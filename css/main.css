@@ -1184,7 +1184,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #e55277;
+  background: #ff5c30;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1546,7 +1546,14 @@ pre .javascript .function {
   margin-top: 40px;
   text-align: center;
 }
-.use-motion .post-block,
+.use-motion .post_block {
+  opacity: 0;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
 .use-motion .pagination,
 .use-motion .comments {
   opacity: 0;
@@ -1973,6 +1980,44 @@ pre .javascript .function {
 }
 #qr p {
   text-align: center;
+}
+.followme {
+  align-items: center;
+  background: var(--card-bg-color);
+  border-left: 3px solid #ff2a2a;
+  color: #bbb;
+  margin: 2em 0 1em 0;
+  padding: 1em 1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.followme .social-list {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+.followme .social-list .social-item {
+  margin: 0.5em 2em;
+}
+@media (max-width: 991px) {
+  .followme .social-list .social-item {
+    margin: 0.5em 0.75em;
+  }
+}
+.followme .social-list .social-link {
+  border: 0;
+  display: inline-block;
+  text-align: center;
+}
+.followme .social-list .social-link .icon {
+  font-size: 1.75em;
+  height: 1.75em;
+  width: 1.75em;
+}
+.followme .social-list .social-link .label {
+  display: block;
+  font-size: 14px;
 }
 .post-body p a {
   color: #0593d3;
