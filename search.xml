@@ -101,8 +101,8 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
+        <tag>Writeup</tag>
         <tag>AWD</tag>
-        <tag>writeup</tag>
         <tag>代码审计</tag>
       </tags>
   </entry>
@@ -164,7 +164,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>XXE</tag>
         <tag>RCE</tag>
         <tag>telnet</tag>
@@ -193,7 +193,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -307,7 +307,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>.htaccess</tag>
         <tag>Bypass</tag>
         <tag>SQL</tag>
@@ -351,7 +351,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>XXE</tag>
       </tags>
   </entry>
@@ -413,7 +413,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>open_basedir</tag>
         <tag>SSRF</tag>
       </tags>
@@ -461,7 +461,7 @@
   <entry>
     <title>BUUOJ Web练手记录</title>
     <url>/2019/08/01/BUUOJ-Web%E7%BB%83%E6%89%8B%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<p>*<em>最近发现北京联合大学的OJ平台特别不错，题目都是近期比赛的题，有些是在比赛中解出了的，有些没有解出刚好想要复现，这里简单记录下解题的思路过程，有时间练手就更新。平台地址：<a href="https://buuoj.cn/" target="_blank" rel="noopener">https://buuoj.cn/</a> *</em></p>
+    <content><![CDATA[<p>最近发现北京联合大学的OJ平台特别不错，题目都是近期比赛的题，有些是在比赛中解出了的，有些没有解出刚好想要复现，这里简单记录下解题的思路过程，有时间练手就更新。平台地址：<a href="https://buuoj.cn/" target="_blank" rel="noopener">https://buuoj.cn/</a></p>
 <h3 id="0x01-Warmup"><a href="#0x01-Warmup" class="headerlink" title="0x01 Warmup"></a>0x01 Warmup</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">    highlight_file(<span class="keyword">__FILE__</span>);</span></span><br><span class="line"><span class="php">    <span class="class"><span class="keyword">class</span> <span class="title">emmm</span></span></span></span><br><span class="line"><span class="php">    &#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">checkFile</span><span class="params">(&amp;$page)</span></span></span></span><br><span class="line"><span class="php">        &#123;</span></span><br><span class="line"><span class="php">            $whitelist = [<span class="string">"source"</span>=&gt;<span class="string">"source.php"</span>,<span class="string">"hint"</span>=&gt;<span class="string">"hint.php"</span>];</span></span><br><span class="line"><span class="php">            <span class="keyword">if</span> (! <span class="keyword">isset</span>($page) || !is_string($page)) &#123;</span></span><br><span class="line"><span class="php">                <span class="keyword">echo</span> <span class="string">"you can't see it"</span>;</span></span><br><span class="line"><span class="php">                <span class="keyword">return</span> <span class="keyword">false</span>;</span></span><br><span class="line"><span class="php">            &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">            <span class="keyword">if</span> (in_array($page, $whitelist)) &#123;</span></span><br><span class="line"><span class="php">                <span class="keyword">return</span> <span class="keyword">true</span>;</span></span><br><span class="line"><span class="php">            &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">            $_page = mb_substr(</span></span><br><span class="line"><span class="php">                $page,</span></span><br><span class="line"><span class="php">                <span class="number">0</span>,</span></span><br><span class="line"><span class="php">                mb_strpos($page . <span class="string">'?'</span>, <span class="string">'?'</span>)</span></span><br><span class="line"><span class="php">            );</span></span><br><span class="line"><span class="php">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span></span><br><span class="line"><span class="php">                <span class="keyword">return</span> <span class="keyword">true</span>;</span></span><br><span class="line"><span class="php">            &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">            $_page = urldecode($page);</span></span><br><span class="line"><span class="php">            $_page = mb_substr(</span></span><br><span class="line"><span class="php">                $_page,</span></span><br><span class="line"><span class="php">                <span class="number">0</span>,</span></span><br><span class="line"><span class="php">                mb_strpos($_page . <span class="string">'?'</span>, <span class="string">'?'</span>)</span></span><br><span class="line"><span class="php">            );</span></span><br><span class="line"><span class="php">            <span class="keyword">if</span> (in_array($_page, $whitelist)) &#123;</span></span><br><span class="line"><span class="php">                <span class="keyword">return</span> <span class="keyword">true</span>;</span></span><br><span class="line"><span class="php">            &#125;</span></span><br><span class="line"><span class="php">            <span class="keyword">echo</span> <span class="string">"you can't see it"</span>;</span></span><br><span class="line"><span class="php">            <span class="keyword">return</span> <span class="keyword">false</span>;</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">    <span class="keyword">if</span> (! <span class="keyword">empty</span>($_REQUEST[<span class="string">'file'</span>])</span></span><br><span class="line"><span class="php">        &amp;&amp; is_string($_REQUEST[<span class="string">'file'</span>])</span></span><br><span class="line"><span class="php">        &amp;&amp; emmm::checkFile($_REQUEST[<span class="string">'file'</span>])</span></span><br><span class="line"><span class="php">    ) &#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">include</span> $_REQUEST[<span class="string">'file'</span>];</span></span><br><span class="line"><span class="php">        <span class="keyword">exit</span>;</span></span><br><span class="line"><span class="php">    &#125; <span class="keyword">else</span> &#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;img src=\"https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\" /&gt;"</span>;</span></span><br><span class="line"><span class="php">    &#125;  </span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
 <p>考点为 <strong>phpmyadmin4.8.1远程文件包含漏洞(CVE-2018-12613)</strong> ，payload：</p>
 <figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">file</span>=hint.php?..<span class="regexp">/../</span>..<span class="regexp">/../</span>..<span class="regexp">/../</span>..<span class="regexp">/ffffllllaaaagggg</span></span><br></pre></td></tr></table></figure>
@@ -525,7 +525,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -704,7 +704,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>SQL</tag>
         <tag>反序列化</tag>
         <tag>uwsgi</tag>
@@ -754,7 +754,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>SQL</tag>
         <tag>反序列化</tag>
         <tag>RCE</tag>
@@ -1029,8 +1029,8 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
+        <tag>Writeup</tag>
         <tag>AWD</tag>
-        <tag>writeup</tag>
         <tag>代码审计</tag>
       </tags>
   </entry>
@@ -1059,7 +1059,7 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>RSA</tag>
         <tag>OAuth2.0</tag>
       </tags>
@@ -1099,7 +1099,7 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
+        <tag>Writeup</tag>
         <tag>二次注入</tag>
         <tag>XXE</tag>
         <tag>SSI</tag>
@@ -1159,8 +1159,8 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>RCE</tag>
         <tag>open_basedir</tag>
+        <tag>RCE</tag>
       </tags>
   </entry>
   <entry>
