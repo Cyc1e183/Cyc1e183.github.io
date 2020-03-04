@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="原文已发Freebuf ECShop 4.0反射型XSS漏洞分析 前言： Ecshop是国内的一款开源的电商框架，在国内应用较为广泛，当前最新版本为4.0.0，最近对其代码进行了简单的分析，发现可以绕过其filter触发XSS。 一、漏洞利用方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECShop 4.0反射型XSS漏洞分析">
+<meta property="og:url" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="原文已发Freebuf ECShop 4.0反射型XSS漏洞分析 前言： Ecshop是国内的一款开源的电商框架，在国内应用较为广泛，当前最新版本为4.0.0，最近对其代码进行了简单的分析，发现可以绕过其filter触发XSS。 一、漏洞利用方式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-3f519e16f6df1c85.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-6c0758d2cf944031.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-b3b37cd4da498647.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-694cf27e9ba6dfff.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-535f6da968dcc931.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-5e182b4b3d983d09.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-c26e9b6986f24f42.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-db65b832df1ea656.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-cf996e66924cb887.jpg">
+<meta property="article:published_time" content="2019-03-13T12:21:19.000Z">
+<meta property="article:modified_time" content="2020-03-04T11:58:49.123Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="代码审计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-3f519e16f6df1c85.jpg">
+
+<link rel="canonical" href="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>ECShop 4.0反射型XSS漏洞分析 | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECShop 4.0反射型XSS漏洞分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-03-13 20:21:19" itemprop="dateCreated datePublished" datetime="2019-03-13T20:21:19+08:00">2019-03-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 19:58:49" itemprop="dateModified" datetime="2020-03-04T19:58:49+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的漏洞挖掘之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>原文已发<a href="https://www.freebuf.com/vuls/198140.html" target="_blank" rel="noopener">Freebuf ECShop 4.0反射型XSS漏洞分析 </a></strong><br><strong>前言</strong>： Ecshop是国内的一款开源的电商框架，在国内应用较为广泛，当前最新版本为4.0.0，最近对其代码进行了简单的分析，发现可以绕过其filter触发XSS。</p>
+<h2 id="一、漏洞利用方式"><a href="#一、漏洞利用方式" class="headerlink" title="一、漏洞利用方式"></a><strong>一、漏洞利用方式</strong></h2><p>发送GET请求包如下：</p>
+<blockquote>
+<p>GET/CMS/ECShop_V4.0./user.php HTTP/1.1<br>Referer:<a href="https://127.0.0.1&quot;" target="_blank" rel="noopener">https://127.0.0.1&quot;</a> /&gt;&lt;a href=j&amp;#97v&amp;#97script:&amp;#97lert(‘Cyc1e_test’)&gt;&lt;imgsrc=”xxxxx<br>User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.21 (KHTML, like Gecko)Chrome/41.0.2228.0 Safari/537.21<br>Cookie:ECS_ID=17b608d2a679cf2c7e8611581478e6929dbfb34b;ECS[visit_times]=2<br>Connection:<br>keep-aliveAccept: <em>/</em><br>Accept-Encoding:gzip,deflate<br>Host: 127.0.0.1</p>
+</blockquote>
+<p>其中漏洞触发代码为：</p>
+<figure class="highlight leaf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Referer:https://127.0.0.1" /&gt;&lt;ahref=j&amp;#97v&amp;#97script:&amp;<span class="function"><span class="keyword">#</span>97<span class="title">lert</span><span class="params">('<span class="variable">Cyc1e_test</span>')</span></span>&gt;&lt;imgsrc="xxxxx</span><br></pre></td></tr></table></figure>
+
+<p>实现绕过过滤规则，触发XSS漏洞的效果。</p>
+<p><strong>二、相关环境</strong></p>
+<p>版本：ECShop4.0.0</p>
+<p>漏洞类型：反射型XSS</p>
+<p>本地环境：php5.6.27+ Apache + Mysql</p>
+<p><strong>三、漏洞分析</strong></p>
+<p>该XSS漏洞路口点在user.php文件，查看user.php：328行</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-3f519e16f6df1c85.jpg" alt></p>
+<p>在用户登入界面的处理代码中，首先变量$action赋值为login进入主体代码，若变量$back_act为空并且请求包中存在REFERER字段，则将REFERER字段中的内容赋值给变量$back_act，这是导致该漏洞的直接原因，对$back_act变量赋值过后传入assign函数进行处理，其中$smarty是模版类cls_template的实例化：/includes/init.php：170行</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-6c0758d2cf944031.jpg" alt></p>
+<p>所以查看assign函数时跟进到模版类cls_template中查看：/includes/ cls_template.php：70行</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-b3b37cd4da498647.jpg" alt></p>
+<p>对传入变量名和变量值进行变量注册，我们可以传入非数组数据对$back_act进行变量注册，注册完毕回到user.php代码，继续跟进模版类中的display函数：/includes/ cls_template.php：100行</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-694cf27e9ba6dfff.jpg" alt></p>
+<p>调用fetch函数进行user_passport.dwt文件的页面显示，也就是显示用户登入页面，其中在user_passport.dwt文件中：</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-535f6da968dcc931.jpg" alt></p>
+<p>$back_act值被赋值给input标签中的value,所以我们控制了$back_act变量值便可以在html页面中插入js代码。</p>
+<p><strong>四、绕过全局Waf触发XSS</strong></p>
+<p>Ecshop中定义了全局安全过滤规则，查看代码：/includes/safety.php</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-5e182b4b3d983d09.jpg" alt></p>
+<p>这个过滤规则比较简单粗暴，利用’on[a-zA-Z]{3,15}’ 过滤了所有的on开头js事件，所以用事件触发是较为困难了，并且&lt;script、alert、eval、data、Javascript等敏感字符，继续查看代码：</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-c26e9b6986f24f42.jpg" alt></p>
+<p>$back_act的值如果不是数组便传入filter()函数中利用preg_match进行字符校验，这里利用了/i，所以不区分大小写，无法利用大小写的方式进行绕过，不过这里的敏感字符过滤也不全，例如对于弹窗的js函数confirm就可以被利用，所以主要考虑的是如何绕过过滤检测。<br>我利用了HTML的实体编码来进行绕过，在 HTML 中，某些字符是预留的，比如不能使用小于号（&lt;）和大于号（&gt;），这是因为浏览器会误认为它们是标签。如果希望正确地显示预留字符，我们必须在 HTML 源代码中使用字符实体，如需显示小于号，我们必须这样写：&lt; 或 &lt;，其中’&lt; ‘便是小于号（&lt;）的HTML实体编码，并且不仅是 “&lt;””&gt;” 这样的能编码，所有字符均能编码，a-zA-Z的HTML实体编码方式是&amp;#[字符ACCII编码]，例如a-&gt;&amp;#97。</p>
+<p>所以可以利用这一编码方式进行构造POC：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Referer: [<span class="string">https://127.0.0.1</span>](<span class="link">https://127.0.0.1</span>)"/&gt;<span class="xml"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">j&amp;#97v&amp;#97script:&amp;#97lert(</span>'<span class="attr">Cyc1e_test</span>')&gt;</span></span><span class="xml"><span class="tag">&lt;<span class="name">imgsrc="xxxxx</span></span></span></span><br></pre></td></tr></table></figure>
+
+<p>其中j&amp;#97v&amp;#97script:&amp;#97lert(‘Cyc1e_test’)可以绕过xss过滤规则的匹配从而绕过服务端的安全过滤植入html页面中，经过html编码解析会恢复成javascript:alert(‘Cyc1e_test’)，从而触发执行，效果如图：</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-db65b832df1ea656.jpg" alt></p>
+<p>通过点击图片可以直接触发</p>
+<p><img src="/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/8418106-cf996e66924cb887.jpg" alt></p>
+<p>漏洞绕过触发的方式不唯一。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 代码审计</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/20/Seacms-6-54-6-55-%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="prev" title="Seacms 6.54 & 6.55 任意代码执行漏洞分析">
+      <i class="fa fa-chevron-left"></i> Seacms 6.54 & 6.55 任意代码执行漏洞分析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/06/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83%E4%BA%8C%E5%91%A8%E5%B9%B4%E7%BB%83%E6%89%8B/" rel="next" title="代码审计知识星球二周年练手">
+      代码审计知识星球二周年练手 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、漏洞利用方式"><span class="nav-number">1.</span> <span class="nav-text">一、漏洞利用方式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">176k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

