@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-03-04T07:51:07.991Z</updated>
+  <updated>2020-03-04T06:49:34.522Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,32 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>RCTF-R-CURSIVE</title>
-    <link href="http://yoursite.com/2020/03/04/RCTF-R-CURSIVE/"/>
-    <id>http://yoursite.com/2020/03/04/RCTF-R-CURSIVE/</id>
-    <published>2020-03-04T06:53:12.000Z</published>
-    <updated>2020-03-04T07:51:07.991Z</updated>
-    
-    <content type="html"><![CDATA[<p>这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">sha1($_SERVER[<span class="string">'REMOTE_ADDR'</span>]) === <span class="string">'9944105bfb8294278dbf87f4c52e8476ebf9ab68'</span> ?: <span class="keyword">die</span>();</span><br><span class="line"><span class="string">';'</span> === preg_replace(<span class="string">'/[^\W_]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $_GET[<span class="string">'cmd'</span>]) ? <span class="keyword">eval</span>($_GET[<span class="string">'cmd'</span>]) : show_source(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure><p>这里主要有正则，<code>preg_replace(&#39;/[^\W_]+\((?R)?\)/&#39;, NULL, $_GET[&#39;cmd&#39;])</code>，\w 就很烦人了，所以首先要做的就是过这个正则达到任意执行。通过构造cmd=eval(next(getallheaders()));在请求头里插入可执行代码来达到任意执行(这里不止next可以用，主要就是决定你构造代码放在header的什么位置，还有implode，end…..都可以用)我用的是next就是，执行代码插在user_agent中：</p><p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-c17d1e0247b7b179-1583307607135.png" alt></p><p>那么接下来也就是要列出目录，找到flag文件了，这里卡了好久，主要要做的就是绕过openbase_dir的限制，把出了/tmp目录和index.php所在目录除外的其他目录给列出来</p><p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-7fd934ffcfedf20f.png" alt></p><p>最后通过opendir + glob://协议列出目录：</p><p><code>if($dh=opendir(&quot;glob:///var\*/www\*/sandbox\*/\*&quot;)){while(($file=readdir($dh))!==false){echo&quot;$file\n&quot;;}closedir($dh);}</code></p><p>一波谜一样的操作</p><p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-f8dd88d7fe7e973c.png" alt></p><p>发现众多token文件夹后面夹生这init.php和php.ini，猜测flag应该是放在init.php里了，但是我们的权限是在 78854209fa4889d51dd0016ceab319f852d90ec9 文件夹下面的，因为vhost_alias的配置的原因，所以我们默认进入网站的时候是在token目录下的，因为openbase_dir的限制，直接读取init.php文件是读不到的</p><p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-a753f240ddb7aaf1.png" alt></p><p>这里可以想想因为我们默认是在token文件夹里，所以我们可以正常读取index.php的源码，那如果我们出了token文件夹，那也就可以正常读取init.php文件了所以我们可以修改请求时的URL:<a href="http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()" target="_blank" rel="noopener">http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()</a>)); 修改请求头中的HOST为:.sandbox.r-cursive.ml:1337，利用file_get_contents()函数来读取init.php文件</p><p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-fa9223d7f5547395.png" alt></p><p>这样也就跨出限制，成功读取到flag。</p><p><strong>比赛滑水，也就只看了这道题，其他的题看都没看，不过这次比赛题目质量真心好，有时间都可以做做，仅写来供自己学习记录用。</strong></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:&lt;/p&gt;
-&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#index.php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sha1($_SERVER[&lt;span class=&quot;string&quot;&gt;&#39;REMOTE_ADDR&#39;&lt;/span&gt;]) === &lt;span class=&quot;string&quot;&gt;&#39;9944105bfb8294278dbf87f4c52e8476ebf9ab68&#39;&lt;/span&gt; ?: &lt;span class=&quot;keyword&quot;&gt;die&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;string&quot;&gt;&#39;;&#39;&lt;/span&gt; === preg_replace(&lt;span class=&quot;string&quot;&gt;&#39;/[^\W_]+\((?R)?\)/&#39;&lt;/span&gt;, &lt;span class=&quot;keyword&quot;&gt;NULL&lt;/span&gt;, $_GET[&lt;span class=&quot;string&quot;&gt;&#39;cmd&#39;&lt;/span&gt;]) ? &lt;span class=&quot;keyword&quot;&gt;eval&lt;/span&gt;($_GET[&lt;span class=&quot;string&quot;&gt;&#39;cmd&#39;&lt;/span&gt;]) : show_source(&lt;span class=&quot;keyword&quot;&gt;__FILE__&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-    
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
-    
-    
-      <category term="RCE" scheme="http://yoursite.com/tags/RCE/"/>
-    
-      <category term="open_basedir" scheme="http://yoursite.com/tags/open-basedir/"/>
-    
-  </entry>
   
   <entry>
     <title>2020新春战役网络安全公益赛web部分题解</title>
@@ -65,6 +39,32 @@
       <category term="RCE" scheme="http://yoursite.com/tags/RCE/"/>
     
       <category term="SQL" scheme="http://yoursite.com/tags/SQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RCTF-R-CURSIVE</title>
+    <link href="http://yoursite.com/2018/10/14/RCTF-R-CURSIVE/"/>
+    <id>http://yoursite.com/2018/10/14/RCTF-R-CURSIVE/</id>
+    <published>2018-10-14T02:33:12.000Z</published>
+    <updated>2020-03-04T08:05:10.973Z</updated>
+    
+    <content type="html"><![CDATA[<p>这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">sha1($_SERVER[<span class="string">'REMOTE_ADDR'</span>]) === <span class="string">'9944105bfb8294278dbf87f4c52e8476ebf9ab68'</span> ?: <span class="keyword">die</span>();</span><br><span class="line"><span class="string">';'</span> === preg_replace(<span class="string">'/[^\W_]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $_GET[<span class="string">'cmd'</span>]) ? <span class="keyword">eval</span>($_GET[<span class="string">'cmd'</span>]) : show_source(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure><p>这里主要有正则，<code>preg_replace(&#39;/[^\W_]+\((?R)?\)/&#39;, NULL, $_GET[&#39;cmd&#39;])</code>，\w 就很烦人了，所以首先要做的就是过这个正则达到任意执行。通过构造cmd=eval(next(getallheaders()));在请求头里插入可执行代码来达到任意执行(这里不止next可以用，主要就是决定你构造代码放在header的什么位置，还有implode，end…..都可以用)我用的是next就是，执行代码插在user_agent中：</p><p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-c17d1e0247b7b179-1583307607135.png" alt></p><p>那么接下来也就是要列出目录，找到flag文件了，这里卡了好久，主要要做的就是绕过openbase_dir的限制，把出了/tmp目录和index.php所在目录除外的其他目录给列出来</p><p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-7fd934ffcfedf20f.png" alt></p><p>最后通过opendir + glob://协议列出目录：</p><p><code>if($dh=opendir(&quot;glob:///var\*/www\*/sandbox\*/\*&quot;)){while(($file=readdir($dh))!==false){echo&quot;$file\n&quot;;}closedir($dh);}</code></p><p>一波谜一样的操作</p><p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-f8dd88d7fe7e973c.png" alt></p><p>发现众多token文件夹后面夹生这init.php和php.ini，猜测flag应该是放在init.php里了，但是我们的权限是在 78854209fa4889d51dd0016ceab319f852d90ec9 文件夹下面的，因为vhost_alias的配置的原因，所以我们默认进入网站的时候是在token目录下的，因为openbase_dir的限制，直接读取init.php文件是读不到的</p><p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-a753f240ddb7aaf1.png" alt></p><p>这里可以想想因为我们默认是在token文件夹里，所以我们可以正常读取index.php的源码，那如果我们出了token文件夹，那也就可以正常读取init.php文件了所以我们可以修改请求时的URL:<a href="http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()" target="_blank" rel="noopener">http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()</a>)); 修改请求头中的HOST为:.sandbox.r-cursive.ml:1337，利用file_get_contents()函数来读取init.php文件</p><p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-fa9223d7f5547395.png" alt></p><p>这样也就跨出限制，成功读取到flag。</p><p><strong>比赛滑水，也就只看了这道题，其他的题看都没看，不过这次比赛题目质量真心好，有时间都可以做做，仅写来供自己学习记录用。</strong></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#index.php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sha1($_SERVER[&lt;span class=&quot;string&quot;&gt;&#39;REMOTE_ADDR&#39;&lt;/span&gt;]) === &lt;span class=&quot;string&quot;&gt;&#39;9944105bfb8294278dbf87f4c52e8476ebf9ab68&#39;&lt;/span&gt; ?: &lt;span class=&quot;keyword&quot;&gt;die&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;string&quot;&gt;&#39;;&#39;&lt;/span&gt; === preg_replace(&lt;span class=&quot;string&quot;&gt;&#39;/[^\W_]+\((?R)?\)/&#39;&lt;/span&gt;, &lt;span class=&quot;keyword&quot;&gt;NULL&lt;/span&gt;, $_GET[&lt;span class=&quot;string&quot;&gt;&#39;cmd&#39;&lt;/span&gt;]) ? &lt;span class=&quot;keyword&quot;&gt;eval&lt;/span&gt;($_GET[&lt;span class=&quot;string&quot;&gt;&#39;cmd&#39;&lt;/span&gt;]) : show_source(&lt;span class=&quot;keyword&quot;&gt;__FILE__&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+    
+    
+      <category term="RCE" scheme="http://yoursite.com/tags/RCE/"/>
+    
+      <category term="open_basedir" scheme="http://yoursite.com/tags/open-basedir/"/>
     
   </entry>
   

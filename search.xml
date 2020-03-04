@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>RCTF-R-CURSIVE</title>
-    <url>/2020/03/04/RCTF-R-CURSIVE/</url>
-    <content><![CDATA[<p>这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">#index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">sha1($_SERVER[<span class="string">'REMOTE_ADDR'</span>]) === <span class="string">'9944105bfb8294278dbf87f4c52e8476ebf9ab68'</span> ?: <span class="keyword">die</span>();</span><br><span class="line"><span class="string">';'</span> === preg_replace(<span class="string">'/[^\W_]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $_GET[<span class="string">'cmd'</span>]) ? <span class="keyword">eval</span>($_GET[<span class="string">'cmd'</span>]) : show_source(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
-<p>这里主要有正则，<code>preg_replace(&#39;/[^\W_]+\((?R)?\)/&#39;, NULL, $_GET[&#39;cmd&#39;])</code>，\w 就很烦人了，所以首先要做的就是过这个正则达到任意执行。通过构造cmd=eval(next(getallheaders()));在请求头里插入可执行代码来达到任意执行(这里不止next可以用，主要就是决定你构造代码放在header的什么位置，还有implode，end…..都可以用)我用的是next就是，执行代码插在user_agent中：</p>
-<p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-c17d1e0247b7b179-1583307607135.png" alt></p>
-<p>那么接下来也就是要列出目录，找到flag文件了，这里卡了好久，主要要做的就是绕过openbase_dir的限制，把出了/tmp目录和index.php所在目录除外的其他目录给列出来</p>
-<p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-7fd934ffcfedf20f.png" alt></p>
-<p>最后通过opendir + glob://协议列出目录：</p>
-<p><code>if($dh=opendir(&quot;glob:///var\*/www\*/sandbox\*/\*&quot;)){while(($file=readdir($dh))!==false){echo&quot;$file\n&quot;;}closedir($dh);}</code></p>
-<p>一波谜一样的操作</p>
-<p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-f8dd88d7fe7e973c.png" alt></p>
-<p>发现众多token文件夹后面夹生这init.php和php.ini，猜测flag应该是放在init.php里了，但是我们的权限是在 78854209fa4889d51dd0016ceab319f852d90ec9 文件夹下面的，因为vhost_alias的配置的原因，所以我们默认进入网站的时候是在token目录下的，因为openbase_dir的限制，直接读取init.php文件是读不到的</p>
-<p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-a753f240ddb7aaf1.png" alt></p>
-<p>这里可以想想因为我们默认是在token文件夹里，所以我们可以正常读取index.php的源码，那如果我们出了token文件夹，那也就可以正常读取init.php文件了所以我们可以修改请求时的URL:<a href="http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()" target="_blank" rel="noopener">http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()</a>)); 修改请求头中的HOST为:.sandbox.r-cursive.ml:1337，利用file_get_contents()函数来读取init.php文件</p>
-<p><img src="/2020/03/04/RCTF-R-CURSIVE/8418106-fa9223d7f5547395.png" alt></p>
-<p>这样也就跨出限制，成功读取到flag。</p>
-<p><strong>比赛滑水，也就只看了这道题，其他的题看都没看，不过这次比赛题目质量真心好，有时间都可以做做，仅写来供自己学习记录用。</strong></p>
-]]></content>
-      <categories>
-        <category>Cyc1e的CTF之路</category>
-      </categories>
-      <tags>
-        <tag>RCE</tag>
-        <tag>open_basedir</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>2020新春战役网络安全公益赛web部分题解</title>
     <url>/2020/02/22/2020%E6%96%B0%E6%98%A5%E6%88%98%E5%BD%B9%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%85%AC%E7%9B%8A%E8%B5%9B/</url>
     <content><![CDATA[<p>打了ichunqiu的新春公益赛，web题大部分比较友好。</p>
@@ -166,6 +138,34 @@
       <tags>
         <tag>RCE</tag>
         <tag>SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RCTF-R-CURSIVE</title>
+    <url>/2018/10/14/RCTF-R-CURSIVE/</url>
+    <content><![CDATA[<p>这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">#index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">sha1($_SERVER[<span class="string">'REMOTE_ADDR'</span>]) === <span class="string">'9944105bfb8294278dbf87f4c52e8476ebf9ab68'</span> ?: <span class="keyword">die</span>();</span><br><span class="line"><span class="string">';'</span> === preg_replace(<span class="string">'/[^\W_]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $_GET[<span class="string">'cmd'</span>]) ? <span class="keyword">eval</span>($_GET[<span class="string">'cmd'</span>]) : show_source(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+<p>这里主要有正则，<code>preg_replace(&#39;/[^\W_]+\((?R)?\)/&#39;, NULL, $_GET[&#39;cmd&#39;])</code>，\w 就很烦人了，所以首先要做的就是过这个正则达到任意执行。通过构造cmd=eval(next(getallheaders()));在请求头里插入可执行代码来达到任意执行(这里不止next可以用，主要就是决定你构造代码放在header的什么位置，还有implode，end…..都可以用)我用的是next就是，执行代码插在user_agent中：</p>
+<p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-c17d1e0247b7b179-1583307607135.png" alt></p>
+<p>那么接下来也就是要列出目录，找到flag文件了，这里卡了好久，主要要做的就是绕过openbase_dir的限制，把出了/tmp目录和index.php所在目录除外的其他目录给列出来</p>
+<p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-7fd934ffcfedf20f.png" alt></p>
+<p>最后通过opendir + glob://协议列出目录：</p>
+<p><code>if($dh=opendir(&quot;glob:///var\*/www\*/sandbox\*/\*&quot;)){while(($file=readdir($dh))!==false){echo&quot;$file\n&quot;;}closedir($dh);}</code></p>
+<p>一波谜一样的操作</p>
+<p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-f8dd88d7fe7e973c.png" alt></p>
+<p>发现众多token文件夹后面夹生这init.php和php.ini，猜测flag应该是放在init.php里了，但是我们的权限是在 78854209fa4889d51dd0016ceab319f852d90ec9 文件夹下面的，因为vhost_alias的配置的原因，所以我们默认进入网站的时候是在token目录下的，因为openbase_dir的限制，直接读取init.php文件是读不到的</p>
+<p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-a753f240ddb7aaf1.png" alt></p>
+<p>这里可以想想因为我们默认是在token文件夹里，所以我们可以正常读取index.php的源码，那如果我们出了token文件夹，那也就可以正常读取init.php文件了所以我们可以修改请求时的URL:<a href="http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()" target="_blank" rel="noopener">http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()</a>)); 修改请求头中的HOST为:.sandbox.r-cursive.ml:1337，利用file_get_contents()函数来读取init.php文件</p>
+<p><img src="/2018/10/14/RCTF-R-CURSIVE/8418106-fa9223d7f5547395.png" alt></p>
+<p>这样也就跨出限制，成功读取到flag。</p>
+<p><strong>比赛滑水，也就只看了这道题，其他的题看都没看，不过这次比赛题目质量真心好，有时间都可以做做，仅写来供自己学习记录用。</strong></p>
+]]></content>
+      <categories>
+        <category>Cyc1e的CTF之路</category>
+      </categories>
+      <tags>
+        <tag>RCE</tag>
+        <tag>open_basedir</tag>
       </tags>
   </entry>
 </search>
