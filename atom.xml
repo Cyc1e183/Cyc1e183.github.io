@@ -27,21 +27,8 @@
     
     <summary type="html">
     
-      这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:
-
-1
-2
-3
-4
-
-
-#index.php
-&lt;?php
-sha1($_SERVER[&#39;REMOTE_ADDR&#39;]) === &#39;9944105bfb8294278dbf87f4c52e8476ebf9ab68&#39; ?: die();
-&#39;;&#39; === preg_replace(&#39;/[^\W_]+\((?R)?\)/&#39;, NULL, $_GET[&#39;cmd&#39;]) ? eval($_GET[&#39;cmd&#39;]) : show_source(__FILE__);
-
-
-这里主要有正则，preg_replace(&#39;/[^\W_]+\((?R
+      &lt;p&gt;这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#index.php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sha1($_SERVER[&lt;span class=&quot;string&quot;&gt;&#39;REMOTE_ADDR&#39;&lt;/span&gt;]) === &lt;span class=&quot;string&quot;&gt;&#39;9944105bfb8294278dbf87f4c52e8476ebf9ab68&#39;&lt;/span&gt; ?: &lt;span class=&quot;keyword&quot;&gt;die&lt;/span&gt;();&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;string&quot;&gt;&#39;;&#39;&lt;/span&gt; === preg_replace(&lt;span class=&quot;string&quot;&gt;&#39;/[^\W_]+\((?R)?\)/&#39;&lt;/span&gt;, &lt;span class=&quot;keyword&quot;&gt;NULL&lt;/span&gt;, $_GET[&lt;span class=&quot;string&quot;&gt;&#39;cmd&#39;&lt;/span&gt;]) ? &lt;span class=&quot;keyword&quot;&gt;eval&lt;/span&gt;($_GET[&lt;span class=&quot;string&quot;&gt;&#39;cmd&#39;&lt;/span&gt;]) : show_source(&lt;span class=&quot;keyword&quot;&gt;__FILE__&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
@@ -66,45 +53,8 @@ sha1($_SERVER[&#39;REMOTE_ADDR&#39;]) === &#39;9944105bfb8294278dbf87f4c52e8476e
     
     <summary type="html">
     
-      打了ichunqiu的新春公益赛，web题大部分比较友好。
-
-Day_1
-简单的招聘系统
-进去一个登录界面，可以注册，开始看到forgot，但是没有忘记密码的链接，注册登进去后，有个查询界面需要admin权限，然后注册admin用户也没有权限，之后试着可以用万能密码进来，然后再查询key的界面测了半天，啥也没出来，后来一想万能密码都可以登，那么登录出就可以注了。。。
-
-exp:
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-
-
-import requests
-url=&quot;http://724572
+      &lt;p&gt;打了ichunqiu的新春公益赛，web题大部分比较友好。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
     
     </summary>
     
