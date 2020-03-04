@@ -1232,7 +1232,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #90ffaa;
+  background: #ffff7c;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1564,9 +1564,9 @@ pre .javascript .function {
   z-index: 1500;
 }
 .post-body {
-  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   overflow-wrap: break-word;
   word-wrap: break-word;
+  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 @media (min-width: 1200px) {
   .post-body {
@@ -1594,7 +1594,14 @@ pre .javascript .function {
   margin-top: 40px;
   text-align: center;
 }
-.use-motion .post_block,
+.use-motion .post-block {
+  opacity: 0;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
 .use-motion .pagination,
 .use-motion .comments {
   opacity: 0;
@@ -1987,81 +1994,8 @@ pre .javascript .function {
   justify-content: center;
   text-align: center;
 }
-.reward-container {
-  margin: 20px auto;
-  padding: 10px 0;
-  text-align: center;
-  width: 90%;
-}
-.reward-container button {
-  background: #ff2a2a;
-  border: 0;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-  line-height: 2;
-  outline: 0;
-  padding: 0 15px;
-  vertical-align: text-top;
-}
-.reward-container button:hover {
-  background: #f55;
-}
-#qr {
-  padding-top: 20px;
-}
-#qr a {
-  border: 0;
-}
-#qr img {
-  display: inline-block;
-  margin: 0.8em 2em 0 2em;
-  max-width: 100%;
-  width: 180px;
-}
-#qr p {
-  text-align: center;
-}
-.followme {
-  align-items: center;
-  background: var(--card-bg-color);
-  border-left: 3px solid #ff2a2a;
-  color: #bbb;
-  margin: 2em 0 1em 0;
-  padding: 1em 1.5em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.followme .social-list {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-}
-.followme .social-list .social-item {
-  margin: 0.5em 2em;
-}
-@media (max-width: 991px) {
-  .followme .social-list .social-item {
-    margin: 0.5em 0.75em;
-  }
-}
-.followme .social-list .social-link {
-  border: 0;
-  display: inline-block;
-  text-align: center;
-}
-.followme .social-list .social-link .icon {
-  font-size: 1.75em;
-  height: 1.75em;
-  width: 1.75em;
-}
-.followme .social-list .social-link .label {
-  display: block;
-  font-size: 14px;
-}
 .post-body p a {
-  color: #0593d3;
+  color: #f75000;
   border-bottom: none;
   border-bottom: 1px solid #0593d3;
 }
