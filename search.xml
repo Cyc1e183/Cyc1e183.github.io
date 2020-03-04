@@ -101,8 +101,8 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>AWD</tag>
         <tag>Writeup</tag>
+        <tag>AWD</tag>
         <tag>代码审计</tag>
       </tags>
   </entry>
@@ -308,9 +308,9 @@
       </categories>
       <tags>
         <tag>Writeup</tag>
+        <tag>SQL</tag>
         <tag>.htaccess</tag>
         <tag>Bypass</tag>
-        <tag>SQL</tag>
       </tags>
   </entry>
   <entry>
@@ -606,8 +606,8 @@
         <category>Cyc1e的漏洞分析之路</category>
       </categories>
       <tags>
-        <tag>CVE</tag>
         <tag>代码审计</tag>
+        <tag>CVE</tag>
       </tags>
   </entry>
   <entry>
@@ -705,8 +705,8 @@
       </categories>
       <tags>
         <tag>Writeup</tag>
-        <tag>SQL</tag>
         <tag>反序列化</tag>
+        <tag>SQL</tag>
         <tag>uwsgi</tag>
       </tags>
   </entry>
@@ -755,8 +755,8 @@
       </categories>
       <tags>
         <tag>Writeup</tag>
-        <tag>SQL</tag>
         <tag>反序列化</tag>
+        <tag>SQL</tag>
         <tag>RCE</tag>
       </tags>
   </entry>
@@ -879,8 +879,8 @@
         <category>Cyc1e的漏洞分析之路</category>
       </categories>
       <tags>
-        <tag>CVE</tag>
         <tag>代码审计</tag>
+        <tag>CVE</tag>
       </tags>
   </entry>
   <entry>
@@ -951,8 +951,8 @@
         <category>Cyc1e的漏洞分析之路</category>
       </categories>
       <tags>
-        <tag>CVE</tag>
         <tag>代码审计</tag>
+        <tag>CVE</tag>
       </tags>
   </entry>
   <entry>
@@ -1029,8 +1029,8 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>AWD</tag>
         <tag>Writeup</tag>
+        <tag>AWD</tag>
         <tag>代码审计</tag>
       </tags>
   </entry>
