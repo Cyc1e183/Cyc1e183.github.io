@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CryptoWarm Up">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2018 X-NUCA Cyc1e_writeup">
+<meta property="og:url" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="CryptoWarm Up">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-35fe46782118d653.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-901058431549ca2d.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-1d2bf17a7627737b.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-fb8e409e2de06be0.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-bc74376afd02b60f.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-f9fee2030f214445.png">
+<meta property="article:published_time" content="2018-11-26T02:39:35.000Z">
+<meta property="article:modified_time" content="2020-03-04T09:58:45.111Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="writeup">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="OAuth2.0">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-35fe46782118d653.png">
+
+<link rel="canonical" href="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>2018 X-NUCA Cyc1e_writeup | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/26/2018X-NUCA-Cyc1e-writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2018 X-NUCA Cyc1e_writeup
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-26 10:39:35" itemprop="dateCreated datePublished" datetime="2018-11-26T10:39:35+08:00">2018-11-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-04 17:58:45" itemprop="dateModified" datetime="2020-03-04T17:58:45+08:00">2020-03-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的CTF之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h1><h3 id="Warm-Up"><a href="#Warm-Up" class="headerlink" title="Warm Up"></a>Warm Up</h3><p>分析流量包，一共包含六组RSA的交互信息，copy出来对比有两组的n是相同的</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">This is a message distribute system. Please tell me your name: </span><br><span class="line">Dave</span><br><span class="line">Hi Dave, your N is: 25118186052801903419891574512806521370646053661385577314262283167479853375867074736882903917202574957661470179148882538361560784362740207649620536746860883395110443930778132343642295247749797041449601967434690280754279589691669366595486824752597992245067619256368446164574344449914827664991591873150416287647528776014468498025993455819767004213726389160036077170973994848480739499052481386539293425983093644799960322581437734560001018025823047877932105216362961838959964371333287407071080250979421489210165485908404019927393053325809061787560294489911475978342741920115134298253806238766543518220987363050115050813263</span><br><span class="line"><span class="keyword">And</span> your exponent is: 6947</span><br><span class="line">Last but <span class="keyword">not</span> least, your<span class="built_in"> secret </span>is: 20494665879116666159961016125949070097530413770391893858215547229071116025581822729798313796823204861624912909030975450742122802775879194445232064367771036011021366123393917354134849911675307877324103834871288513274457941036453477034798647182106422619504345055259543675752998330786906376830335403339610903547255965127196315113331300512641046933227008101401416026809256813221480604662012101542846479052832128788279031727880750642499329041780372405567816904384164559191879422615238580181357183882111249939492668328771614509476229785062819586796660370798030562805224704497570446844131650030075004901216141893420140140568</span><br><span class="line">You will know the<span class="built_in"> secret </span>after I give you P,Q.</span><br><span class="line">See you next time!</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">This is a message distribute system. Please tell me your name: </span><br><span class="line">Alice</span><br><span class="line">Hi Alice, your N is: 25118186052801903419891574512806521370646053661385577314262283167479853375867074736882903917202574957661470179148882538361560784362740207649620536746860883395110443930778132343642295247749797041449601967434690280754279589691669366595486824752597992245067619256368446164574344449914827664991591873150416287647528776014468498025993455819767004213726389160036077170973994848480739499052481386539293425983093644799960322581437734560001018025823047877932105216362961838959964371333287407071080250979421489210165485908404019927393053325809061787560294489911475978342741920115134298253806238766543518220987363050115050813263</span><br><span class="line"><span class="keyword">And</span> your exponent is: 7669</span><br><span class="line">Last but <span class="keyword">not</span> least, your<span class="built_in"> secret </span>is: 22917655888781915689291442748409371798632133107968171254672911561608350738343707972881819762532175014157796940212073777351362314385074785400758102594348355578275080626269137543136225022579321107199602856290254696227966436244618441350564667872879196269074433751811632437228139470723203848006803856868237706401868436321225656126491701750534688966280578771996021459620472731406728379628286405214996461164892486734170662556518782043881759918394674517409304629842710180023814702447187081112856416034885511215626693534876901484105593275741829434329109239483368867518384522955176807332437540578688867077569728548513876841471</span><br><span class="line">You will know the<span class="built_in"> secret </span>after I give you P,Q.</span><br><span class="line">See you next time!</span><br></pre></td></tr></table></figure>
+
+<p>一个常规的RSA共模攻击，代码如下</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="attr">from</span> <span class="string">libnum import n2s,s2n</span></span><br><span class="line"><span class="attr">from</span> <span class="string">gmpy2 import invert</span></span><br><span class="line"><span class="attr">def</span> <span class="string">egcd(a, b):</span></span><br><span class="line">  <span class="attr">if</span> <span class="string">a == 0:</span></span><br><span class="line">    <span class="attr">return</span> <span class="string">(b, 0, 1)</span></span><br><span class="line">  <span class="attr">else</span>:<span class="string"></span></span><br><span class="line">    <span class="meta">g,</span> <span class="string">y, x = egcd(b % a, a)</span></span><br><span class="line">    <span class="attr">return</span> <span class="string">(g, x - (b // a) * y, y)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">def</span> <span class="string">main():</span></span><br><span class="line">  <span class="attr">n</span> = <span class="string">25118186052801903419891574512806521370646053661385577314262283167479853375867074736882903917202574957661470179148882538361560784362740207649620536746860883395110443930778132343642295247749797041449601967434690280754279589691669366595486824752597992245067619256368446164574344449914827664991591873150416287647528776014468498025993455819767004213726389160036077170973994848480739499052481386539293425983093644799960322581437734560001018025823047877932105216362961838959964371333287407071080250979421489210165485908404019927393053325809061787560294489911475978342741920115134298253806238766543518220987363050115050813263</span></span><br><span class="line">  <span class="attr">c1</span> = <span class="string">20494665879116666159961016125949070097530413770391893858215547229071116025581822729798313796823204861624912909030975450742122802775879194445232064367771036011021366123393917354134849911675307877324103834871288513274457941036453477034798647182106422619504345055259543675752998330786906376830335403339610903547255965127196315113331300512641046933227008101401416026809256813221480604662012101542846479052832128788279031727880750642499329041780372405567816904384164559191879422615238580181357183882111249939492668328771614509476229785062819586796660370798030562805224704497570446844131650030075004901216141893420140140568</span></span><br><span class="line">  <span class="attr">c2</span> = <span class="string">22917655888781915689291442748409371798632133107968171254672911561608350738343707972881819762532175014157796940212073777351362314385074785400758102594348355578275080626269137543136225022579321107199602856290254696227966436244618441350564667872879196269074433751811632437228139470723203848006803856868237706401868436321225656126491701750534688966280578771996021459620472731406728379628286405214996461164892486734170662556518782043881759918394674517409304629842710180023814702447187081112856416034885511215626693534876901484105593275741829434329109239483368867518384522955176807332437540578688867077569728548513876841471</span></span><br><span class="line">  <span class="attr">e1</span> = <span class="string">6947</span></span><br><span class="line">  <span class="attr">e2</span> = <span class="string">7669</span></span><br><span class="line">  <span class="attr">s</span> = <span class="string">egcd(e1, e2)</span></span><br><span class="line">  <span class="attr">s1</span> = <span class="string">s[1]</span></span><br><span class="line">  <span class="attr">s2</span> = <span class="string">s[2]</span></span><br><span class="line">  <span class="attr">if</span> <span class="string">s1&lt;0:</span></span><br><span class="line">    <span class="attr">s1</span> = <span class="string">- s1</span></span><br><span class="line">    <span class="attr">c1</span> = <span class="string">invert(c1, n)</span></span><br><span class="line">  <span class="attr">elif</span> <span class="string">s2&lt;0:</span></span><br><span class="line">    <span class="attr">s2</span> = <span class="string">- s2</span></span><br><span class="line">    <span class="attr">c2</span> = <span class="string">invert(c2, n)</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">m</span> = <span class="string">pow(c1,s1,n)*pow(c2,s2,n) % n</span></span><br><span class="line">  <span class="attr">print</span> <span class="string">n2s(m)</span></span><br><span class="line"></span><br><span class="line"><span class="attr">if</span> <span class="string">__name__ == '__main__':</span></span><br><span class="line">  <span class="attr">main()</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h3 id="Blog"><a href="#Blog" class="headerlink" title="Blog"></a>Blog</h3><p>题目提示了第三方登入认证方式是OAuth2.0的，OAuth2.0存在一个快捷登录授权劫持问题，主要在于code变量，然后就入坑了，最开始的思路是让admin访问快捷登入页面，修改redirect_uri 来抓取重置的code，然后伪造admin用户登入，然后发现redirect_uri不可伪造，就自闭了（具体分析可以看：<a href="https://bbs.ichunqiu.com/thread-34168-1-1.html）。本题的主要利用点在于帐号可重复绑定不同的第三方邮箱，所以让admin绑定上我们注册的邮箱，通过第三方邮箱登入admin帐号即可得到flag。通过/main/register注册一个用户，register需要探测一下" target="_blank" rel="noopener">https://bbs.ichunqiu.com/thread-34168-1-1.html）。本题的主要利用点在于帐号可重复绑定不同的第三方邮箱，所以让admin绑定上我们注册的邮箱，通过第三方邮箱登入admin帐号即可得到flag。通过/main/register注册一个用户，register需要探测一下</a></p>
+<p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-35fe46782118d653.png" alt><br>第三方登入方式注册一个邮箱帐号用来绑定，通过绑定第三方邮箱，截取绑定的流量包</p>
+<p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-901058431549ca2d.png" alt></p>
+<p>绑定第三方邮箱主要通过state和code进行认证，即只要state和code正确，即可绑定成功，并不校验绑定的账户是什么，从而可以达到绑定其他用户并覆盖绑定邮箱的目的，所以我们可以让admin用户去访问Url：<a href="http://106.75.66.211:8000/main/oauth/?state=svFglsaloQ&code=AoWZd4NJLHuVomqQn2hWoDAp6hP6nz03VqDbp6sa" target="_blank" rel="noopener">http://106.75.66.211:8000/main/oauth/?state=svFglsaloQ&amp;code=AoWZd4NJLHuVomqQn2hWoDAp6hP6nz03VqDbp6sa</a> 便可以达到让admin帐号绑定上我们邮箱的效果，并且后台设置了bot，所以我们可以通过post_bug提交绑定的Url来让admin访问，由于提交框有长度限制，所以直接提交是没有办法的。</p>
+<p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-1d2bf17a7627737b.png" alt></p>
+<p>由于<a href="http://106.75.66.211:8000/main/login?next=/main/login" target="_blank" rel="noopener">http://106.75.66.211:8000/main/login?next=/main/login</a> 处存在重定向，所以我们可以通过重定向跳转到vps上，即<a href="http://106.75.66.211:8000/main/login?next=[your_ip]" target="_blank" rel="noopener">http://106.75.66.211:8000/main/login?next=[your_ip]</a> 在vps上写一个跳转页面</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">window</span>.open(<span class="string">'http://106.75.66.211:8000/main/oauth/?state=9PKyRdpU5D&amp;code=Y5WjDdELjUMGaJpbYfs9lOPBtgEvrOOvZxmmwZsj'</span>)</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将vps跳转页面地址压缩成短链（ 推荐个短链生成地址：<a href="https://bitly.com" target="_blank" rel="noopener">https://bitly.com</a> ），提交bug，最终提交Url为：<a href="http://106.75.66.211:8000/main/login?next=https://bit.ly/2Qiixxx" target="_blank" rel="noopener">http://106.75.66.211:8000/main/login?next=https://bit.ly/2Qiixxx</a> 等待bot访问后利用第三方邮箱登入</p>
+<p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-fb8e409e2de06be0.png" alt></p>
+<h3 id="ezdotso"><a href="#ezdotso" class="headerlink" title="ezdotso"></a>ezdotso</h3><p>题目配置问题，上手甩一个cat /flag就出了，我和小伙伴都惊呆了。?action=cmd&amp;cmd=ls%20/ 列根目录，flag在根目录下<br><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-bc74376afd02b60f.png" alt></p>
+<p>?action=cmd&amp;cmd=cat%20/flag出奇迹……<br><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-f9fee2030f214445.png" alt></p>
+<h5 id="ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。"><a href="#ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。" class="headerlink" title="ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。"></a>ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。</h5>
+    </div>
+
+    
+    
+    
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/atom.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
+              <a href="/tags/Crypto/" rel="tag"><i class="fa fa-tag"></i> Crypto</a>
+              <a href="/tags/OAuth2-0/" rel="tag"><i class="fa fa-tag"></i> OAuth2.0</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/" rel="prev" title="2018高校网络信息安全管理运维挑战赛Web_Writeup">
+      <i class="fa fa-chevron-left"></i> 2018高校网络信息安全管理运维挑战赛Web_Writeup
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/" rel="next" title="2019 全国大学生信息安全竞赛创新能力实践赛3道Web Writeup">
+      2019 全国大学生信息安全竞赛创新能力实践赛3道Web Writeup <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Crypto"><span class="nav-number">1.</span> <span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Warm-Up"><span class="nav-number">1.0.1.</span> <span class="nav-text">Warm Up</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web"><span class="nav-number">2.</span> <span class="nav-text">Web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Blog"><span class="nav-number">2.0.1.</span> <span class="nav-text">Blog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ezdotso"><span class="nav-number">2.0.2.</span> <span class="nav-text">ezdotso</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。"><span class="nav-number">2.0.2.0.1.</span> <span class="nav-text">ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">41k</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
