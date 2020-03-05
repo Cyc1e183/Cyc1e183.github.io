@@ -43,12 +43,12 @@
 <meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-8443127bdac0d0e2.png">
 <meta property="og:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-be2040dcaa949ed3.jpg">
 <meta property="article:published_time" content="2018-11-16T13:18:49.000Z">
-<meta property="article:modified_time" content="2020-03-04T12:19:53.367Z">
+<meta property="article:modified_time" content="2020-03-05T10:59:24.938Z">
 <meta property="article:author" content="Cyc1e">
-<meta property="article:tag" content="Writeup">
-<meta property="article:tag" content="二次注入">
 <meta property="article:tag" content="XXE">
 <meta property="article:tag" content="SSI">
+<meta property="article:tag" content="SQL">
+<meta property="article:tag" content="writeup">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f0e585b5e166c7dd.png">
 
@@ -237,7 +237,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-04 20:19:53" itemprop="dateModified" datetime="2020-03-04T20:19:53+08:00">2020-03-04</time>
+                <time title="修改时间：2020-03-05 18:59:24" itemprop="dateModified" datetime="2020-03-05T18:59:24+08:00">2020-03-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -308,7 +308,8 @@
 <p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f218ccef0572771d.png" alt>把flag.js下载到本地分析，可以看到调用了一个flag.wasm文件</p>
 <p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-8443127bdac0d0e2.png" alt>)可以下载到flag.wasm进行分析，找到了一篇类似题目的writeup：<a href="https://tipi-hack.github.io/2018/04/01/quals-NDH-18-assemblyme.html，参照题目进行js调试判断调用函数，在check()函数上下断点跟进，可以看到调用了wasm中的$func53函数" target="_blank" rel="noopener">https://tipi-hack.github.io/2018/04/01/quals-NDH-18-assemblyme.html，参照题目进行js调试判断调用函数，在check()函数上下断点跟进，可以看到调用了wasm中的$func53函数</a><br><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-be2040dcaa949ed3.jpg" alt></p>
 <p>所以接下来要做的主要就是反编译wasm文件，找到$func53函数进行分析，奈何wasm反编译后是3M的C源码。。。。。。而且变量名都变了，作为一个逆向只好爆破什么的来说，到这就放弃了，思路肯定是没毛病的了，分析调用的函数就可以的到flag{xxxxxx}，页面提交就可以得到flag的吧，坐等Writeup</p>
-<h5 id="题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"><a href="#题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。" class="headerlink" title="题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"></a>题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</h5>
+<p><strong>题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</strong></p>
+
     </div>
 
     
@@ -342,10 +343,10 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Writeup/" rel="tag"><i class="fa fa-tag"></i> Writeup</a>
-              <a href="/tags/%E4%BA%8C%E6%AC%A1%E6%B3%A8%E5%85%A5/" rel="tag"><i class="fa fa-tag"></i> 二次注入</a>
               <a href="/tags/XXE/" rel="tag"><i class="fa fa-tag"></i> XXE</a>
               <a href="/tags/SSI/" rel="tag"><i class="fa fa-tag"></i> SSI</a>
+              <a href="/tags/SQL/" rel="tag"><i class="fa fa-tag"></i> SQL</a>
+              <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
           </div>
 
         
@@ -420,7 +421,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleBBS"><span class="nav-number">2.</span> <span class="nav-text">SimpleBBS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleBlog"><span class="nav-number">3.</span> <span class="nav-text">SimpleBlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleExtensionExplorerInjection"><span class="nav-number">4.</span> <span class="nav-text">SimpleExtensionExplorerInjection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimplePrintEventLogger"><span class="nav-number">5.</span> <span class="nav-text">SimplePrintEventLogger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleServerInjection"><span class="nav-number">6.</span> <span class="nav-text">SimpleServerInjection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleWasmReverse"><span class="nav-number">7.</span> <span class="nav-text">SimpleWasmReverse</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"><span class="nav-number">7.0.1.</span> <span class="nav-text">题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleBBS"><span class="nav-number">2.</span> <span class="nav-text">SimpleBBS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleBlog"><span class="nav-number">3.</span> <span class="nav-text">SimpleBlog</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleExtensionExplorerInjection"><span class="nav-number">4.</span> <span class="nav-text">SimpleExtensionExplorerInjection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimplePrintEventLogger"><span class="nav-number">5.</span> <span class="nav-text">SimplePrintEventLogger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleServerInjection"><span class="nav-number">6.</span> <span class="nav-text">SimpleServerInjection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SimpleWasmReverse"><span class="nav-number">7.</span> <span class="nav-text">SimpleWasmReverse</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -449,7 +450,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

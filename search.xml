@@ -101,9 +101,9 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>AWD</tag>
         <tag>代码审计</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -158,17 +158,17 @@
 <p>所以拼接一下cat /ppppp_f_l_4_g_mmm文件的命令就可以拿到flag了</p>
 <figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line"><span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span></span>ws.send('&#123;<span class="string">"terminal:ssh_get_host_fingerprint"</span>:&#123;<span class="string">"host"</span>:<span class="string">"[ip]"</span>,<span class="string">"port"</span>:<span class="string">"22;cat /ppppp_f_l_4_g_mmm;"</span>&#125;&#125;')</span><br></pre></td></tr></table></figure>
 <p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-83b114f6f3a64a5d.png" alt></p>
-<p>#0x05 render<br>Thymeleaf Spring EL SSTI  后面补上</p>
+<h3 id="0x05-render"><a href="#0x05-render" class="headerlink" title="0x05 render"></a>0x05 render</h3><p>Thymeleaf Spring EL SSTI  后面补上</p>
 ]]></content>
       <categories>
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>XXE</tag>
         <tag>RCE</tag>
         <tag>telnet</tag>
         <tag>.user.ini</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -193,7 +193,7 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -307,10 +307,9 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>SQL</tag>
         <tag>.htaccess</tag>
-        <tag>Bypass</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -351,8 +350,8 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>XXE</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -413,9 +412,9 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>open_basedir</tag>
         <tag>SSRF</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -520,12 +519,13 @@
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">strlower</span><span class="params">(username)</span></span><span class="symbol">:</span></span><br><span class="line">    username = nodeprep.prepare(username)</span><br><span class="line">    <span class="keyword">return</span> username</span><br></pre></td></tr></table></figure>
 <p>该版本的Twisted库对于Unicode中的Small Capital，例如ᴀ的转换过程为ᴀ -&gt; A -&gt; a，恰好代码中的注册，登录，改密码操作中执行的nodeprep.prepare()次数足够将ᴀᴅᴍɪɴ转成admin,也就是注册一个ᴀᴅᴍɪɴ账号，绕后登录后修改密码时修改的时admin账号的密码。该题有三个解法，其他解法阔以看看飘零兄写的文章：<a href="https://www.anquanke.com/post/id/164086" target="_blank" rel="noopener">https://www.anquanke.com/post/id/164086</a></p>
 <h3 id="0x0B-DE1CTF赛题"><a href="#0x0B-DE1CTF赛题" class="headerlink" title="0x0B DE1CTF赛题"></a>0x0B DE1CTF赛题</h3><p>参考本菜的De1CTF web wp即可：<a href="https://www.jianshu.com/p/0a02f4ff6a7e" target="_blank" rel="noopener">https://www.jianshu.com/p/0a02f4ff6a7e</a> </p>
-<h3 id="最近太忙了，没时间刷题了，有时间再写"><a href="#最近太忙了，没时间刷题了，有时间再写" class="headerlink" title="最近太忙了，没时间刷题了，有时间再写"></a>最近太忙了，没时间刷题了，有时间再写</h3>]]></content>
+<p><strong>最近太忙了，没时间刷题了，有时间再写</strong></p>
+]]></content>
       <categories>
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -703,10 +703,10 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>反序列化</tag>
         <tag>SQL</tag>
         <tag>uwsgi</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -748,15 +748,16 @@
 <p>所以接下主要要解决的就是构造$_GET，正则上不会过滤MATH函数名、大括号等，所以可以利用这点用来构造变量覆盖来从而构造payload，其中中括号[]可以用大括号替代，最终构造：$cos=(is_nan^(6).(4)).(rand^(7).(5));$$cos{atan}($$cos{atanh})，即$cos=’_GET’,$$cos覆盖后为$_GET,所以通过变量覆盖后最终为$_GET{atan}($_GET{atanh}),所以直接给参数atan和atanh赋值，可以实现任意代码执行，最终构造：2333333;$cos=(is_nan^(6).(4)).(rand^(7).(5));$$cos{atan}($$cos{atanh})&amp;atan=system&amp;atanh=cat flag.php，其中2333333;用于闭合echo，不过不闭合也可以的，便可得到flag。<br>后来继续测试了一下，发现利用exec(nl *)进行缩短竟然可以缩到79位（吐血）！！！……这里直接贴缩的payload：base_convert(47138,20,36)(base_convert(1438255411,14,34)(dechex(474260465194)))，其中hex2bin进行14/34进制的转换，exec进行20/36进制的转换就可以达到79位。<br>这道题的解法比较多，比如在构造$cos=(is_nan^(6).(4)).(rand^(7).(5));$$cos{atan}($$cos{atanh})时，$$cos{atan}可以直接利用base_convert函数将system或者eval进行10/36进制转换进行利用。<br>如果没有过滤反引号，其实会简单很多，可以参考P神的：<a href="https://www.freebuf.com/articles/web/186298.html" target="_blank" rel="noopener">无字母数字Webshell之提高篇 </a>闭合前一段&lt;?php，利用&lt;?=开辟代码，通过’`. /???/???/????/????.????`‘来打印文件内容，详细的可以本地测试调试不做过多说明。</p>
 <p><strong>FLAG值：</strong>flag{86fed0d1-42ec-46ba-83ee-7dedd09303fb}</p>
 <h3 id="0x03-RefSpace"><a href="#0x03-RefSpace" class="headerlink" title="0x03 RefSpace"></a>0x03 RefSpace</h3><p>路走错了，跑去逆向文件了。这个还是等大佬的wp了</p>
-<h6 id="个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。"><a href="#个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。" class="headerlink" title="个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。"></a>个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。</h6>]]></content>
+<p><strong>个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。</strong></p>
+]]></content>
       <categories>
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>反序列化</tag>
         <tag>SQL</tag>
         <tag>RCE</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -1028,9 +1029,9 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>AWD</tag>
         <tag>代码审计</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -1053,14 +1054,15 @@ if &apos;errorInfo&apos; not in req.content:
 <p><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-fb8e409e2de06be0.png" alt></p>
 <h3 id="ezdotso"><a href="#ezdotso" class="headerlink" title="ezdotso"></a>ezdotso</h3><p>题目配置问题，上手甩一个cat /flag就出了，我和小伙伴都惊呆了。?action=cmd&amp;cmd=ls%20/ 列根目录，flag在根目录下<br><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-bc74376afd02b60f.png" alt></p>
 <p>?action=cmd&amp;cmd=cat%20/flag出奇迹……<br><img src="/2018/11/26/2018X-NUCA-Cyc1e-writeup/8418106-f9fee2030f214445.png" alt></p>
-<h5 id="ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。"><a href="#ps-其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js-wasm和web-pwn的，又可以学习一波了。" class="headerlink" title="ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。"></a>ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。</h5>]]></content>
+<p><strong>ps:其他几个web都比较难，怼到自闭，最后ROIS出了hardphp，还有js+wasm和web+pwn的，又可以学习一波了。</strong></p>
+]]></content>
       <categories>
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
         <tag>RSA</tag>
         <tag>OAuth2.0</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>
@@ -1093,15 +1095,16 @@ if &apos;errorInfo&apos; not in req.content:
 <p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-f218ccef0572771d.png" alt>把flag.js下载到本地分析，可以看到调用了一个flag.wasm文件</p>
 <p><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-8443127bdac0d0e2.png" alt>)可以下载到flag.wasm进行分析，找到了一篇类似题目的writeup：<a href="https://tipi-hack.github.io/2018/04/01/quals-NDH-18-assemblyme.html，参照题目进行js调试判断调用函数，在check()函数上下断点跟进，可以看到调用了wasm中的$func53函数" target="_blank" rel="noopener">https://tipi-hack.github.io/2018/04/01/quals-NDH-18-assemblyme.html，参照题目进行js调试判断调用函数，在check()函数上下断点跟进，可以看到调用了wasm中的$func53函数</a><br><img src="/2018/11/16/2018%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86%E8%BF%90%E7%BB%B4%E6%8C%91%E6%88%98%E8%B5%9BWeb-Writeup/8418106-be2040dcaa949ed3.jpg" alt></p>
 <p>所以接下来要做的主要就是反编译wasm文件，找到$func53函数进行分析，奈何wasm反编译后是3M的C源码。。。。。。而且变量名都变了，作为一个逆向只好爆破什么的来说，到这就放弃了，思路肯定是没毛病的了，分析调用的函数就可以的到flag{xxxxxx}，页面提交就可以得到flag的吧，坐等Writeup</p>
-<h5 id="题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"><a href="#题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。" class="headerlink" title="题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。"></a>题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</h5>]]></content>
+<p><strong>题目相对比较简单，差一题ak比较可惜，不过也不会逆向，木有办法，仅供学习。</strong></p>
+]]></content>
       <categories>
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>Writeup</tag>
-        <tag>二次注入</tag>
         <tag>XXE</tag>
         <tag>SSI</tag>
+        <tag>SQL</tag>
+        <tag>writeup</tag>
       </tags>
   </entry>
   <entry>

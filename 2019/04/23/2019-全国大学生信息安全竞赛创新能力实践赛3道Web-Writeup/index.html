@@ -39,12 +39,12 @@
 <meta property="og:image" content="http://yoursite.com/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/8418106-a3f096398526363b.png">
 <meta property="og:image" content="http://yoursite.com/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/8418106-43ae652631f185cb.png">
 <meta property="article:published_time" content="2019-04-23T01:55:56.000Z">
-<meta property="article:modified_time" content="2020-03-04T12:19:53.367Z">
+<meta property="article:modified_time" content="2020-03-05T10:59:24.941Z">
 <meta property="article:author" content="Cyc1e">
-<meta property="article:tag" content="Writeup">
 <meta property="article:tag" content="反序列化">
 <meta property="article:tag" content="SQL">
 <meta property="article:tag" content="RCE">
+<meta property="article:tag" content="writeup">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/8418106-fd7dd48f508be3a5.png">
 
@@ -233,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-04 20:19:53" itemprop="dateModified" datetime="2020-03-04T20:19:53+08:00">2020-03-04</time>
+                <time title="修改时间：2020-03-05 18:59:24" itemprop="dateModified" datetime="2020-03-05T18:59:24+08:00">2020-03-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +313,8 @@
 <p>所以接下主要要解决的就是构造$_GET，正则上不会过滤MATH函数名、大括号等，所以可以利用这点用来构造变量覆盖来从而构造payload，其中中括号[]可以用大括号替代，最终构造：$cos=(is_nan^(6).(4)).(rand^(7).(5));$$cos{atan}($$cos{atanh})，即$cos=’_GET’,$$cos覆盖后为$_GET,所以通过变量覆盖后最终为$_GET{atan}($_GET{atanh}),所以直接给参数atan和atanh赋值，可以实现任意代码执行，最终构造：2333333;$cos=(is_nan^(6).(4)).(rand^(7).(5));$$cos{atan}($$cos{atanh})&amp;atan=system&amp;atanh=cat flag.php，其中2333333;用于闭合echo，不过不闭合也可以的，便可得到flag。<br>后来继续测试了一下，发现利用exec(nl *)进行缩短竟然可以缩到79位（吐血）！！！……这里直接贴缩的payload：base_convert(47138,20,36)(base_convert(1438255411,14,34)(dechex(474260465194)))，其中hex2bin进行14/34进制的转换，exec进行20/36进制的转换就可以达到79位。<br>这道题的解法比较多，比如在构造$cos=(is_nan^(6).(4)).(rand^(7).(5));$$cos{atan}($$cos{atanh})时，$$cos{atan}可以直接利用base_convert函数将system或者eval进行10/36进制转换进行利用。<br>如果没有过滤反引号，其实会简单很多，可以参考P神的：<a href="https://www.freebuf.com/articles/web/186298.html" target="_blank" rel="noopener">无字母数字Webshell之提高篇 </a>闭合前一段&lt;?php，利用&lt;?=开辟代码，通过’`. /???/???/????/????.????`‘来打印文件内容，详细的可以本地测试调试不做过多说明。</p>
 <p><strong>FLAG值：</strong>flag{86fed0d1-42ec-46ba-83ee-7dedd09303fb}</p>
 <h3 id="0x03-RefSpace"><a href="#0x03-RefSpace" class="headerlink" title="0x03 RefSpace"></a>0x03 RefSpace</h3><p>路走错了，跑去逆向文件了。这个还是等大佬的wp了</p>
-<h6 id="个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。"><a href="#个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。" class="headerlink" title="个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。"></a>个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。</h6>
+<p><strong>个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。</strong></p>
+
     </div>
 
     
@@ -347,10 +348,10 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Writeup/" rel="tag"><i class="fa fa-tag"></i> Writeup</a>
               <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" rel="tag"><i class="fa fa-tag"></i> 反序列化</a>
               <a href="/tags/SQL/" rel="tag"><i class="fa fa-tag"></i> SQL</a>
               <a href="/tags/RCE/" rel="tag"><i class="fa fa-tag"></i> RCE</a>
+              <a href="/tags/writeup/" rel="tag"><i class="fa fa-tag"></i> writeup</a>
           </div>
 
         
@@ -425,7 +426,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-JustSoso"><span class="nav-number">1.</span> <span class="nav-text">0x01 JustSoso</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-全宇宙最简单的SQL"><span class="nav-number">2.</span> <span class="nav-text">0x02 全宇宙最简单的SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-love-math"><span class="nav-number">3.</span> <span class="nav-text">0x02 love math</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-RefSpace"><span class="nav-number">4.</span> <span class="nav-text">0x03 RefSpace</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。"><span class="nav-number">4.0.0.1.</span> <span class="nav-text">个人觉得Web没那么简单，被刷到两位数的分有点意外到，不多说。</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-JustSoso"><span class="nav-number">1.</span> <span class="nav-text">0x01 JustSoso</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-全宇宙最简单的SQL"><span class="nav-number">2.</span> <span class="nav-text">0x02 全宇宙最简单的SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-love-math"><span class="nav-number">3.</span> <span class="nav-text">0x02 love math</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-RefSpace"><span class="nav-number">4.</span> <span class="nav-text">0x03 RefSpace</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -454,7 +455,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
