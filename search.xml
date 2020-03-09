@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>GXZYCTF部分Webeb Writeup</title>
+    <title>GXZYCTF部分Web Writeup</title>
     <url>/2020/03/09/GXZYCTF%E9%83%A8%E5%88%86Web-Writeup/</url>
     <content><![CDATA[<p><strong>很长一段时间没有接触了，都沉迷于课程学习不能自拔（被迫的），果然2020年对题目都失去了感觉，不仅如此，刚打开就想x了……，简单先整理一下做出来的题。</strong></p>
 <h3 id="0x00-Webtmp"><a href="#0x00-Webtmp" class="headerlink" title="0x00 Webtmp"></a>0x00 Webtmp</h3><p>题目源码</p>
