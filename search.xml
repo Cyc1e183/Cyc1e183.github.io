@@ -4,7 +4,7 @@
     <title>关于file_put_contents的一些小测试</title>
     <url>/2020/04/03/php-filter%E7%9A%84%E4%B8%80%E4%BA%9B%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<p>昨天看了篇文章<a href="https://mp.weixin.qq.com/s/kfYF157ux_VAOymU5l5RFA" target="_blank" rel="noopener">一次“SSRF–&gt;RCE”的艰难利用</a>，被里面的各种骚操作给秀到了，发现<code>file_put_contents</code>这个很有意思，绕过<code>&lt;?php exit();</code>GetShell也经常有人提出不同的思路，这里简单的做一些测试和记录</p>
-<h1 id="一、file-put-contents-filename-”-lt-php-exit-”-content"><a href="#一、file-put-contents-filename-”-lt-php-exit-”-content" class="headerlink" title="一、file_put_contents($filename,”&lt;?php exit();”.$content);"></a>一、file_put_contents($filename,”&lt;?php exit();”.$content);</h1><blockquote>
+<h1 id="file-put-contents-filename-”-lt-php-exit-”-content"><a href="#file-put-contents-filename-”-lt-php-exit-”-content" class="headerlink" title="file_put_contents($filename,”&lt;?php exit();”.$content);"></a>file_put_contents($filename,”&lt;?php exit();”.$content);</h1><blockquote>
 <p><strong>前提</strong>：这种是前后两个变量不同，假设$filename,%content我们都可控情况</p>
 </blockquote>
 <p>这种情况相对较为简单，先捋清思路，$filename控制的写入的文件名，$content拼接在了<code>&lt;?php exit();</code>后，所以想要GetShell的话，就必须把<code>&lt;?php exit();</code>给干掉，而都知道$filename是控制文件名的，如果我们使用<strong>php://filter</strong>协议的话，这会先按<strong>php://filter</strong>规定的协议对$content进行解码后再写入协议，更强大的是<strong>php://filter</strong>还支持使用多个过滤器规则，也就是说我们可以来个连环操作。所以思路很简单，目标就是把<code>&lt;?php exit();</code>解码为php不认识的字符，而我们构造的内容能够正常的解码出来就可以。这个在phith0n之前的文章里有了很详细的介绍<a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html" target="_blank" rel="noopener">传送门</a>，这里简单的介绍一下</p>
@@ -21,7 +21,7 @@
 <figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>php phpinfo();<span class="meta">?&gt;</span> =&gt; PD9waHAgcGhwaW5mbygpOz8+ =&gt;<span class="meta">?&gt;</span>PD9waHAgcGhwaW5mbygpOz8+ -&gt; $content <span class="comment">#这里由于`&lt;?php exit();`不是完整的标签，所以需要补上’?&gt;‘进行补全</span></span><br><span class="line">php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="keyword">string</span>.strip_tags|<span class="built_in">convert</span>.base64-decode/resource=Cyc1e.php  -&gt; $filename</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2020/04/03/php-filter%E7%9A%84%E4%B8%80%E4%BA%9B%E6%B5%8B%E8%AF%95/image-20200403152859574.png" alt="image-20200403152859574"></p>
-<h1 id="二、file-put-contents-a-”-lt-php-exit-”-a"><a href="#二、file-put-contents-a-”-lt-php-exit-”-a" class="headerlink" title="二、file_put_contents($a,”&lt;?php exit();”.$a);"></a>二、file_put_contents($a,”&lt;?php exit();”.$a);</h1><blockquote>
+<h1 id="file-put-contents-a-”-lt-php-exit-”-a"><a href="#file-put-contents-a-”-lt-php-exit-”-a" class="headerlink" title="file_put_contents($a,”&lt;?php exit();”.$a);"></a>file_put_contents($a,”&lt;?php exit();”.$a);</h1><blockquote>
 <p><strong>前提</strong>：这种是前后两个变量相同，假设$a可控情况</p>
 </blockquote>
 <p>这种相同变量的构造方式和不同变量的构造方式思路是大差不差的，都是需要干掉<code>&lt;?php exit();</code>，只不过构造起来相对更复杂一些，这里也简单记录下测试的内容👇</p>
