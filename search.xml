@@ -3,7 +3,7 @@
   <entry>
     <title>关于file_put_contents的一些小测试</title>
     <url>/2020/04/03/php-filter%E7%9A%84%E4%B8%80%E4%BA%9B%E6%B5%8B%E8%AF%95/</url>
-    <content><![CDATA[<p>昨天看了篇文章<a href="https://mp.weixin.qq.com/s/kfYF157ux_VAOymU5l5RFA" target="_blank" rel="noopener">一次“SSRF–&gt;RCE”的艰难利用</a>，被里面的各种骚操作给秀到了，发现<code>file_put_contents</code>这个很有意思，绕过<code>&lt;?php exit();</code>GetShell也经常有人提出不同的思路，这里简单的做一些测试和记录</p>
+    <content><![CDATA[<p>昨天看了篇文章<a href="https://mp.weixin.qq.com/s/kfYF157ux_VAOymU5l5RFA" target="_blank" rel="noopener">一次“SSRF–&gt;RCE”的艰难利用</a>，被里面的各种骚操作给秀到了，发现<code>file_put_contents</code>这个很有意思，绕过<code>&lt;?php exit();</code>GetShell也经常有人提出不同的思路，这里简单的做一下测试的记录。</p>
 <h1 id="file-put-contents-filename-”-lt-php-exit-”-content"><a href="#file-put-contents-filename-”-lt-php-exit-”-content" class="headerlink" title="file_put_contents($filename,”&lt;?php exit();”.$content);"></a>file_put_contents($filename,”&lt;?php exit();”.$content);</h1><blockquote>
 <p><strong>前提</strong>：这种是前后两个变量不同，假设$filename,%content我们都可控情况</p>
 </blockquote>
