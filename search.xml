@@ -67,7 +67,7 @@
 <p>tips：<code>file_put_contents</code>和<code>file_get_contents</code>这两个函数还是很有意思的，file_get_contents也有很多特性，下次有时间再写</p>
 ]]></content>
       <categories>
-        <category>水滴</category>
+        <category>水滴随笔</category>
       </categories>
       <tags>
         <tag>file_put_contents</tag>
