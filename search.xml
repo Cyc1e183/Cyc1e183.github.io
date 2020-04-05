@@ -31,22 +31,22 @@
 <p>根据前面介绍的不同变量的构造方法，很容易拓展到相同的变量，同样利用<strong>php://filter</strong>来构造，反正后面是写入的内容，只要在后面解码的时候把shell解码出来，不需要的东西解码成乱码即可，而Base64构造的话，例如</p>
 <figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">$<span class="keyword">a</span> = php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="built_in">convert</span>.base64-decode|PD9waHAgcGhwaW5mbygpOz8+|/resource=Cyc1e.php</span><br></pre></td></tr></table></figure>
 
-<p>构造的shell可以放在过滤器的位置和文件名位置都可以（其他编码有时候会有空格什么的乱码，文件名不一定好用），php://filter面对不可用的规则是报个Warning，绕后跳过继续执行的（不会退出），所以按理说这样构造是<strong>“很完美”</strong>的，我们看下base-decode哪些字符👇</p>
+<p>构造的shell可以放在过滤器的位置和文件名位置都可以（其他编码有时候会有空格什么的乱码，文件名不一定好用），php://filter面对不可用的规则是报个Warning，然后跳过继续执行的（不会退出），所以按理说这样构造是<strong>“很完美”</strong>的，我们看下base-decode哪些字符👇</p>
 <figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">php<span class="regexp">//</span>filter<span class="regexp">/write=convertbase64decodePD9waHAgcGhwaW5mbygpOz8+/</span>resource=Cyc1e.php</span><br></pre></td></tr></table></figure>
 
-<p>而默认情况下base64编码是以 <strong>=</strong> 作为结尾的，所以正常解码的时候到了 = 就解码结束了，即使我们构造payload的时候不用<code>write=</code>，但是在最后获取文件名的时候<code>resource=</code>中的 = 过不掉，所以导致过滤器解码失败，从而报错（不过还是会创建文件的，内容由于解码过程出错了，就都丢弃了）👇</p>
+<p>而默认情况下base64编码是以 <code>=</code> 作为结尾的，所以正常解码的时候到了 <code>=</code> 就解码结束了，即使我们构造payload的时候不用<code>write=</code>，但是在最后获取文件名的时候<code>resource=</code>中的 <code>=</code> 过不掉，所以导致过滤器解码失败，从而报错（不过还是会创建文件的，内容由于解码过程出错了，就都丢弃了）👇</p>
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403160120749.png" alt></p>
-<p>我们也可以简单的测试一下是否是 <strong>=</strong> 出的问题，</p>
+<p>我们也可以简单的测试一下是否是 <code>=</code> 出的问题，</p>
 <figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment">#3.php</span></span><br><span class="line">&lt;?php</span><br><span class="line">$filename=<span class="string">"php://filter/write=convert.base64-decode/resource=Cyc1e.php"</span>;</span><br><span class="line">$content=<span class="string">"PD9waHAgcGhwaW5mbygpOz8+"</span>;</span><br><span class="line">file_put_contents($filename,<span class="string">"&lt;?PHP exit();//="</span>.$content);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403160208500.png" alt></p>
-<p>结果是一样的，所以可以确定是 <strong>=</strong> 出的问题，要是有绕过的构造方法，欢迎分享。</p>
+<p>结果是一样的，所以可以确定是 <code>=</code> 出的问题，要是有绕过的构造方法，欢迎分享。</p>
 <h2 id="0x02-Rot13"><a href="#0x02-Rot13" class="headerlink" title="0x02 Rot13"></a>0x02 Rot13</h2><p>rot13编码就不存在base64的问题，所以和前面base64构造的思路一样👇</p>
 <figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">$<span class="keyword">a</span> = php://<span class="built_in">filter</span>/<span class="built_in">write</span>=<span class="keyword">string</span>.rot13|<span class="meta">&lt;?</span>cuc cucvasb();<span class="meta">?&gt;</span>|/resource=Cyc1e.php</span><br></pre></td></tr></table></figure>
 
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403160545137.png" alt></p>
-<p>和前面提到的一样，这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用（默认情况是没开启的：php.ini中的short_open_tag）</p>
-<h2 id="0x03-iconv字符编码转换"><a href="#0x03-iconv字符编码转换" class="headerlink" title="0x03 iconv字符编码转换"></a>0x03 iconv字符编码转换</h2><p>这种方法由于之前没有见过，所以感觉这波操作比我的亚索还要秀~，想法是一样的，通过字符转换把<code>&lt;?php exit();</code>转成不能解析的，这里采用的是UCS-2或者UCS-4编码方式，而我们构造的转成可正常解析的。👇</p>
+<p>和前面提到的一样，这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用（默认情况是没开启的：php.ini中的short_open_tag（再补充一下，linux下默认是没有开启的））</p>
+<h2 id="0x03-iconv字符编码转换"><a href="#0x03-iconv字符编码转换" class="headerlink" title="0x03 iconv字符编码转换"></a>0x03 iconv字符编码转换</h2><p>这种方法由于之前没有见过，所以感觉这波操作比我的亚索还要秀~，想法是一样的，通过字符转换把<code>&lt;?php exit();</code>转成不能解析的，这里采用的是UCS-2或者UCS-4编码方式（当然还有很多，比如utf-8和utf-7），而我们构造的转成可正常解析的。👇</p>
 <figure class="highlight lisp"><table><tr><td class="code"><pre><span class="line">#echo iconv(<span class="string">"UCS-2LE"</span>,<span class="string">"UCS-2BE"</span>,'&lt;?php phpinfo()<span class="comment">;?&gt;');</span></span><br><span class="line">?&lt;hp phpipfn(<span class="name">o</span><span class="comment">;)&gt;?</span></span><br></pre></td></tr></table></figure>
 
 <p>这里用的是UCS-2，当然我们也可以用UCS-4👇</p>
@@ -71,10 +71,10 @@
 <p>这样就成功的把 <strong>=</strong> 给转了，base64编码没有受到影响，一样可以正常的解码~</p>
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403193558288.png" alt></p>
 <p>所以对于base64的运用，只要找到一个能把 <strong>=</strong> 转了同时又不影响base64编码后的字符的转码方式即可</p>
-<h3 id="第三套连招"><a href="#第三套连招" class="headerlink" title="第三套连招"></a>第三套连招</h3><p>我们来用一下strip_tags方法&amp;&amp;base64的组合，不过之前构造的这种方法有局限性，要求服务器是linux系统，所以之前没写。因为前面介绍过strip_tags去除的是完整的标签以及内容，而base64要求中间不能出现 <strong>=</strong> 所以把他们二者组合起来👇</p>
+<h3 id="第三套连招"><a href="#第三套连招" class="headerlink" title="第三套连招"></a>第三套连招</h3><p>我们来用一下strip_tags方法&amp;&amp;base64的组合，不过之前构造的这种方法有局限性，要求服务器是linux系统，所以之前没写。因为前面介绍过strip_tags去除的是完整的标签以及内容，而base64要求中间不能出现 <code>=</code> 所以把他们二者组合起来👇</p>
 <figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">$a = 'php://filter/write=<span class="built_in">string</span>.strip_tags|<span class="built_in">convert</span>.<span class="built_in">base64</span>-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8+.php';</span><br></pre></td></tr></table></figure>
 
-<p>理解起来也很简单，在文件名前加上<code>?&gt;</code>把<code>&lt;?php exit();</code>闭合，同时 = 也在闭合标签之间，所以利用strip_tags处理的时候直接把<code>&lt;?php ...... ?&gt;</code>内的所有内容都删除了，然后对剩下的部分，也就是<code>PD9waHAgcGhwaW5mbygpOz8+.php</code>进行base64解码，为什么说这种构造Windows不行呢，因为Windows不支持文件名中有?、&gt;这类字符。</p>
+<p>理解起来也很简单，在文件名前加上<code>?&gt;</code>把<code>&lt;?php exit();</code>闭合，同时 = 也在闭合标签之间，所以利用strip_tags处理的时候直接把<code>&lt;?php ...... ?&gt;</code>内的所有内容都删除了，然后对剩下的部分，也就是<code>PD9waHAgcGhwaW5mbygpOz8+.php</code>进行base64解码，为什么说这种构造Windows不行呢，因为Windows不支持文件名中有<code>?</code>、<code>&gt;</code>这类字符。</p>
 <p><img src="/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/image-20200403195815117.png" alt></p>
 <p>如果觉得文件名太难看了，那么可以利用<code>../</code>来构造👇</p>
 <figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">$a = 'php://filter/write=<span class="built_in">string</span>.strip_tags|<span class="built_in">convert</span>.<span class="built_in">base64</span>-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8+/../Cyc1e.php';</span><br></pre></td></tr></table></figure>
