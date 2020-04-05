@@ -326,10 +326,10 @@ td {
   border-bottom-width: 1px;
 }
 .btn {
-  background: transparent;
-  border: 2px solid var(--link-color);
+  background: #fff;
+  border: 2px solid #006762;
   border-radius: 0;
-  color: var(--link-color);
+  color: #006762;
   display: inline-block;
   font-size: 0.875em;
   line-height: 2;
@@ -341,9 +341,9 @@ td {
   transition-timing-function: ease-in-out;
 }
 .btn:hover {
-  background: transparent;
-  border-color: var(--link-hover-color);
-  color: var(--link-hover-color);
+  background: #456f95;
+  border-color: #456f95;
+  color: #fff;
 }
 .btn + .btn {
   margin: 0 0 8px 8px;
@@ -963,9 +963,9 @@ pre .javascript .function {
   margin: 0.1em 0.2em;
 }
 .comment-button-group .comment-button.active {
-  background: transparent;
-  border-color: var(--link-hover-color);
-  color: var(--link-hover-color);
+  background: #456f95;
+  border-color: #456f95;
+  color: #fff;
 }
 .comment-position {
   display: none;
@@ -1232,7 +1232,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #33ff3b;
+  background: #8effec;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1992,6 +1992,48 @@ pre .javascript .function {
   justify-content: center;
   text-align: center;
 }
+.reward-container {
+  margin: 20px auto;
+  padding: 10px 0;
+  text-align: center;
+  width: 90%;
+}
+.reward-container button {
+  background: #ff2a2a;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  line-height: 2;
+  outline: 0;
+  padding: 0 15px;
+  vertical-align: text-top;
+}
+.reward-container button:hover {
+  background: #f55;
+}
+#qr {
+  padding-top: 20px;
+}
+#qr a {
+  border: 0;
+}
+#qr img {
+  display: inline-block;
+  margin: 0.8em 2em 0 2em;
+  max-width: 100%;
+  width: 180px;
+}
+#qr p {
+  text-align: center;
+}
+.post-copyright {
+  background: var(--card-bg-color);
+  border-left: 3px solid #ff2a2a;
+  list-style: none;
+  margin: 2em 0 0;
+  padding: 0.5em 1em;
+}
 .post-body p a {
   color: #f75000;
   border-bottom: none;
@@ -2178,6 +2220,14 @@ ul.breadcrumb li + li:last-child {
 }
 .tag-cloud a:hover {
   color: #222 !important;
+}
+.gt-header a,
+.gt-comments a,
+.gt-popup a {
+  border-bottom: none;
+}
+.gt-container .gt-popup .gt-action.is--active::before {
+  top: 0.7em;
 }
 .search-pop-overlay {
   background: rgba(0,0,0,0.3);
@@ -2467,12 +2517,12 @@ hr {
 .post-button .btn {
   background: none;
   border: 0;
-  border-bottom: 2px solid var(--link-color);
+  border-bottom: 2px solid #006762;
   padding: 0;
   transition-property: border;
 }
 .post-button .btn:hover {
-  border-bottom-color: var(--link-hover-color);
+  border-bottom-color: #456f95;
 }
 .sidebar {
   left: -320px;

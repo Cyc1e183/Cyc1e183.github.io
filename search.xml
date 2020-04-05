@@ -309,8 +309,8 @@
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
         <tag>AWD</tag>
+        <tag>writeup</tag>
         <tag>代码审计</tag>
       </tags>
   </entry>
@@ -1237,8 +1237,8 @@ if &apos;errorInfo&apos; not in req.content:
         <category>Cyc1e的CTF之路</category>
       </categories>
       <tags>
-        <tag>writeup</tag>
         <tag>AWD</tag>
+        <tag>writeup</tag>
         <tag>代码审计</tag>
       </tags>
   </entry>
