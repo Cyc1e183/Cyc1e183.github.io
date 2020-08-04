@@ -326,10 +326,10 @@ td {
   border-bottom-width: 1px;
 }
 .btn {
-  background: #fff;
+  background: #eee;
   border: 2px solid #006762;
   border-radius: 0;
-  color: #006762;
+  color: #555;
   display: inline-block;
   font-size: 0.875em;
   line-height: 2;
@@ -1232,7 +1232,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #8effec;
+  background: #eb22ff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
