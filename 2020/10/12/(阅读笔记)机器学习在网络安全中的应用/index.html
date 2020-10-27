@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"cyc1e183.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="机器学习在网络空间安全中的应用流程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(阅读笔记)机器学习在网络安全中的应用">
+<meta property="og:url" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="机器学习在网络空间安全中的应用流程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200407163404074.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408155819177.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408160234176.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408163443448.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408165505024.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408170530426.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408202520748.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408203159872.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408204429751.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408210203497.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408210306592.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409161406008.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409162923123.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409170053350.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409171136507.png">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409171201297.png">
+<meta property="article:published_time" content="2020-10-12T14:03:51.000Z">
+<meta property="article:modified_time" content="2020-10-27T02:10:34.745Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200407163404074.png">
+
+<link rel="canonical" href="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>(阅读笔记)机器学习在网络安全中的应用 | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="潜心专研、与世无争😄">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          (阅读笔记)机器学习在网络安全中的应用
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-12 22:03:51" itemprop="dateCreated datePublished" datetime="2020-10-12T22:03:51+08:00">2020-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-27 10:10:34" itemprop="dateModified" datetime="2020-10-27T10:10:34+08:00">2020-10-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84%E5%AD%A6%E6%9C%AF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的学术之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200407163404074.png" alt></p>
+<h3 id="机器学习在网络空间安全中的应用流程"><a href="#机器学习在网络空间安全中的应用流程" class="headerlink" title="机器学习在网络空间安全中的应用流程"></a>机器学习在网络空间安全中的应用流程</h3><p>机器学习在网络空间安全研究中的一般应用流程，主要包括安全问题抽象、数据采集、数据预处理及安全特征提取、模型构建、模型验证以及模型效果评估6个阶段.在整个应用流程中，各阶段不能独立存在，相互之间存在一定的关联关系.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408155819177.png" alt></p>
+<p>使用机器学习技术解决安全问题的第一步就是要进行问题的抽象和定义，将安全问题映射为机器学习能够解决的分类、聚类及降维等问题</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408160234176.png" alt></p>
+<p>数据预处理及特征提取主要包括堆数据规范化、离散化以及非平衡性的处理等</p>
+<p>深度学习[3]凭借强大的自动提取特征的能力，被用于解决异常协议检测、恶意软件检测、网络入侵检测BGP（Border Gateway Protocol）异常路由检测以及差分隐私保护等安全问题.</p>
+<p>常用的分类评估指标有正确率、查准率（又称精度）和查全率（又称召回率）.</p>
+<blockquote>
+<p>正确率是分类正确的正常样本与恶黛样本数占样本总数的比例，一般来说正确率越高，分类器越好.查准率则是被正确识别的正常样本数占被识别为正常样本的比例，也是分类器精确性的衡量标准.查率是被正确识别的正常样本与正确识别的正常样参参和错误识别的恶意样本之和的比例，该指标衡量了分类器对正常样本的识别能力.</p>
+</blockquote>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408163443448.png" alt></p>
+<h3 id="机器学习在系统安全研究中的应用"><a href="#机器学习在系统安全研究中的应用" class="headerlink" title="机器学习在系统安全研究中的应用"></a>机器学习在系统安全研究中的应用</h3><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408165505024.png" alt></p>
+<h3 id="机器学习在网络安全研究中的应用"><a href="#机器学习在网络安全研究中的应用" class="headerlink" title="机器学习在网络安全研究中的应用"></a>机器学习在网络安全研究中的应用</h3><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408170530426.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408202520748.png" alt></p>
+<p>根据入侵检测系统中检测引擎使用方法的不同，网络入侵检测分为误用检测、异常检测及混合检测.误用检测是以已知攻击为特征，将入侵行为与正常行为按照已知的特征区分开来.该类方法效率高且误报率低，但只能发现已知的入侵，漏报率较高，并且特征的维护多采用人工方式完成.异常检测指将当前网络行为与系统正常行为模式进行比较，若两者偏差较大，超过了预定义的阈值，则认为系统出现了异常或被入侵.</p>
+<p>将机器学习技术应用于网络入侵检测系统的一般流程如图6所示：首先通过网络流量采集工具Snort、Wireshark等自行采集数据集或者采用公开的网络入侵数据集，接着对数据集进行预处理从中提取网络入侵特征，然后选择合适的机器学习算法构建入侵检测分类器，对待测数据识别是正常行为还是异常行为.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408203159872.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408204429751.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408210203497.png" alt></p>
+<p>机器学习在网络安全中的应用小结</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408210306592.png" alt></p>
+<h3 id="机器学习在应用安全研究中的应用"><a href="#机器学习在应用安全研究中的应用" class="headerlink" title="机器学习在应用安全研究中的应用"></a>机器学习在应用安全研究中的应用</h3><h4 id="1、在垃圾邮件检查领域"><a href="#1、在垃圾邮件检查领域" class="headerlink" title="1、在垃圾邮件检查领域"></a>1、在垃圾邮件检查领域</h4><p>垃圾邮件的检测可以抽象为机器学习的文本分类问题，例如，最简单的分类可以定义为{一1，1}，一1代表非垃圾邮件；1代表垃圾邮件.</p>
+<h4 id="2、基于URL的恶意网页识别"><a href="#2、基于URL的恶意网页识别" class="headerlink" title="2、基于URL的恶意网页识别"></a>2、基于URL的恶意网页识别</h4><p>基于分类方法的恶意网页识别，通常将该问题抽象为机器学习的二分类问题，一般流程如图8所示，首先根据已标记URL数据集进行特征提取，常用的静态特征包括主机信息、URL信息和网页信息等，动态特征主要包括浏览器行为、URL的重定向信息、网页跳转关系等；对上述特征进行归一化处理，归一化后特征的取值用{0，1}表示；已知的网页标记用{0，1}表示，{0）代表正常网页，{1）代表恶意网页；然后选择决策树、贝叶斯网络、SVM、逻辑回归等分类算法构造分类器，进而识别未知类型URL数据集.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409161406008.png" alt></p>
+<p>基于聚类的恶意网页识别的一般流程如图9所示，首先将网页采集的URL数据集中提取链接关系、URL特征、网页文本信息等特征，通常采用{0，1）标识；然后根据聚类算法，将URL数据集划分为若干聚类，同一聚类的URL数据之间具有较高的相似度，而不同聚类的URL数据对象之间的相似度较低；最后根据已标记数据的聚类结果，对待测URL识别是否是恶意网页.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409162923123.png" alt></p>
+<h4 id="3、恶意PDF检测"><a href="#3、恶意PDF检测" class="headerlink" title="3、恶意PDF检测"></a>3、恶意PDF检测</h4><p>PDF文档的检测研究大多采用PDF文档内容或结构为特征，利用随机森林、SVM、决策树等分类器构建PDF检测器.</p>
+<h4 id="4、社交网络异常账号"><a href="#4、社交网络异常账号" class="headerlink" title="4、社交网络异常账号"></a>4、社交网络异常账号</h4><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409170053350.png" alt></p>
+<h4 id="信用卡欺诈检测"><a href="#信用卡欺诈检测" class="headerlink" title="信用卡欺诈检测"></a>信用卡欺诈检测</h4><h4 id="取证分析"><a href="#取证分析" class="headerlink" title="取证分析"></a>取证分析</h4><h4 id="网络舆情"><a href="#网络舆情" class="headerlink" title="网络舆情"></a>网络舆情</h4><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409171136507.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409171201297.png" alt></p>
+<p>无论是模型的泛化能力，还是检测准确度、实时性等问题，目前的技术解决方案均不能完全满足网络空间安全的应用需求，并存在一些目前难以解决的问题以及可进一步研究的方向，采用机器学习技术解决网络空间安全问题仍是极具挑战性的工作.同时机器学习技术本身存在一定的研究难点，在解决网络空间安全问题中面临巨大挑战：</p>
+<blockquote>
+<p>（1）基于机器学习的安全解决方案的可解释性与溯源性.</p>
+<p>（2）基于机器学习技术的攻击的防御难度.</p>
+<p>（3）机器学习自身的安全问题.</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Cyc1e
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" title="(阅读笔记)机器学习在网络安全中的应用">https://cyc1e183.github.io/2020/10/12/(阅读笔记)机器学习在网络安全中的应用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8E%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84WebShell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95/" rel="prev" title="(阅读笔记)基于语义分析和神经网络的WebShell检测方法">
+      <i class="fa fa-chevron-left"></i> (阅读笔记)基于语义分析和神经网络的WebShell检测方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EPHP%E7%9A%84WEB%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/" rel="next" title="(阅读笔记)基于PHP的WEB漏洞挖掘技术研究">
+      (阅读笔记)基于PHP的WEB漏洞挖掘技术研究 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#机器学习在网络空间安全中的应用流程"><span class="nav-text">机器学习在网络空间安全中的应用流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#机器学习在系统安全研究中的应用"><span class="nav-text">机器学习在系统安全研究中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#机器学习在网络安全研究中的应用"><span class="nav-text">机器学习在网络安全研究中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#机器学习在应用安全研究中的应用"><span class="nav-text">机器学习在应用安全研究中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、在垃圾邮件检查领域"><span class="nav-text">1、在垃圾邮件检查领域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、基于URL的恶意网页识别"><span class="nav-text">2、基于URL的恶意网页识别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、恶意PDF检测"><span class="nav-text">3、恶意PDF检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、社交网络异常账号"><span class="nav-text">4、社交网络异常账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#信用卡欺诈检测"><span class="nav-text">信用卡欺诈检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取证分析"><span class="nav-text">取证分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络舆情"><span class="nav-text">网络舆情</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description">潜心专研、与世无争😄</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+      <!--<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    var div = $('.post-body');
+    var toc=$('.post-toc')
+    function password() {
+        if(''){
+            div.remove();
+            toc.remove();
+            $('.post-header').after(
+            '<span class="description" value="password" style="font-style: normal;font-weight: bold;border: none;display: block;'+
+            'width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none ">'+
+            'Private Articles' +
+            '</span>' +
+            '<div class="qiang" style="height: 100px;width: 60%;margin:0 auto">' +
+            '<input class="password"  type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;' +
+            'margin: 0 auto;outline: none;width:95%"/>' +
+            '</div>')
+            //绑定点击事件，如果是点击的.password 这个div就改变样式，如果是document中除了div之外的其他任何元素，就变回原来的样式。
+            document.onclick = function (event) {
+                var e = event || window.event;
+                var elem = e.srcElement || e.target;
+
+                while (elem) {
+                    if (elem != document) {
+                        if (elem.className == "password") {
+                            //$(".password").animate({paddingTop:"30px",width:"100%",borderWidth:"2px"},300)
+                            return;
+                        }
+                        elem = elem.parentNode;
+                    } else {
+                        //$(".password").animate({paddingTop:"0px",width:"95%",borderWidth:"1px"},300)
+                        return;
+                    }
+                }
+            }
+
+            $(document).keyup(function(event){
+                if(event.keyCode ==13&&$('.password').length>0){
+                    //console.log($('.password').val())
+                    //console.log('')
+                    if ($('.password').val() == '') {
+                        //恢复文章内容
+                        (div).appendTo($(".post-header"))
+                        //恢复目录
+                        toc.appendTo($(".sidebar-inner"))
+                        //删除本页面的输入密码组件
+                        $(".description").remove();
+                        $(".qiang").remove();
+                        $(".password").remove();
+
+                        $('img').lazyload({
+                            placeholder: '/images/loading.gif',
+                            effect: 'fadeIn',
+                            threshold : 100,
+                            failure_limit : 20,
+                            skip_invisible : false
+                        });
+                        $(".post-block").css({opacity:1});
+                        $(".post-header").css({opacity:1});
+                        $(".post-body").css({opacity:1});
+                        $(".pagination").css({opacity:1});
+                    }else {
+                        alert("Error Password")
+                    }
+                }
+            });
+        }
+    }
+    password();
+</script>-->
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">229k</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e888c47fbc056c0" async="async"></script>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '12d6d420f80b7e657f1e',
+      clientSecret: '9eefd2b08977c061960a20fe8b57f99fb62c5037',
+      repo        : 'Cyc1e183.github.io',
+      owner       : 'Cyc1e183',
+      admin       : ['Cyc1e183'],
+      id          : '982f48b2dffe2b42f49df0b0dcb7b576',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

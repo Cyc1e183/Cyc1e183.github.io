@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon-48x48-next.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon-48x48-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"cyc1e183.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="提出了一种结合卷积神经网络和长短期记忆网络的特征的Webshell通信检测模型 提出了一种字符级交通内容特征转换方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(阅读笔记)Webshell Traffic Detection With Character-Level Features Based on Deep Learning">
+<meta property="og:url" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/index.html">
+<meta property="og:site_name" content="Cyc1e&#39;s Blog">
+<meta property="og:description" content="提出了一种结合卷积神经网络和长短期记忆网络的特征的Webshell通信检测模型 提出了一种字符级交通内容特征转换方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0">
+<meta property="og:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0">
+<meta property="article:published_time" content="2020-10-12T14:03:51.000Z">
+<meta property="article:modified_time" content="2020-10-27T02:10:06.819Z">
+<meta property="article:author" content="Cyc1e">
+<meta property="article:tag" content="webshell检测">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0">
+
+<link rel="canonical" href="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>(阅读笔记)Webshell Traffic Detection With Character-Level Features Based on Deep Learning | Cyc1e's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Cyc1e's Blog" type="application/atom+xml">
+</head>
+
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Cyc1e's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Cyc1e">
+      <meta itemprop="description" content="潜心专研、与世无争😄">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Cyc1e's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          (阅读笔记)Webshell Traffic Detection With Character-Level Features Based on Deep Learning
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-12 22:03:51" itemprop="dateCreated datePublished" datetime="2020-10-12T22:03:51+08:00">2020-10-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-27 10:10:06" itemprop="dateModified" datetime="2020-10-27T10:10:06+08:00">2020-10-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cyc1e%E7%9A%84%E5%AD%A6%E6%9C%AF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">Cyc1e的学术之路</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>提出了一种结合卷积神经网络和长短期记忆网络的特征的Webshell通信检测模型</p>
+<p>提出了一种字符级交通内容特征转换方法。</p>
+<p>主要动机是从网络流量中发现Webshell攻击，尤其是未知攻击</p>
+<p>提出了结合卷积神经网络（CNN）[4]，[5]和长短期记忆（LSTM）[6]，[7]的深度学习模型架构。  CNN用于提取局部关键字段特征，文本序列的特征由LSTM捕获。</p>
+<p>贡献：</p>
+<ul>
+<li>提出了字符级方法来转换Webshell内容特征，它可以完全保留流量内容的顺序模式特征。同时，可以减小尺寸，并且提高了模型检测的效果。在实际情况下，亿万个流量项目会有更好的性能。</li>
+<li>提出了结合了CNN和LSTM的深度学习检测模型结构。通过将LSTM层拼接到CNN层的隐藏输出结果中，我们可以实现局部特征和序列特征的全面提取。组合模型检测比单个CNN模型和单个LSTM模型更有效。</li>
+</ul>
+<p>本文的动机是从流量中发现Webshell攻击，尤其是未知攻击。因此，在分析流量时，我们将Webshell分为以下两种类型：</p>
+<ul>
+<li>基于浏览器和服务器（B＆S）的Webshell。这种Webshell主要用于基于Web的应用程序中。黑客通过漏洞（例如文件上传）将Webshell文件上传到目标网站，并通过浏览器与上传的Web  Shell建立连接。浏览器使用Post方法发送命令参数，返回的包的内容通常是执行控制命令后返回的HTML结构的内容。（不仅仅是POST）</li>
+<li>基于客户端和服务器（C＆S）的Webshell：这种Webshell基于客户端将命令发送到服务器。以China Chopper为例，客户端使用Base64对命令执行脚本进行编码，然后将服务器连接到One  Word  Trojan程序，服务器使用指定的分隔符分隔指令执行结果，并将结果返回给客户端。从流量的角度来看，服务器返回的结果通常是命令执行的结果，而不是完整的HTML页面结构，此外，请求包还包含更多的执行内容。这两种Webshell通过URL和Post正文传递请求信息。同时，它可以包含上述各种Webshell类别，例如“大木马，小木马，单字木马”。</li>
+</ul>
+<p><strong>数据采集</strong>：</p>
+<ul>
+<li>收集从大学网络监控系统中提取的大量网站通信流量，包括正常流量和异常流量。经过长时间的积累，我们获得了大约60万个Webshell恶意流量，其中包括请求和响应正文。</li>
+<li>在实验室环境中模拟Webshell攻击。</li>
+</ul>
+<p><strong>数据清理</strong></p>
+<ul>
+<li>URL 解码</li>
+<li>BASE64解码</li>
+<li>消除加密的影响：首先确定加密的数据位置，然后将相应部分替换为预定义的标志。这有助于减少对模型预测结果的干扰。</li>
+<li>二进制数据流：首先确定二进制流的位置，然后用预定义的标志替换相应位置中的数据</li>
+</ul>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell Traffic Detection With Character-Level Features Based on Deep Learning/image-20201013101930560.png)</p>
+<p><strong>常用的分词方法</strong></p>
+<ul>
+<li>N-GRAM WITH TF-IDF</li>
+<li>N-GRAM WITH Word2Vec：使用word2vec算法创建的嵌入向量具有许多优势。词嵌入后，每个词可以表示为固定长度向量，尺寸可以大大减少。但是，对于海量数据处理需求，该模型需要大量时间和资源来训练和生成单词向量</li>
+</ul>
+<p><strong>本文提出字符级内容特征转换</strong></p>
+<p>将内容信息转换为特征向量。对于长流量内容，我们定义固定长度L。如果内容长度大于L，则截断L长度的数据。如果内容长度小于L，我们将在数据的开头至结尾重复数据，直到数据长度等于L</p>
+<p>对于每个输入，我们将字符序列转换为相应的ASCII值序列。如果遇到非ASCII可见字符（例如汉字），我们将这些字符删除，最后形成特征向量。</p>
+<p><strong>例</strong>：‘‘/1.qaz.jsp chopper=i&amp;z0=gb2312’’</p>
+<p>内容的长度为30，相应的ASCII向量为：[47，49，46，113，97，122，46，106，115，112，32，99，104，111，112，112，101，114，61 ，105，38，122，48，61，103，98，50，51，49，50]。</p>
+<p>对于请求数据包，我们将URL和Post主体拼接在一起以生成原始数据。通过分析Webshell流量的内容特征，我们发现其独特的特征如下：</p>
+<ul>
+<li>URL特征：Webshell文件通常位于敏感目录中，例如“ images/”，“ css/”。这些文件通常使用敏感名称命名，例如“ dama.jsp”，“  shell.php”。文件后缀名称通常是php，asp和jsp。也存在混淆的文件后缀，例如“ .asp; png”，以避免文件上传验证。</li>
+<li>POST内容特征：一些PHP系统调用命令嵌入到Postbody值之后，由Base64编码。更重要的是，关键命令代码是使用Base64编码的，这与正常流量非常不同。</li>
+</ul>
+<p>经过特征分析后，我们确定固定长度序列的长度和特定的字符替换规则</p>
+<p><strong>基于深度学习的WEBSHELL检测模型</strong></p>
+<p>基于卷积神经网络（CNN）[4]，[5]和长短期记忆网络（LSTM）</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell Traffic Detection With Character-Level Features Based on Deep Learning/image-20201013103751220.png)</p>
+<p>webshell检测平台：</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell Traffic Detection With Character-Level Features Based on Deep Learning/image-20201013154926935.png)</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Cyc1e
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://cyc1e183.github.io/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/" title="(阅读笔记)Webshell Traffic Detection With Character-Level Features Based on Deep Learning">https://cyc1e183.github.io/2020/10/12/(阅读笔记)Webshell Traffic Detection With Character-Level Features Based on Deep Learning/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/webshell%E6%A3%80%E6%B5%8B/" rel="tag"><i class="fa fa-tag"></i> webshell检测</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EXGBoost%E7%AE%97%E6%B3%95%E7%9A%84Webshell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%A0%94%E7%A9%B6/" rel="prev" title="(阅读笔记)基于XGBoost 算法的Websbell 检测方法研究">
+      <i class="fa fa-chevron-left"></i> (阅读笔记)基于XGBoost 算法的Websbell 检测方法研究
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/" rel="next" title="(阅读笔记)Web Behavior Detection Based on Deep Neural Network">
+      (阅读笔记)Web Behavior Detection Based on Deep Neural Network <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Cyc1e"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Cyc1e</p>
+  <div class="site-description" itemprop="description">潜心专研、与世无争😄</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Cyc1eC" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Cyc1eC" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/9c3ca1ca4784" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;9c3ca1ca4784" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+      <!--<script src="https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    var div = $('.post-body');
+    var toc=$('.post-toc')
+    function password() {
+        if(''){
+            div.remove();
+            toc.remove();
+            $('.post-header').after(
+            '<span class="description" value="password" style="font-style: normal;font-weight: bold;border: none;display: block;'+
+            'width: 60%;margin: 0 auto;text-align: center;outline: none;margin-bottom: 40px;resize:none ">'+
+            'Private Articles' +
+            '</span>' +
+            '<div class="qiang" style="height: 100px;width: 60%;margin:0 auto">' +
+            '<input class="password"  type="password" autocomplete="new-password" autofocus="autofocus" value="" style="border-radius: 5px;height: 30px;border: none;display: block;border-bottom: 1px solid #ccc;' +
+            'margin: 0 auto;outline: none;width:95%"/>' +
+            '</div>')
+            //绑定点击事件，如果是点击的.password 这个div就改变样式，如果是document中除了div之外的其他任何元素，就变回原来的样式。
+            document.onclick = function (event) {
+                var e = event || window.event;
+                var elem = e.srcElement || e.target;
+
+                while (elem) {
+                    if (elem != document) {
+                        if (elem.className == "password") {
+                            //$(".password").animate({paddingTop:"30px",width:"100%",borderWidth:"2px"},300)
+                            return;
+                        }
+                        elem = elem.parentNode;
+                    } else {
+                        //$(".password").animate({paddingTop:"0px",width:"95%",borderWidth:"1px"},300)
+                        return;
+                    }
+                }
+            }
+
+            $(document).keyup(function(event){
+                if(event.keyCode ==13&&$('.password').length>0){
+                    //console.log($('.password').val())
+                    //console.log('')
+                    if ($('.password').val() == '') {
+                        //恢复文章内容
+                        (div).appendTo($(".post-header"))
+                        //恢复目录
+                        toc.appendTo($(".sidebar-inner"))
+                        //删除本页面的输入密码组件
+                        $(".description").remove();
+                        $(".qiang").remove();
+                        $(".password").remove();
+
+                        $('img').lazyload({
+                            placeholder: '/images/loading.gif',
+                            effect: 'fadeIn',
+                            threshold : 100,
+                            failure_limit : 20,
+                            skip_invisible : false
+                        });
+                        $(".post-block").css({opacity:1});
+                        $(".post-header").css({opacity:1});
+                        $(".post-body").css({opacity:1});
+                        $(".pagination").css({opacity:1});
+                    }else {
+                        alert("Error Password")
+                    }
+                }
+            });
+        }
+    }
+    password();
+</script>-->
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Cyc1e</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">229k</span>
+</div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5e888c47fbc056c0" async="async"></script>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '12d6d420f80b7e657f1e',
+      clientSecret: '9eefd2b08977c061960a20fe8b57f99fb62c5037',
+      repo        : 'Cyc1e183.github.io',
+      owner       : 'Cyc1e183',
+      admin       : ['Cyc1e183'],
+      id          : 'bc89fab8ddf05f2f7c317b57b2bf7101',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

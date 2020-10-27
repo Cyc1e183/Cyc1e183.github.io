@@ -1,6 +1,645 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>(阅读笔记)CNN-Webshell Malicious Web Shell Detection with</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)CNN-Webshell%20Malicious%20Web%20Shell%20Detection%20with/</url>
+    <content><![CDATA[<p>基于word2vec表示和卷积神经网络（CNN）的恶意web外壳检测方法</p>
+<p>使用“word2vec”工具将从HTTP请求中分离出来的每个单词表示为一个向量。接下来，webshell可以表示为一个大小固定的矩阵。最后，设计了一个基于CNN的恶意网页外壳分类模型。</p>
+<p>webshell检测方法可分为两种：静态检测方法和动态检测方法，前者有正则化特征匹配方法（如Linux恶意软件检测扫描器）、统计特征阈值方法（sush作为NeoPI）和基于关联的检测方法（webshell与现有web文件的连接较低）。后者对web文件的关键功能采用HOOK方式，对特殊目录下操作系统的读写操作采用监控方式。然而，在现实中，许多webshell经过混淆和变异后，与正常网页文件混淆，难以检测。只有当攻击者启动与目标服务器的HTTP通信以执行恶意代码时，才会显示恶意功能。本文重点研究了利用恶意HTTP通信来检测websehll</p>
+<p>引入“word2vec”向量表示来表示从HTTP请求中分割出来的HTTP符号词。这是第一次将HTTP请求表示为一个矩阵，方法是按顺序连接单词向量。一旦有了矩阵表示，CNN就可以用来同时提取特征和学习分类器来检测恶意的webshell通信。它有能力发现两个词之间的相互关系，而这两个词之间相距甚远。通过实验对本文提出的方法进行了性能评估，并与几种分类器进行了比较，分析了关键参数和性能。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)CNN-Webshell%20Malicious%20Web%20Shell%20Detection%20with/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>CNN-Webshell Malicious Web Shell Detection with/image-20200505153650696.png)</p>
+<p>图1给出了包含恶意HTTP请求的包的示例。正在发布的请求内容通过URL编码进行编码。所以，首先，我们需要在预处理时对参数串进行解码。对于每个参数字符串，它有许多由符号“&amp;”分割的部分。每个部分由一个键值对组成。可以通过查找符号“=”来获取该对中的键和值。此外，在实际应用中，HTTP请求的参数字符串还具有许多其他特殊符号，如“（”、“）”、“{”、“}”、“/”、“\”、“@”。这些符号可用于将参数字符串分割为“单词”。这可以获得许多有意义的单词，用于对恶意webshell进行分类。分段的“单词”有简单的符号、数字或普通的单词和字符串。在这一步结束时，我们为每个HTTP请求得到一个“word”语句，该语句保持HTTP请求中“words”的顺序。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)CNN-Webshell%20Malicious%20Web%20Shell%20Detection%20with/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>CNN-Webshell Malicious Web Shell Detection with/image-20200505201554513.png)</p>
+<p>为了评估我们提出的方法的性能，本文将其与几个经典的分类器，朴素贝叶斯(NB)，  k-近邻(kNN)，决策树(DT)，支持向量机(SVM)，传统的神经网络(NN)进行了比较。所有这些分类器都使用相同的特性。对于多项式NB，常参数设为0.01。对于kNN，邻居参数设置为3。对于DT，使用熵，将叶节点上的最小样本设为3。支持向量机采用线性分类器。对于NN，使用了两个隐藏层，分别包含50和10个隐藏单元。表1显示了我们实验中每种方法的精确度、召回率和F1-score性能。NB方法的性能最差。与其他所有方法相比，我们的方法由于其良好的“单词”表示和CNN分类器而获得了最好的性能。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)CNN-Webshell%20Malicious%20Web%20Shell%20Detection%20with/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>CNN-Webshell Malicious Web Shell Detection with/image-20200505202409327.png)</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>Webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)Detecting Webshell Based on Random Forest with FastText</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Detecting%20Webshell%20Based%20on%20Random%20Forest%20with%20FastText/</url>
+    <content><![CDATA[<p>提出了一种基于fastText和随机森林算法的PHP Webshell检测模型，称为FRF-WD</p>
+<p>操作码是一种机器语言指令。它为计算机提供了指示，指示如何处理提供的数据。到目前为止，一些相关工作表明，操作码频率可以将恶意软件与可信任软件区分开。  PHP操作码（或字节码）与恶意软件识别中使用的操作码不同，后者是Zend Engine  2在解析PHP文件时生成的一系列操作代码，表示该代码的功能。它们本质上是相似的，因为两者都告诉机器要做什么。因此，我们研究了是否可以使用PHP操作码来检测PHP  Webshell。</p>
+<p>提取文件的特征，这些特征由两部分组成：静态特征和操作码序列。一方面，分析了文件的静态特征，包括最长字符串、熵、符合索引和危险函数等；另一方面，利用PHP-VLD扩展获取测试文件的操作码序列，然后利用fastText训练文本分类器模型。</p>
+<p>操作码是一种机器语言指令。它为计算机提供了指示，指示如何处理提供的数据。到目前为止，一些相关工作表明，操作码频率可以将恶意软件与可信任软件区分开。  PHP操作码（或字节码）与恶意软件识别中使用的操作码不同，后者是Zend Engine  2在解析PHP文件时生成的一系列操作代码，表示该代码的功能。它们本质上是相似的，因为两者都告诉机器要做什么。因此，我们研究了是否可以使用PHP操作码来检测PHP  Webshell。 PHP具有Vulcan逻辑反汇编程序（VLD）[11]扩展。 VLD挂接到Zend  Engine，可以帮助我们方便地转储脚本的所有操作码。下面列出的示例是由Zend Engine解析的典型Webshell的输出：&lt;？php ev  al（$ _ POST [‘a’]）; ？&gt;如果通过VLD运行上述Web  Shell，则可以在表1中看到以下输出。因此，文件的PHP操作码序列如下所示：[“ EXT_SMTM”，“ FETCH_R”，“ FETCH_DIM_R”，“  EXT_FCALL_ BEGIN”， “ INCLUDE_OR_EVAL”，“ EXT_FCALL_END”，“ RETU RN”]。</p>
+<p>通过使用PHP的VLD扩展，可以帮助轻松获取PHP文件的操作码序列。然后，我们研究是否可以将文本分类器技术与操作码一起使用来识别webshell。每个操作码本地序列都显示出相关性，即操作码序列中附近的操作码很可能彼此相关。这些顺序模式很重要，因为可以利用它们来提高预测变量的性能。选择FastText模型来训练文本分类器。  fastText模型由Joulin等人提出。  [12]。它结合了带有单词袋和n-gram袋的代表句子，并利用秩约束和快速损失近似的关键特征来提高基本线性分类器的性能。  FastText模型由一个矩阵A和一个矩阵B组成，矩阵A是单词的查找表，矩阵B用于分类器。将单词的表示形式平均化为文本表示形式，然后将其馈送到线性分类器。使用softmax函数f获得预定义类上的概率分布。对于一组N个文档，该模型导致最小化：∑（1）第n个文档的归一化BoW是哪里，即标签。  FastText更快，但可以达到与基于深度学习的建议方法相当的性能。特别是，不同文件的操作码序列的长度是多种多样的，有些可能只有几个操作码，有些可能具有超过数千个操作码，而fastText比诸如TextCNN的深度学习方法更适合处理此类数据集。  [13]在这项工作中，PHP的VLD扩展用于获取文件的操作码序列。然后在fastText上使用带标签的样本来训练文本分类器。之后，加载经过预训练的分类器以预测从PHP操作码序列生成的文本标签。预测值将用作预测值</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>Webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)Discovering Vulnerabilities in COTS IoT Devices through Blackbox Fuzzing Web Management Interface</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Discovering%20Vulnerabilities%20in%20COTS%20IoT%20Devices%20through%20Blackbox%20Fuzzing%20Web%20Management%20Interface/</url>
+    <content><![CDATA[<p>提出利用Fuzz技术对物联网设备的Web端管理页面进行漏洞检测</p>
+<p><strong>主要面临的问题</strong>：</p>
+<ul>
+<li><p>（1）Web管理页面设计的多样性，导致没有一个统一的接口可以直接用于Fuzz，以及接收随机消息以启动模糊测试时的效率很低</p>
+</li>
+<li><p>（2）由于交互的信息具有高度结构化，带有字节级突变的模糊测试可能会在早期阶段直接被设备拒绝接收。</p>
+<p><strong>传统的方法</strong>：</p>
+</li>
+<li><p>（1）从官网等渠道手机固件</p>
+</li>
+<li><p>（2）用binwalk等解压</p>
+</li>
+<li><p>（3）采用动态或静态的方法进行漏洞挖掘</p>
+</li>
+</ul>
+<p><strong>传统方法的问题</strong>：</p>
+<ul>
+<li><p>1.许多固件并未公开</p>
+</li>
+<li><p>2.解压的困难性，开发商在打包时会采用自己的压缩算法，并不是每个固件都能被直接解压。</p>
+</li>
+<li><p>3.由于底层架构的多样性而导致直接进行二进制分析较为困难</p>
+</li>
+</ul>
+<p>文章提出利用基于变异的模糊技术自动执行黑盒测试（主要是发送的时变形的数据包进行测试），测试结果与AFL和Sully进行了比较，IO设备通常是为特定目的而设计的，供应商通常宁愿更加关注数据传输和视频质量的改善，而他们只是在Web管理界面上花很少的资源，包括安全性。并且家用型联网的IoT设备交互的数据信息大多为敏感信息和远程控制指令，以http数据包的形势进行发送。</p>
+<p>针对IoT设备的fuzz方法，采用黑盒的方式更为适用！</p>
+<p>总体思路**：</p>
+<ul>
+<li><p>爬取页面，生成初始消息种子</p>
+</li>
+<li><p>利用初始消息种子，基于http协议框架进行编译</p>
+</li>
+<li><p>对设备进行fuzz</p>
+</li>
+<li><p>设置设备监视，判断设备奔溃以及漏洞触发情况</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>IoT漏洞挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)FUSE Finding File Upload Bugs via Penetration Testing</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/</url>
+    <content><![CDATA[<p>缩写：<strong>PCE（潜在的代码执行）</strong>、<strong>CE（代码执行）</strong>、<strong>Unrestricted Executable File Upload (UEFU)</strong>、<strong>Unrestricted File Upload(UFU)</strong></p>
+<h3 id="0x00-背景"><a href="#0x00-背景" class="headerlink" title="0x00 背景"></a>0x00 背景</h3><p>网站的文件上传功能会带来安全风险，攻击者可以将其任意文件上载到目标服务器，并将其用作垫脚石，以提供更多机会破坏目标系统。因此，对于Web应用程序开发人员来说，至关重要的是防止攻击者滥用此上传功能。缓解该问题的一种普遍做法是实施内容过滤检查，以禁止上传构成严重安全风险的指定文件类型。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201015201939883.png)</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201015201955425.png)</p>
+<p>不受限制的文件上传（UFU）是利用服务器端Web应用程序中的内容筛选检查中的缺陷的漏洞，成功上传伪造的文件会带来潜在的代码执行风险。当攻击者能够通过其URL触发上载文件的代码执行时，此UFU漏洞将变得更加严重。这意味着对手可以通过调用URL来执行任意代码执行。我们将内容过滤检查中的缺陷称为“不受限制的可执行文件上传（UEFU）”漏洞，其中（1）允许上传可执行文件，并且（2）对手能够在目标网站上远程运行此可执行文件服务器或受害者的浏览器（通过调用URL）。</p>
+<h3 id="0x01-FUSE"><a href="#0x01-FUSE" class="headerlink" title="0x01 FUSE"></a>0x01 FUSE</h3><p>提出了FUSE，这是一种旨在确定U（E）FU漏洞的渗透测试系统，该方法面临两个技术挑战：</p>
+<ul>
+<li>（1）它应生成一个上传请求，以绕过目标Web应用程序中存在的所有内容过滤检查；  </li>
+<li>（2）应该保留最终上传文件的执行语义。我们通过使用精心设计的变异来更改标准上传请求来应对这些技术挑战，这些变异可以绕过内容过滤检查，并且不会篡改上传文件的执行。</li>
+</ul>
+<p>文章提出了一种新颖的基于变异的算法，用于生成引发U（E）FU漏洞的上传请求。首先生成四个种子上传请求；每个请求都会尝试上传PHP，HTML，XHTML或JS文件。目标应用程序可能会阻止这些种子请求，因此，FUSE通过应用13种精心设计的突变操作的组合来突变每个种子请求。作者定义了五个目标，这些目标在实施内容过滤检查时会触发常见错误。然后，我们实施了具体的变异方法，每种方法均至少实现了一个目标，从而解决了第一个挑战。同时，这些突变操作不会篡改种子文件可由目标执行环境执行所需的约束，因此保留了种子文件的执行语义。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201008212443815.png)</p>
+<p><strong>FUSE的总体架构</strong>，它由三个组件组成：<strong>链协调器</strong>，<strong>上传代理</strong>和<strong>上传验证器</strong>。在较高的层次上，这些组件协同工作以执行三个步骤。  （1）链协调员为四个种子文件中的每个文件准备测试策略； （2）UPLOAD  AGENT建立上传请求，根据测试策略对这些请求进行变异，并发送这些变异的请求，以尝试上传种子文件的变体； （3）UPUP  VALIDATOR检查上传的文件是否可以通过公开访问的URL访问和执行。</p>
+<ul>
+<li>链协调器构造一个测试策略，称为链表。它指定如何生成一系列变异的上传请求。此链列表中的每个链都包含一个FUSE应用于种子上传请求的变异操作列表。因此，每个突变的上传请求是将链中的突变应用于种子上传请求的计算结果。</li>
+<li>上传代理。该模块负责为给定的种子文件生成一个上传请求，并根据链协调器计算出的给定链来改变原始请求。目标应用程序通常需要完成身份验证过程，并与每个尝试的上载请求一起发送有效的CSRF令牌。因此，UPLOAD  AGENT解决了身份验证过程并附加了有效的CSRF令牌以促进上载过程。</li>
+<li>上传验证器。  UPLOAD VALIDATOR会检查生成的请求是否成功上传了文件，并获得了这些上传文件的公共URL。通过通过计算的URL访问这些文件，UPLOAD  VALIDATOR检查上传的文件是否可执行。</li>
+</ul>
+<h3 id="0x02-测试流程"><a href="#0x02-测试流程" class="headerlink" title="0x02 测试流程"></a>0x02 测试流程</h3><ul>
+<li>第一阶段为每个种子文件计算一种测试策略，我们将其称为链表。</li>
+<li>第二阶段通过为每个种子文件构造一个种子请求，根据链表对这些种子请求进行变异并发送变异的请求来执行此测试策略。</li>
+<li>第三阶段获取导致成功上传文件的可访问URL，并检查这些上传文件的执行能力。</li>
+</ul>
+<p>FUSE接受两个输入：一组种子文件和一个配置文件。每个种子文件都将成为构建标准上传请求（称为种子请求）的源。  FUSE还使用用户提供的配置文件，该文件指定目标PHP应用程序的参数。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201015202602518.png)</p>
+<p><strong>第一阶段：链式协调</strong></p>
+<p>链协调的目的是穷举探索所有可行的突变组合，从而有助于FUSE生成各种上载请求并发现新的错误。请注意，每个变异操作都旨在绕过一种内容过滤检查。因此，这些组合无疑会增加绕过多个内容过滤检查的几率。</p>
+<p>链协调器首先为每个种子请求创建一个初始链表。对于每个种子请求，它将排列所有适用的变异操作，然后按链长对它们进行排序。例如，如果适用于HTML种子的变异操作是M1，M2和M3，则链表如下。（<strong>绕过组合策略</strong>）</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201009083501975.png)</p>
+<p>在两个不同的变异操作修改种子请求的重叠部分的情况下，它们可能会相互冲突。链协调程序可删除此类虚假链以清除不必要的突变。例如，如果M1与M2冲突，则先前示例的修订链列表将变为以下内容。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201009083449428.png)</p>
+<p>链协调器的另一个功能是根据从阶段III获得的先前的上载尝试结果来删除链，以进行有效的渗透测试。如果一条链有助于成功上传，则“链协调器”会清除包括该成功链的所有其他链。由于链表是根据其链长排序的，因此FUSE总是选择一条短链，而不是其他包含此短链的较长链。我们的目的是报告不同的最小长度链，以成功利用漏洞。例如，如果链M1成功触发了UFU漏洞，则链协调器将从链列表中删除所有其他包含M1的链，如下所示：</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201008212430917.png)</p>
+<p>如果空链（即种子请求无突变）触发了UFU漏洞，则链协调器会删除链表中的所有链。</p>
+<p><strong>第二阶段：更改和发送上传请求</strong></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>FUSE Finding File Upload Bugs via Penetration Testing/image-20201015203221490.png)</p>
+<p><strong>第三阶段：上传验证</strong></p>
+<p>UPLOAD VALIDATOR执行三个任务：</p>
+<p>（1）检查每个尝试的上传请求是否成功将文件拖放到托管目标应用程序的Web服务器上； </p>
+<p>（2）计算指向上传文件的URL；  </p>
+<p>（3）确认获取的URL是否调用了上传文件的执行。</p>
+<p>三种不同的方法来获取上载文件的URL：</p>
+<ul>
+<li>URL的通用前缀：UPLOAD VALIDATOR使用用户提供的参数url_prefix，该参数指示通向所有上载文件的URL的公共前缀。如果设置了此参数，则UPVAL VALIDATOR会简单地将用url_prefix提取的URL值和上载文件名连接起来，从而生成最终的URL。</li>
+<li>上传回应和摘要网页：应用程序在对上载请求的响应中提供了上载文件的URL</li>
+<li>文件监视：解决一些应用程序使用随机文件名作为其上载文件，并且不提供摘要页面的问题</li>
+</ul>
+<p>FUSE进一步检查了上载<strong>.htaccess</strong>文件的可行性。如果上载攻击者能够控制.htaccess文件，则她可以调用PHP解释器以执行具有任何扩展名的上载文件，并使该上载文件可访问。这是一个关键的安全威胁，它使具有PCE风险的UFU漏洞演变为导致CE的UEFU漏洞。</p>
+<h3 id="0x03-突变"><a href="#0x03-突变" class="headerlink" title="0x03 突变"></a>0x03 突变</h3><p><strong>突变载体</strong></p>
+<p>突变的主要目标是以给定的上载请求保留其种子文件的执行语义的方式来转换给定的上载请求，并且经过变异的请求可能会绕过内容过滤逻辑。因此首先确定了上载攻击者能够操纵的变异载体。</p>
+<img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)FUSE%20Finding%20File%20Upload%20Bugs%20via%20Penetration%20Testing/image-20201009085310529.png">
+
+<p>FUSE更改HTTP协议报文中的字段，在上载请求的请求主体中，FUSE考虑了三个突变向量来修改其对应字段：</p>
+<ul>
+<li>Extension：文件名的扩展名</li>
+<li>Content-Type：文件的 MIME 类型</li>
+<li>Content：文件的二进制内容或纯文本</li>
+</ul>
+<p>突变的五个目标</p>
+<ul>
+<li>检查是否没有内容过滤检查</li>
+<li>根据内容消除错误的类型推断</li>
+<li>根据扩展利用不完整的白名单或黑名单</li>
+<li>绕过基于内容的关键字过滤逻辑：例如&lt;?php、<html>、<script></li>
+<li>绕过基于Content-Type的过滤逻辑</li>
+</ul>
+<p><strong>突变清单</strong></p>
+<p><img src="(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt="">FUSE Finding File Upload Bugs via Penetration Testing/image-20201009091953233.png)</p>
+<p><strong>M1</strong> ：加文件头前缀，包括6种文件类型（GIF，JPG，PDF，PNG，TAR_GZ和ZIP），只适用于PHP和HTML文件</p>
+<p><strong>M2</strong>：将恶意代码注入6种文件的元数据部分中（GIF，JPG，PDF，PNG，TAR_GZ和ZIP）</p>
+<p><strong>M3</strong>：更改上载请求的内容类型 Content-Type，更改为GIF，JPG，PDF，PNG，TAR_GZ和ZIP的上传请求类型</p>
+<p><strong>M4</strong>：更改文件扩展名，将给定上传请求的扩展名更改为七个PHP样式扩展名之一或17个预定义的公共扩展名之一</p>
+<p><strong>M5</strong>：替换PHP标签，短标签</p>
+<p><strong>M6</strong>：将HTML转换为EML，EML文件能够包含带有脚本元素的HTML文档，适用于(X)HTML</p>
+<p><strong>M7</strong>：删除文件扩展名</p>
+<p><strong>M8</strong>：将文件转换为SVG，SVG是XML的文件格式，代表矢量图像；它有助于将HTML代码嵌入其文件中。</p>
+<p><strong>M9</strong>：添加一个在HTML注释：<!--,--?></p>
+<p><strong>M10</strong>：将文件扩展名更改为不常见的扩展名，适合HTML和JS种子文件</p>
+<p><strong>M11</strong>：将文件扩展名转换为大写，将给定请求的扩展名中的第二个字符更改为大写的操作。</p>
+<p><strong>M12</strong>：附加文件扩展名，例如，通过将gzip附加到扩展名，将上载文件的扩展名从.php更改为.gzip.php</p>
+<p><strong>M13</strong>：追加资源标头，将预定义JPG文件的八个字节的标头附加到给定上传请求的内容的末尾</p>
+<p><strong>实验结果</strong>：</p>
+<p><img src="(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt="">FUSE Finding File Upload Bugs via Penetration Testing/image-20201009212715186.png)</p>
+<h3 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h3><p>作者手动检查了浏览器和PHP解释器(VI)的执行约束，并在设计13个突变时反映了这些约束。<strong>因此，当嵌入在这些软件中的这些约束由于它们的更新而改变时，突变也应该被修改以反映这些改变(VII-D)。这些执行约束的自动提取[30]和这些约束对突变的反映是我们留给未来研究的有趣的技术挑战。</strong></p>
+<p>导致UFU漏洞的最常见错误是使用不完整的黑名单或有缺陷的扩展白名单。这种趋势源于开发人员对造成低安全风险的文件类型的无知。</p>
+<p>另一个漏洞来源是智能浏览器执行内容嗅探。假设攻击者试图上传目标应用程序接受的攻击文件。在某些情况下，托管应用程序的Apache服务器无法推断上传的文件类型，因此在对该文件的请求的响应中没有放置内容类型头。这邀请浏览器通过执行内容嗅探来基于其内容推断文件类型，上传攻击者利用这一点。对于网络服务器无法推断其类型的上传文件，我们建议将X-Content-Type-Options设置为启用nosniff，这将阻止浏览器执行内容嗅探[11]。调整Apache配置文件来设置这个头的默认值可以阻止攻击。此外，web应用程序可以用应用程序推断的特定文件类型来指定标头，从而防止攻击。</p>
+</script></html></li></ul>]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>Web漏洞挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)PHP代码缺陷检测技术的研究与实现（静态）</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<p>选择了能够支持主流PHP版本的PHP-Parser作为代码编译前端的基础，实现数据流分析所需的代码编译和控制流图的生成，同时针对MVC框架的特点，使用重定义入口集合的方式解决检测是对代码分支覆盖不足的问题。</p>
+<p>提出了一种基于污染传播记录的动态检测方法。</p>
+<p>迄今为止，全球有超过80%的网站使用PHP作为其开发语言1，大量国内外的著名站点，包括Google、Facebook、Amazon、百度、微博等，均使用PHP作为其后端开发语言。</p>
+<p>第二个阶段是基于PHP代码底层的检测，即通过先对PHP代码进行编译或解释等操作，将其转换成易于分析的形式，再通过数据流分析、污点分析等方式进行缺陷检测，如RIPS四、Pixyl等，相对第一个阶段而言，基于PHP实现原理的分析方式能够更准确的分析PHP代码本身的含义，是目前PHP代码缺陷检测的主流思路。</p>
+<p><strong>PHP语言的特性</strong></p>
+<ul>
+<li>用户输入</li>
+<li>动态弱类型</li>
+<li>动态执行</li>
+<li>对象定义与实例化</li>
+<li>自动加载</li>
+<li>引用和复制</li>
+</ul>
+<p><strong>MVC架构</strong>：整个应用由Model（模型）、View（视图）、Controller（控制器）三个模块组成。</p>
+<p>MVC架构的PHP web应用几乎都会使用如自动加载、路由解析等动态包含技术，这些动态包含的目标需要在代码运行时，借助用户输入才能被确定，纯静态分析无法获取PHP代码间的包含关系，也就无法获得程序的执行流程，并且MVC架构下大多数文件中只包含一些对象定义，直接忽视动态调用过程，转而对这些文件进行单独分析也会因无法建立完整的代码执行逻辑而难以进行缺陷检测，因此针对传统开发模式的静态缺陷检测工具，应用到基于面向对象、使用MVC架构开发的PHP web应用时，效果将大打折扣。（MVC架构和传统架构最大的区别在于使用了“路由的方式”给URL的含义增加了不确定性）</p>
+<p>（对SQL注入的防护：预编译，过滤）</p>
+<p><strong>目前，对PHP代码的静态缺陷检测方式可以分为两类：直接分析源代码本身的方式和分析代码底层的方式。</strong></p>
+<p>大多数PHP代码缺陷检测工具选择了对PHP代码先进行编译或转换的处理，使代码原本的逻辑关系暴露出来，便于进行分析。这样的检测方式大致有两类：</p>
+<ul>
+<li>（1）转换为中间语言</li>
+<li>（2）转换为编译的中间结果（有开源的前端）</li>
+</ul>
+<p><strong>作者对RIPS观点</strong></p>
+<p>RIPS，其分析方法是通过遍历token流，提取其中的关键节点并分析转化为一些自定义的结构，从编译的角度看，RIPS相当于实现了一个不完整的语法分析和中间代码生成过程。token流所提供的信息中，PHP代码的逻辑关系和整体结构并没有被体现出来，需要代码分析工具实现从中提取这些信息的逻辑，而实现这些信息的提取的逻辑实现起来极其复杂，可能是考虑到了这一问题，RIPS的作者放弃了这一检测方式，RIPS也停止了更新，由此可见token流并不适合直接用于代码分析。</p>
+<p><strong>控制流图</strong>：使用数据流分析、污点分析等静态分析方法的代码缺陷检测方案都会使用控制流图来引导分析过程。</p>
+<p><strong>数据流分析</strong></p>
+<p>数据流分析根据数据流信息的传播方向与程序的执行路径的关系分为两类：</p>
+<ul>
+<li><p>1）前向数据流分析：数据流信息流向与程序执行路径相同的分析相同</p>
+</li>
+<li><p>2）后向数据流分析：数据流信息流向与程序执行路径相同的分析相反</p>
+</li>
+</ul>
+<p>数据流分析方法</p>
+<ul>
+<li><p>（1）流敏感性</p>
+</li>
+<li><p>（2）过程间关系</p>
+</li>
+<li><p>（3）上下文敏感性</p>
+</li>
+</ul>
+<p>数据流分析模式：</p>
+<ul>
+<li><p>（1）到达定值</p>
+</li>
+<li><p>（2）活跃变量</p>
+</li>
+<li><p>（3）可用表达式</p>
+</li>
+</ul>
+<p><strong>开源的PHP语言编译前端</strong></p>
+<ul>
+<li>（1）phc</li>
+<li>（2）peachpie</li>
+<li>（3）HHVM</li>
+<li>（4）ANTLR</li>
+<li>（5）PHP-Parser（基于PHP语言开发的PHP语法分析器）👈需要了解一下</li>
+</ul>
+<p><strong>灰盒测试两种典型使用拓展的分析工具</strong></p>
+<ul>
+<li>（1）XDebug</li>
+<li>（2）Taint</li>
+</ul>
+<p><strong>入口路劲分析</strong></p>
+<p>主要针对的是国内的类似Thinkphp类MVC架构开发的web框架</p>
+<p>通过获取model、controller、action三个路由参数进行入口路径构造</p>
+<p>在对MVC架构应用的静态分析中会出现的难以处理的动态包含有两类，第一类是包含的路径中含有变量，需要在运行时才能确定其具体值，第二类是通过PHP的自动加载特性进行的包含。</p>
+<p>提出基于污染传播记录的动态缺陷检测技术来对净化有效进行准确识别</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20200312213925669.png" alt="image-20200312213925669"></p>
+<p>安全进化代码得提取</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20200312214318219.png" alt="image-20200312214318219"></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20200312215525068.png" alt="image-20200312215525068"></p>
+<p><strong>预处理</strong>：由于PHP动态包含特性的存在，我们无法一次性的将全部代码都进行编译，只能在分析过程中逐步解析并处理包含</p>
+<p>分为针对传统架构和MVC架构</p>
+<p>针对MVC架构：根据目标PHP应用的目录结构，指定相应的目录名和文件名特征，提取出全部控制器文件的路径，并使用PHP-Parser分析生成的抽象语法树，提取出入口参数集合，再根据其入口代码对应的入口生成规则，来生成相应的PHP入口文件集合。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20200313110622258.png" alt="image-20200313110622258"></p>
+<p>通过对抽象语法树的遍历生成控制流图的操作流程大致如下：</p>
+<ul>
+<li>1）建立入口和出口节点，建立第一个基本块和连接出入口的边。</li>
+<li>2）从根节点开始对语法树进行深度优先遍历。</li>
+<li>3）在遇到分支、循环节点时，将当前基本块分割为该节点的前驱和后继块，分别保留入边和出边，并对每个条件分支，以分支的语法树节点作为根节点，将前驱和后继块作为其入口和出口，从2）开始生成控制流图，处理完分支后，在后继块上继续当前遍历操作。</li>
+<li>4）在遇到函数、对象定义时，将定义节点作为新的根节点，生成独立的局部控制流图，生成完成后，继续在当前块上的遍历操作。</li>
+<li>5）遇到其他类型节点时，将其放入当前基本块的节点数组中，继续当前的遍历操作直到所有节点被遍历，完成整个过程。</li>
+</ul>
+<p>本文采用流敏感、上下文敏感且考虑过程间关系的数据流分析方法，进行前向数据流分析</p>
+<p>大多数使用漏洞规则的静态缺陷检测工具都会对污染源、危险函数、净化函数或类似的概念进行定义而形成检测规则，但通常会采用统一的污染源集合来判定污染传播的起始位置，再根据每一类漏洞定义危险函数和净化函数，这样的定义方式没有对不同漏洞类型的污染源进行区分，当检测非常规污染源漏洞时，如某些框架对用户输入做了封装，需要将封装后的api定义为污染源，这样的规则无法适应需求。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20200313113017396.png" alt="image-20200313113017396"></p>
+<p>根据上述漏洞规则的定义方式，我们采用如下流程来分析到达危险函数的污染传播链表：<br>1）根据到达的危险函数，查找危险函数数组包含该危险函数的规则。<br>2）在1）找到的规则中，查找污染源数组包含该污染传播链表起点的规则。<br>3）根据查找出的规则，对比污染传播链中记录的污染传播运算，如果在污染传播链表中，没有发现对污染的净化函数，或是所有的净化函数都能够被反净化函数所抵消，则认为用户输入的恶意数据能够最终进入危险函数中，漏洞存在，反之则认为漏洞不存在。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E4%BB%A3%E7%A0%81%E7%BC%BA%E9%99%B7%E6%A3%80%E6%B5%8B%E6%8A%80%E6%9C%AF%E7%9A%84%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%AE%9E%E7%8E%B0/image-20200313113221085.png" alt="image-20200313113221085"></p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>web漏洞挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)PHP程序污点型漏洞静态检测方法</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E7%A8%8B%E5%BA%8F%E6%B1%A1%E7%82%B9%E5%9E%8B%E6%BC%8F%E6%B4%9E%E9%9D%99%E6%80%81%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>提出一种静态代码分析检测的方法</p>
+<blockquote>
+<p>提出的生成控制流图的算法</p>
+<p>对内置特征、入口点和敏感点进行建模，精确分析数据流</p>
+<p>提出基于有效路径的污点分析方法，提高了分析的准确性，实现了基于变量回溯的路径遍历算法</p>
+</blockquote>
+<p>污点型漏洞检测技术分类可以归纳为：动态测试、静态分析和动静态结合的方式</p>
+<p>PHP语言具有动态性和弱类型两种特点</p>
+<p>基于PHP内置函数token_get_all 和token_name 对PHP 程序分词，生成AST（抽象语法树），进而在AST基础上进行PHP的语法和词法分析[11]，精确的字符串分析提取函数摘要，并创建CFG</p>
+<blockquote>
+<p>token_get_all — 将提供的源码按 PHP 标记进行分割，可以用作php源代码的压缩，会按照固定的分解方法，分解php代码成不同的部分</p>
+<p>token_name — 获取提供的 PHP 解析器代号的符号名称</p>
+</blockquote>
+<p>原型系统：</p>
+<ul>
+<li><p>预处理阶段：生成完整的CFG图，对文件进行扫描-》生成主函数语法解析树和UDF（用户自定义函数）语法解析树-》从主函数开始将语法解析树生成控制流图CFG。</p>
+</li>
+<li><p>污点分析阶段：提取输入源到敏感点的有效路径和输入源到敏感点路径上的数据流分析</p>
+</li>
+</ul>
+<p><strong>CFG(控制流图)生成算法</strong>：</p>
+<p>输入：一个数组形式的AST（抽象语法树）。<br>输出：控制流图。<br>（1）当前基本块CurrentBlock 为NULL，控制流节点集合CFNS 包含＜if|switch|try|三元操作|逻辑运算符＞，控制流退出节点CFRS＜return|exit＞。<br>（2）读取AST当前位置根节点n 。<br>（3）如果n 不在当前基本块中，则加入到当前基本块中。<br>（4）如果n 属于CFNS，则保存跳转条件，将下一个基本块与当前基本块相连，并对每条分支AST执行步骤2<br>（5）如果n 属于CFRS，则本条路径结束。<br>（6）所有子节点都结束后算法停止。</p>
+<p><strong>基于有效路径遍历的污点分析方法</strong></p>
+<ul>
+<li>提取数据输入源到敏感函数的有效路径</li>
+<li>在有效路径上进行污点分析</li>
+</ul>
+<p><strong>基于变量回溯的路径遍历算法</strong><br>输入：程序CFG。<br>输出：变量传递路径。<br>（1）CFG 中标记出一个满足条件的敏感函数Vfun ，设为顶点，其对应的一个敏感参数为变量Param，保存在集合Variables中。<br>（2）选择下一个邻接点Ni（条件语句节点），如果Variables中存在超全局变量元素，则标记出一条路径（包含入口点）。如果存在非超全局变量元素，则执行（3）。如果Variables 为空，则执行（5）。<br>（3）分析顶点到Ni 间的数据流，如果存在Variable 中变量元素Vi 的传递过程，则执行（4）；否则，执行2。<br>（4）将Vi 的上一级变量保存在集合Variables 中。将Ni设为顶点，执行（2）。<br>（5）标记出全部有效路径，退出算法。</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>web漏洞挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)PHP 开源白盒审计工具初探（上）</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E5%BC%80%E6%BA%90%E7%99%BD%E7%9B%92%E5%AE%A1%E8%AE%A1%E5%B7%A5%E5%85%B7%E5%88%9D%E6%8E%A2/</url>
+    <content><![CDATA[<h1 id="PHP-开源白盒审计工具初探（上）"><a href="#PHP-开源白盒审计工具初探（上）" class="headerlink" title="PHP 开源白盒审计工具初探（上）"></a>PHP 开源白盒审计工具初探（上）</h1><p>当前PHP开源白盒审计工具的设计思路上大都是依据 敏感函数的参数部分/全部来自未经安全函数处理的外部输入 这一经验。最终落实到具体的实现上又可以划分成以下两大类：</p>
+<ul>
+<li><strong>基于文本特征</strong>：也就是我们常说的正则方式，基于人工代码审计时发现漏洞点的源代码规律，从而归纳出相应的正则表达式，然后基于此正则表达式来查找此类漏洞。基于文本特征的白盒审计工具优点在于审计速度相对较快，且规则维护起来成本较低，但是缺点又在于准确率相对较低，误报率也比较高。</li>
+<li><strong>基于静态分析</strong>：即借助传统静态分析技术来进行白盒审计。常见的技术主要有数据流分析、污点传播和控制流分析等。静态分析的方式能够更加准确的判断外部输入是否经过安全函数的处理，这点是基于文本特征的方式很难实现的。此外，基于静态分析的方式在判断一个变量是否部分/全部来自外部输入的时候也更有优势，尤其在针对框架进行审计的时候。但是，有好的一面就有坏的一面，基于静态分析的问题在于：1）时间开销大，做一次完整的分析所需的时间远大于基于文本特征的方式；2）适配成本高，针对不同的目标，需要适配相应的解析器来生成所需的 AST 树和 CFG 等信息，此外，检测规则的适配也是一个相对较重的成本。</li>
+</ul>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)PHP%E5%BC%80%E6%BA%90%E7%99%BD%E7%9B%92%E5%AE%A1%E8%AE%A1%E5%B7%A5%E5%85%B7%E5%88%9D%E6%8E%A2/640.png" alt="img"></p>
+<h1 id="PHP-开源白盒审计工具初探（下）"><a href="#PHP-开源白盒审计工具初探（下）" class="headerlink" title="PHP 开源白盒审计工具初探（下）"></a>PHP 开源白盒审计工具初探（下）</h1><p><strong>基于静态分析</strong>：即借助传统静态分析技术来进行白盒审计。常见的技术主要有数据流分析、污点传播和控制流分析等。静态分析的方式能够更加准确的判断外部输入是否经过安全函数的处理，这点是基于文本特征的方式很难实现的。此外，基于静态分析的方式在判断一个变量是否部分/全部来自外部输入的时候也更有优势，尤其在针对框架进行审计的时候。但是，有好的一面就有坏的一面，基于静态分析的问题在于：</p>
+<ul>
+<li>1）时间开销大，做一次完整的分析所需的时间远大于基于文本特征的方式；</li>
+<li>2）适配成本高，针对不同的目标，需要适配相应的解析器来生成所需的 AST 树和 CFG 等信息，此外，检测规则的适配也是一个相对较重的成本。</li>
+</ul>
+<h3 id><a href="#" class="headerlink" title></a></h3><h3 id="progpilot"><a href="#progpilot" class="headerlink" title="progpilot"></a>progpilot</h3><figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">Githu<span class="variable">b:</span> http<span class="variable">s:</span>//github.<span class="keyword">com</span>/designsecurity/progpilotLanguage: </span><br><span class="line">PHPLast commit <span class="keyword">on</span> <span class="number">2019.06</span>.<span class="number">02</span></span><br></pre></td></tr></table></figure>
+
+<p>progpilot 是一款使用 PHP 开发的针对 PHP 的白盒审计框架，基于  PHP-CFG（<a href="https://github.com/ircmaxell/php-cfg/）来实现控制流图" target="_blank" rel="noopener">https://github.com/ircmaxell/php-cfg/）来实现控制流图</a> (CFG) 的生成，同时又基于  PHP-Parser（<a href="https://github.com/nikic/php-parser）" target="_blank" rel="noopener">https://github.com/nikic/php-parser）</a> 来实现抽象语法书 ( AST 树) 的生成。</p>
+<p>progpilot 在 CFG 和 AST 的基础上做进一步的漏洞分析。progpilot 借助生成的 CFG  图检查指定函数之间执行顺序是否符合预定义的规则。progpilot 还会检查指定函数的参数是否满足规则。progpilot  支持以下四种方式来检测漏洞：</p>
+<ol>
+<li>sources：在分析过程中，将 sources.json 中指定的函数参数作为污点进行分析；</li>
+<li>sinks：在 sinks.json 中指明危险函数及其可能导致的漏洞类型</li>
+<li>sanitizers：在sanitizers.json中指明防御特定漏洞安全函数及其用法。此处，安全函数会修改参数的值，比如转义；</li>
+<li>validators：在validators.json中指明防御特定漏洞的安全函数及其用法。此处，安全函数不会修改污点的值。</li>
+</ol>
+<p>progpilot 的检测规则位于 package/src/uptodate_data。其提供了 PHP 和 JavaScript 的通用检测规则。对于 PHP 而言，progpilot 还提供CodeIgniter，PrestaShop，SuiteCRM，SymFony，WordPress 这五个框架的定制化检测规则。</p>
+<h3 id="RIPS"><a href="#RIPS" class="headerlink" title="RIPS"></a>RIPS</h3><p>RIPS 使用 PHP Zend 引擎语法分析器获取源码 Token 流信息，然后基于这个 Token 流信息生成相应的 AST 树和 CFG。然后，RIPS  在此基础上定位敏感函数，然后对敏感函数的参数进行回溯，检查其是否为用户可控输入，以此来判断是否有漏洞。RIPS  在变量回溯过程中会检查该变量是否进行安全函数的处理来减少误报。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>十几款白盒审计工具看下来给我的感觉是自动化代码审计仍然是一个任重而道远的活计。正如开头的所说的，目前主流的 PHP 白盒审计工具都是基于同一条经验。这个经验可以简单拆分成三个子问题：</p>
+<ol>
+<li><ol>
+<li>定位敏感函数；</li>
+</ol>
+</li>
+<li><ol>
+<li>参数部分/全部来自外部输入；</li>
+</ol>
+</li>
+<li><ol>
+<li>外部输入在传递过程中是否经过安全函数处理。</li>
+</ol>
+</li>
+</ol>
+<p>针对第一个问题，现如今的方案基本上可以解决了。针对第二个问题，通过静态分析的方式可以基本解决大部分的情况，但仍然存在较大的改进空间，比如针对源码更加全面深入的解析、借助数据库等的二次输入等等；第三个问题现如今依然是一个重灾区，基本上还停留在传递链上是否存在安全函数的判断，而未考虑多次编码导致的绕过问题，安全函数可以被绕过等问题。再者，近几年来我们设计白盒审计工具的原理基本上都是一致，是否存在现如今技术条件下其他更好的设计方案？这点还是有待商榷的。有趣的是，同样是漏洞挖掘，二进制方面的不管是工业界还是学术界都有相当一部分人在研究，但是回归 WEB 这边，主力就都是工业界的人。</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>web漏洞挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)Web Behavior Detection Based on Deep Neural Network</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/</url>
+    <content><![CDATA[<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Web Behavior Detection Based on Deep Neural Network/image-20201011194942388.png)</p>
+<p><strong>算法</strong>：DNN</p>
+<p><strong>特征</strong>：文本特征，采用n-gram和TFIDF算法处理</p>
+<p>在本文中，WOG模型是基于2-Gram模型[21]的，该模型假定一个词仅与下一个词有关。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Web Behavior Detection Based on Deep Neural Network/image-20201011201940236.png)</p>
+<p>在本文中，卷积层用于捕获句子级别中输入单词序列的表示。单词序列实际上是一维向量。因此，我们使用128个1维滤镜提取特征，其中包括1×3、1×4、1×5和1×6跨度为1的滤镜。二次采样操作使用最大池化技术，最大池化技术代表2×2区域。卷积层的激活函数设置为常用的整流线性单位（ReLU）函数，如式。  （1）。 L2正则化技术用于增强卷积层的通用性。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Web Behavior Detection Based on Deep Neural Network/image-20201011201557782.png)</p>
+<p>LSTM层用于捕获句子之间的长关系。也就是说，LSTM层能够基于CNN层捕获的句子表示形式，在文章级别实现PHP脚本的表示。LSTM层包括128个单位，使用tanh激活函数，如式。 （2）。为了降低过度拟合的风险，我们对LSTM层使用了0.8的辍学率。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Web Behavior Detection Based on Deep Neural Network/image-20201011201831090.png)</p>
+<p>全连接（FC）层等于多层感知器（MLP），用于处理从LSTM层输出的商品级别的分类任务。在我们的设计中，FC层包括20个隐藏节点。</p>
+<p>使用softmax层（如等式（3））来区分正常和异常PHP代码</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Web%20Behavior%20Detection%20Based%20on%20Deep%20Neural%20Network/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Web Behavior Detection Based on Deep Neural Network/image-20201011202138534.png)</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)Webshell Traffic Detection With Character-Level Features Based on Deep Learning</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/</url>
+    <content><![CDATA[<p>提出了一种结合卷积神经网络和长短期记忆网络的特征的Webshell通信检测模型</p>
+<p>提出了一种字符级交通内容特征转换方法。</p>
+<p>主要动机是从网络流量中发现Webshell攻击，尤其是未知攻击</p>
+<p>提出了结合卷积神经网络（CNN）[4]，[5]和长短期记忆（LSTM）[6]，[7]的深度学习模型架构。  CNN用于提取局部关键字段特征，文本序列的特征由LSTM捕获。</p>
+<p>贡献：</p>
+<ul>
+<li>提出了字符级方法来转换Webshell内容特征，它可以完全保留流量内容的顺序模式特征。同时，可以减小尺寸，并且提高了模型检测的效果。在实际情况下，亿万个流量项目会有更好的性能。</li>
+<li>提出了结合了CNN和LSTM的深度学习检测模型结构。通过将LSTM层拼接到CNN层的隐藏输出结果中，我们可以实现局部特征和序列特征的全面提取。组合模型检测比单个CNN模型和单个LSTM模型更有效。</li>
+</ul>
+<p>本文的动机是从流量中发现Webshell攻击，尤其是未知攻击。因此，在分析流量时，我们将Webshell分为以下两种类型：</p>
+<ul>
+<li>基于浏览器和服务器（B＆S）的Webshell。这种Webshell主要用于基于Web的应用程序中。黑客通过漏洞（例如文件上传）将Webshell文件上传到目标网站，并通过浏览器与上传的Web  Shell建立连接。浏览器使用Post方法发送命令参数，返回的包的内容通常是执行控制命令后返回的HTML结构的内容。（不仅仅是POST）</li>
+<li>基于客户端和服务器（C＆S）的Webshell：这种Webshell基于客户端将命令发送到服务器。以China Chopper为例，客户端使用Base64对命令执行脚本进行编码，然后将服务器连接到One  Word  Trojan程序，服务器使用指定的分隔符分隔指令执行结果，并将结果返回给客户端。从流量的角度来看，服务器返回的结果通常是命令执行的结果，而不是完整的HTML页面结构，此外，请求包还包含更多的执行内容。这两种Webshell通过URL和Post正文传递请求信息。同时，它可以包含上述各种Webshell类别，例如“大木马，小木马，单字木马”。</li>
+</ul>
+<p><strong>数据采集</strong>：</p>
+<ul>
+<li>收集从大学网络监控系统中提取的大量网站通信流量，包括正常流量和异常流量。经过长时间的积累，我们获得了大约60万个Webshell恶意流量，其中包括请求和响应正文。</li>
+<li>在实验室环境中模拟Webshell攻击。</li>
+</ul>
+<p><strong>数据清理</strong></p>
+<ul>
+<li>URL 解码</li>
+<li>BASE64解码</li>
+<li>消除加密的影响：首先确定加密的数据位置，然后将相应部分替换为预定义的标志。这有助于减少对模型预测结果的干扰。</li>
+<li>二进制数据流：首先确定二进制流的位置，然后用预定义的标志替换相应位置中的数据</li>
+</ul>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell Traffic Detection With Character-Level Features Based on Deep Learning/image-20201013101930560.png)</p>
+<p><strong>常用的分词方法</strong></p>
+<ul>
+<li>N-GRAM WITH TF-IDF</li>
+<li>N-GRAM WITH Word2Vec：使用word2vec算法创建的嵌入向量具有许多优势。词嵌入后，每个词可以表示为固定长度向量，尺寸可以大大减少。但是，对于海量数据处理需求，该模型需要大量时间和资源来训练和生成单词向量</li>
+</ul>
+<p><strong>本文提出字符级内容特征转换</strong></p>
+<p>将内容信息转换为特征向量。对于长流量内容，我们定义固定长度L。如果内容长度大于L，则截断L长度的数据。如果内容长度小于L，我们将在数据的开头至结尾重复数据，直到数据长度等于L</p>
+<p>对于每个输入，我们将字符序列转换为相应的ASCII值序列。如果遇到非ASCII可见字符（例如汉字），我们将这些字符删除，最后形成特征向量。</p>
+<p><strong>例</strong>：‘‘/1.qaz.jsp chopper=i&amp;z0=gb2312’’</p>
+<p>内容的长度为30，相应的ASCII向量为：[47，49，46，113，97，122，46，106，115，112，32，99，104，111，112，112，101，114，61 ，105，38，122，48，61，103，98，50，51，49，50]。</p>
+<p>对于请求数据包，我们将URL和Post主体拼接在一起以生成原始数据。通过分析Webshell流量的内容特征，我们发现其独特的特征如下：</p>
+<ul>
+<li>URL特征：Webshell文件通常位于敏感目录中，例如“ images/”，“ css/”。这些文件通常使用敏感名称命名，例如“ dama.jsp”，“  shell.php”。文件后缀名称通常是php，asp和jsp。也存在混淆的文件后缀，例如“ .asp; png”，以避免文件上传验证。</li>
+<li>POST内容特征：一些PHP系统调用命令嵌入到Postbody值之后，由Base64编码。更重要的是，关键命令代码是使用Base64编码的，这与正常流量非常不同。</li>
+</ul>
+<p>经过特征分析后，我们确定固定长度序列的长度和特定的字符替换规则</p>
+<p><strong>基于深度学习的WEBSHELL检测模型</strong></p>
+<p>基于卷积神经网络（CNN）[4]，[5]和长短期记忆网络（LSTM）</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell Traffic Detection With Character-Level Features Based on Deep Learning/image-20201013103751220.png)</p>
+<p>webshell检测平台：</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20Traffic%20Detection%20With%20Character-Level%20Features%20Based%20on%20Deep%20Learning/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell Traffic Detection With Character-Level Features Based on Deep Learning/image-20201013154926935.png)</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)基于XGBoost 算法的Websbell 检测方法研究</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EXGBoost%E7%AE%97%E6%B3%95%E7%9A%84Webshell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%A0%94%E7%A9%B6/</url>
+    <content><![CDATA[<p>为解决加密型Webshell 与非加密型Webshell 的代码特征不统一、难以提取的问题</p>
+<p>对于加密型的Webshell,根据代码的静态特性,将<strong>文件重合指数</strong>、<strong>信息熵</strong>、<strong>最长字符串长度</strong>、<strong>压缩比</strong>４ 个参数作为其特征</p>
+<p>国家互联网应急中心(CNCERT/CC)公布</p>
+<p>常见的特征隐藏手段有:在代码中引入注释等无关的信息、外形混淆、字符串加解密、拆分、连接替换、多重编码与压缩、多文件等技术.</p>
+<blockquote>
+<p>１)引入注释:在不影响功能的前提下,引入诸如‘/∗…∗/’和‘//…’类的注释,会对检测工作造成一定的影响,间接保护后门的长期存在.<br>２)外形混淆:利用脚本语言灵活多变的语法特点,通过引入大量的自定义函数名、变量名等变量,对一些容易被检测到的函数进行特征变换,增加代码的理解难度[１０].<br>３)字符串加解密:将敏感的代码段进行加密,只在代码具体执行的过程中进行解密,从而绕过检测.<br>４)字符串拆分:利用脚本语言的拼接特性,将函数名拆成各种不同的组合,使用时再进行拼接.<br>５)连接替换:编写Webshell 时可能会用到一些系统控件,为了避免被检测到,给相应的控件名加入一些特殊字符,使用时通过别的函数进行过滤,从而达到躲避检测的目的.<br>６)多重编码与压缩:通过多重编码来改变代码的静态特征,结合压缩技术使得页面的特征发生变动,从而降低被检测到的概率.<br>７)多文件:将一个Webshell 拆分成多个文件,使用时通过各种文件包含技术再将它们连接起来,这样可以有效地降低Webshell 中一些功能函数集中出现的概率.</p>
+</blockquote>
+<p>将加密型与非加密型的Webshell 的主要特征归纳为以下几种:</p>
+<blockquote>
+<p>１)<strong>功能函数</strong></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EXGBoost%E7%AE%97%E6%B3%95%E7%9A%84Webshell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%A0%94%E7%A9%B6/image-20200415095907714.png" alt></p>
+<p>２)<strong>文件重合指数</strong>：Webshell 经混淆编码后,在某种意义上可以当作密文,随着其内容的随机性变大,重合指数也会发生相应的变化.因此,可以把重合指数作为Webshell 的一个特征.</p>
+<p>３)<strong>信息熵</strong>：为了隐藏一些特征,Webshell 的代码往往很混乱,信息熵也随之变大.</p>
+<p> 4 )<strong>最长字符串长度</strong>：正常的网页语言一般不会出现很长的字符串;Webshell经过混淆编码后,很容易出现超出正常语法单词的长字符串.</p>
+<p>５)<strong>压缩比</strong>：经过混淆编码的Webshell 消除了非ASCII 字符后,会表现出更小的不均衡分布,从而导致压缩值变大.</p>
+</blockquote>
+<p><strong>当前主流的检测技术</strong>：</p>
+<blockquote>
+<p><strong>１)静态特征检测</strong>：核心是围绕脚本文件的特征对关键词、文件权限、文件修改时间、文件拥有者、高危函数等多个维度进行信息提取,检测效果的好坏与这些特征的设定密切相关.</p>
+<ul>
+<li><p><strong>Linux 下基于SVM 分类器的WebShell 检测方法研究</strong>：基于页面属性和页面操作对Webshell 进行特征提取,然后使用SVM 分类器来进行判定.</p>
+</li>
+<li><p><strong>基于决策树的Webshell 检测方法研究</strong>：提取Webshell 的文档属性、基本属性、高级属性３ 类特征,采用C４．５ 决策树方法对Webshell 进行检测.</p>
+</li>
+<li><p><strong>基于支持向量机的Webshell 黑盒检测</strong>：把Webshell 的文件特征、编码特征、语言特征、标签特征、静态文件特征等作为特征数据,采用SVM 方法对Webshell进行检测</p>
+</li>
+</ul>
+<p>静态特征检测方法对一些已有的Webshell 有效,但对０day 的Webshell 往往无效.由于过于依赖特征库的特点,该方法的误报率很高.对于加密或者采用混淆编码的Webshell而言,该方法自身也存在特征根本无法提取的问题.因此,静态特征检测往往需要手工检测作为辅助,才能完成Webshell的检测工作。</p>
+</blockquote>
+<blockquote>
+<p><strong>２)流量分析检测</strong></p>
+<p>该类方法的核心是通过建立网关对流量进行可视化处理,然后对Webshell 访问过程中产生的payload 网络流量进行监测.经过一定的payload 积累和相关规则的定制,通过与其他的检测过程相结合建立起一套基于流量分析的检测引擎,然后将其嵌入到现有的网关型设备或云端设备上,就可以实现对Webshell 的深度分析与查杀.</p>
+<p><strong>３)日志分析检测</strong></p>
+<p>采用日志分析的Webshell 检测,就是根据确定的攻击事件来进行事件回溯的,依据攻击事件的特征来防范下次遭受到相同的攻击.该类方法一般是先对日志建模,然后找到异常日志与攻击日志,其本质是对Webshell 访问日志进行提取与确认的过程.日志分析技术主要是从文本特征、统计特征和页面特征３ 个角度来检测异常文件,效果的好坏依赖于检测规则的完善与否;也有通过对请求模型进行建模的方法来检测Webshell,其属于一种词汇分析技术[１５].</p>
+<p><strong>４)行为分析检测</strong></p>
+<p>涉及到文件方面的行为有文件读写、创建与删除等;涉及到网络方面的行为有socket 监听行为、TCP/UDP/<br>HTTP 请求发送(DDOS 攻击)等;涉及到数据库读写的行为有数据库查找、修改、全库备份(脱库)等;涉及到系统配置的行为有Windows 注册表的修改、启动配置文件等</p>
+<p>根据其执行机制编写相应的扩展模块,然后采用hook 技术,即过滤并阻止相关的异常操作行为.这种方式是通过监控操作系统底层的API(应用程序接口)调用实现的.</p>
+<p>另一种方式是采用蜜罐技术,即将站点源码放在蜜罐中,然后对其行为特征进行分析来检测异常.</p>
+<p><strong>５)统计学检测</strong></p>
+<p>依据Webshell 脚本与正常文件的差异性来识别混淆代码.</p>
+<p>其检测核心是通过统计学的方法计算出正常的PHP 文件的统计学特征的范围,然后将其与用户上传的文件进行比较.</p>
+<p>主要涉及到５ 个特征:</p>
+<p>信息熵(Entropy),通过使用ASCII 码来衡量文件的不确定性;</p>
+<p>最长单词(LongestWord),正常文件里的字符串长度符合英文规范,不会出现极端情况,出现很长的字符串很大程度上意味着代码被编码加密或者混淆过;</p>
+<p>重合指数(Index of Coincidence),低的重合指数预示着文件被加密过;</p>
+<p>特征值匹配(Signature),匹配特征函数与敏感代码;</p>
+<p>压缩比(Compression),Webshell 经编码后,与正常文件相比,压缩比会变大.</p>
+<p><strong>基于贝叶斯理论的Webshell 检测方法研究</strong></p>
+</blockquote>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EXGBoost%E7%AE%97%E6%B3%95%E7%9A%84Webshell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%A0%94%E7%A9%B6/image-20200415105234227.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EXGBoost%E7%AE%97%E6%B3%95%E7%9A%84Webshell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%A0%94%E7%A9%B6/image-20200415105427247.png" alt></p>
+<p>TP(True Positive):预测当前页面是Webshell,实际上是Webshell.<br>FN(False Negative):预测当前页面不是Webshell,实际上是Webshell.</p>
+<p>FP(False Positive):预测当前页面是Webshell,实际上不是Webshell.<br>TN(True Negative):预测当前页面不是Webshell,实际上不是Webshell.</p>
+<p>Webshell 的评价标准主要有４ 个:特定度(Specificity)、灵敏度(Sensitivity)、准确度(Accuracy)和F１ 值</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EXGBoost%E7%AE%97%E6%B3%95%E7%9A%84Webshell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95%E7%A0%94%E7%A9%B6/image-20200415105522381.png" alt></p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>Webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)Webshell detection based on random forest-gradientboosting decision tree algori</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20detection%20based%20on%20random%20forest-gradientboosting%20decision%20tree%20algori/</url>
+    <content><![CDATA[<p>提出了一种PHP网络外壳检测模型RF-GBDT（Random Forest–Gradient Boosting Decision  Tree）模型，它是随机森林分类器和GBDT分类器的结合。此外，我们不仅利用了PHP源文件的信息熵、重合度指数等常见统计特性，还从PHP源文件中提取了TF-IDF向量和hash向量等操作码序列特征。</p>
+<p>提出了RF-GBDT模型，如图1所示，它是随机森林和梯度增强决策树的组合。这是一个双层模型。在第一层，利用基于RF分类器的操作码序列的特征得到了初步的预测结果。然后，将PHP文件的统计特性与第一层的初步预测结果结合起来，参与下一层基于GBDT分类器的训练，产生最终的预测结果。</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)Webshell%20detection%20based%20on%20random%20forest-gradientboosting%20decision%20tree%20algori/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0" alt>Webshell detection based on random forest-gradientboosting decision tree algori/image-20200422174714129.png)</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)基于PHP的WEB漏洞挖掘技术研究</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8EPHP%E7%9A%84WEB%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/</url>
+    <content><![CDATA[<p>采用的方法：</p>
+<ul>
+<li><p>提出基于漏洞特征信息的函数摘要方法， 提出基于漏洞特征信息的函数摘要方法</p>
+<p>主要是总结了各种类型漏洞的特征，根据这些特征信息进行函数摘要（需要建立一个已知漏洞的特征模型）</p>
+</li>
+<li><p>提出了基于路径特征的程序切片方法</p>
+<p>根据漏洞触发的特征，剪去那些不可能存在漏洞的路径信息（个人觉得这个方法不适用，只能针对已经设定的类型）</p>
+</li>
+<li><p>结合污点分析和动态符号执行方法</p>
+<p>在动态符号执行过程中，根据污点检查的算法，对符号状态进行分析</p>
+</li>
+</ul>
+<p>提出了基于漏洞特征信息的函数摘要方法以及路径程序切片法，</p>
+<p>特点：优化了动态符号执行的时间效率并将方与污点分析相结合 法，优化了动态符号执行的时间效率并将方与污点分析相结合法，优化了动态符号执行的时间效率并将方与污点分析相结合 ，用以检测 Web应用程序漏洞。</p>
+<p>设计的PHPVS系统主要是采用词法、语法分析来生成符号执行树（这里还不是太了解）</p>
+<p>主要是在条件判断语句上做路劲分叉形成符号树。</p>
+<p>对于污点分析的实现和符号树的构造没有详细说明（需要进一步了解）</p>
+<p>本论文的实验论证的实例是自己构造的漏洞代码片段。</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)机器学习在网络安全中的应用</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200407163404074.png" alt></p>
+<h3 id="机器学习在网络空间安全中的应用流程"><a href="#机器学习在网络空间安全中的应用流程" class="headerlink" title="机器学习在网络空间安全中的应用流程"></a>机器学习在网络空间安全中的应用流程</h3><p>机器学习在网络空间安全研究中的一般应用流程，主要包括安全问题抽象、数据采集、数据预处理及安全特征提取、模型构建、模型验证以及模型效果评估6个阶段.在整个应用流程中，各阶段不能独立存在，相互之间存在一定的关联关系.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408155819177.png" alt></p>
+<p>使用机器学习技术解决安全问题的第一步就是要进行问题的抽象和定义，将安全问题映射为机器学习能够解决的分类、聚类及降维等问题</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408160234176.png" alt></p>
+<p>数据预处理及特征提取主要包括堆数据规范化、离散化以及非平衡性的处理等</p>
+<p>深度学习[3]凭借强大的自动提取特征的能力，被用于解决异常协议检测、恶意软件检测、网络入侵检测BGP（Border Gateway Protocol）异常路由检测以及差分隐私保护等安全问题.</p>
+<p>常用的分类评估指标有正确率、查准率（又称精度）和查全率（又称召回率）.</p>
+<blockquote>
+<p>正确率是分类正确的正常样本与恶黛样本数占样本总数的比例，一般来说正确率越高，分类器越好.查准率则是被正确识别的正常样本数占被识别为正常样本的比例，也是分类器精确性的衡量标准.查率是被正确识别的正常样本与正确识别的正常样参参和错误识别的恶意样本之和的比例，该指标衡量了分类器对正常样本的识别能力.</p>
+</blockquote>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408163443448.png" alt></p>
+<h3 id="机器学习在系统安全研究中的应用"><a href="#机器学习在系统安全研究中的应用" class="headerlink" title="机器学习在系统安全研究中的应用"></a>机器学习在系统安全研究中的应用</h3><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408165505024.png" alt></p>
+<h3 id="机器学习在网络安全研究中的应用"><a href="#机器学习在网络安全研究中的应用" class="headerlink" title="机器学习在网络安全研究中的应用"></a>机器学习在网络安全研究中的应用</h3><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408170530426.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408202520748.png" alt></p>
+<p>根据入侵检测系统中检测引擎使用方法的不同，网络入侵检测分为误用检测、异常检测及混合检测.误用检测是以已知攻击为特征，将入侵行为与正常行为按照已知的特征区分开来.该类方法效率高且误报率低，但只能发现已知的入侵，漏报率较高，并且特征的维护多采用人工方式完成.异常检测指将当前网络行为与系统正常行为模式进行比较，若两者偏差较大，超过了预定义的阈值，则认为系统出现了异常或被入侵.</p>
+<p>将机器学习技术应用于网络入侵检测系统的一般流程如图6所示：首先通过网络流量采集工具Snort、Wireshark等自行采集数据集或者采用公开的网络入侵数据集，接着对数据集进行预处理从中提取网络入侵特征，然后选择合适的机器学习算法构建入侵检测分类器，对待测数据识别是正常行为还是异常行为.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408203159872.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408204429751.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408210203497.png" alt></p>
+<p>机器学习在网络安全中的应用小结</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200408210306592.png" alt></p>
+<h3 id="机器学习在应用安全研究中的应用"><a href="#机器学习在应用安全研究中的应用" class="headerlink" title="机器学习在应用安全研究中的应用"></a>机器学习在应用安全研究中的应用</h3><h4 id="1、在垃圾邮件检查领域"><a href="#1、在垃圾邮件检查领域" class="headerlink" title="1、在垃圾邮件检查领域"></a>1、在垃圾邮件检查领域</h4><p>垃圾邮件的检测可以抽象为机器学习的文本分类问题，例如，最简单的分类可以定义为{一1，1}，一1代表非垃圾邮件；1代表垃圾邮件.</p>
+<h4 id="2、基于URL的恶意网页识别"><a href="#2、基于URL的恶意网页识别" class="headerlink" title="2、基于URL的恶意网页识别"></a>2、基于URL的恶意网页识别</h4><p>基于分类方法的恶意网页识别，通常将该问题抽象为机器学习的二分类问题，一般流程如图8所示，首先根据已标记URL数据集进行特征提取，常用的静态特征包括主机信息、URL信息和网页信息等，动态特征主要包括浏览器行为、URL的重定向信息、网页跳转关系等；对上述特征进行归一化处理，归一化后特征的取值用{0，1}表示；已知的网页标记用{0，1}表示，{0）代表正常网页，{1）代表恶意网页；然后选择决策树、贝叶斯网络、SVM、逻辑回归等分类算法构造分类器，进而识别未知类型URL数据集.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409161406008.png" alt></p>
+<p>基于聚类的恶意网页识别的一般流程如图9所示，首先将网页采集的URL数据集中提取链接关系、URL特征、网页文本信息等特征，通常采用{0，1）标识；然后根据聚类算法，将URL数据集划分为若干聚类，同一聚类的URL数据之间具有较高的相似度，而不同聚类的URL数据对象之间的相似度较低；最后根据已标记数据的聚类结果，对待测URL识别是否是恶意网页.</p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409162923123.png" alt></p>
+<h4 id="3、恶意PDF检测"><a href="#3、恶意PDF检测" class="headerlink" title="3、恶意PDF检测"></a>3、恶意PDF检测</h4><p>PDF文档的检测研究大多采用PDF文档内容或结构为特征，利用随机森林、SVM、决策树等分类器构建PDF检测器.</p>
+<h4 id="4、社交网络异常账号"><a href="#4、社交网络异常账号" class="headerlink" title="4、社交网络异常账号"></a>4、社交网络异常账号</h4><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409170053350.png" alt></p>
+<h4 id="信用卡欺诈检测"><a href="#信用卡欺诈检测" class="headerlink" title="信用卡欺诈检测"></a>信用卡欺诈检测</h4><h4 id="取证分析"><a href="#取证分析" class="headerlink" title="取证分析"></a>取证分析</h4><h4 id="网络舆情"><a href="#网络舆情" class="headerlink" title="网络舆情"></a>网络舆情</h4><p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409171136507.png" alt></p>
+<p><img src="/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/image-20200409171201297.png" alt></p>
+<p>无论是模型的泛化能力，还是检测准确度、实时性等问题，目前的技术解决方案均不能完全满足网络空间安全的应用需求，并存在一些目前难以解决的问题以及可进一步研究的方向，采用机器学习技术解决网络空间安全问题仍是极具挑战性的工作.同时机器学习技术本身存在一定的研究难点，在解决网络空间安全问题中面临巨大挑战：</p>
+<blockquote>
+<p>（1）基于机器学习的安全解决方案的可解释性与溯源性.</p>
+<p>（2）基于机器学习技术的攻击的防御难度.</p>
+<p>（3）机器学习自身的安全问题.</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>(阅读笔记)基于语义分析和神经网络的WebShell检测方法</title>
+    <url>/2020/10/12/(%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0)%E5%9F%BA%E4%BA%8E%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E5%92%8C%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84WebShell%E6%A3%80%E6%B5%8B%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>作者WebShell的行为和目的主要包括四个方面。</p>
+<blockquote>
+<p><strong>信息嗅探</strong>：以嗅探Web运行环境信息、主机信息、数据库信息、IDC网络信息为目的，将收集到的各类信息回显在页面中或通过其它渠道反馈给攻击者，攻击者可以将收集到的信息用于下一步的入侵中。</p>
+<p><strong>权限维持</strong>：攻击者可以通过HTTP请求的参数（包括GET/POST参数、Cookie、Header等）传递命令，由WebShell以Web应用运行权限执行命令，是一种攻击成功后较隐蔽的权限维持手段。此外，攻击者还可以通过各种反弹Shell手法获取到交互式Shell，利用系统本地内核漏洞进行提权。</p>
+<p><strong>数据窃取和篡改</strong>：嗅探到数据库连接方式等配置信息后，攻击者可以利用WebShell窃取或篡改数据库内的敏感信息。</p>
+<p><strong>网络代理</strong>： 攻击者可以利用WebShel l建立TCP/IP网络隧道，用于嗅探、扫描IDC网络和进一步的内网渗透，例如著名的reGeorg工具就利用了WebShell建立SOCKS5隧道。</p>
+</blockquote>
+<h3 id="Webshell逃逸"><a href="#Webshell逃逸" class="headerlink" title="Webshell逃逸"></a>Webshell逃逸</h3><ul>
+<li>字符串编码与构造</li>
+<li>代码混淆</li>
+<li>利用反射机制</li>
+<li>文件包含</li>
+<li>流量加密</li>
+<li>隐蔽通道</li>
+</ul>
+<p>根据WebShell的检测和防御手段的介入阶段不同，可以分为事前预警、事中检测、事后追溯三种。</p>
+<p>对WebShel l的检测防御思路主要分为基于文件的检测、基于流量的检测、基于行为的检测和基于日志的检测等。其中，基于文件的检测是在WebShel l 刚被植入时，通过对文件属性、内容、关键字等进行静态分析判断是否为WebShel l，属于事前预警；基于流量的检测是从攻击者与WebShell的交互流量中提取特征并进行判断，基于行为的检测是在WebShel l运行时对其异常行为进行分析，这两类均属于事中检测； 而基于日志的检测是对Web日志进行全局分析，发现正常访问日志与WebShell访问日志的差异，从而判断是否已经遭受了WebShell攻击并定位WebShell，属于事后追溯。</p>
+<p>抽象语法树（Abstract Syntax Tree，AST）是编程语言的抽象语法结构的树状表现形式，作为编译器后端的输入，不依赖于具体的文法和语言的细节。通过对抽象语法树进行分析，可以获得对代码语义层面的理解。抽象语法树的生成过程包括词法分析和语法分析两个步骤，其中词法分析是将代码字符流转变为标记（Token）的过程，语法分析是根据标记集合构造抽象语法树的过程。</p>
+]]></content>
+      <categories>
+        <category>Cyc1e的学术之路</category>
+      </categories>
+      <tags>
+        <tag>Webshell检测</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CISCN2020_初赛web</title>
     <url>/2020/08/21/CISCN2020-%E5%88%9D%E8%B5%9Bweb/</url>
     <content><![CDATA[<h2 id="easyphp"><a href="#easyphp" class="headerlink" title="easyphp"></a>easyphp</h2><p>题目源码的意思就是打down子进程就会进入phpinfo，参考<a href="https://bugs.php.net/bug.php?id=52173，flag就在phpinfo里。" target="_blank" rel="noopener">https://bugs.php.net/bug.php?id=52173，flag就在phpinfo里。</a></p>
